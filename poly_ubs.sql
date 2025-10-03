@@ -29,4 +29,7 @@ create table admin (
   admin_register_date TIMESTAMP NOT NULL,
   PRIMARY KEY (admin_id)
 );
-//Chưa xong//
+
+drop table member
+drop table employee
+drop table admin
