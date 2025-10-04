@@ -26,6 +26,7 @@ public class Controller {
         return "/container/home";
     }
 
+<<<<<<< HEAD
     @RequestMapping("cart")
     public String cart(Model model) {
         return "/container/shopping-cart";
@@ -39,3 +40,7 @@ public class Controller {
 
 }
 
+=======
+
+}
+>>>>>>> huynt
