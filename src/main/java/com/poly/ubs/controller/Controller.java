@@ -26,6 +26,16 @@ public class Controller {
         return "/container/home";
     }
 
+    @RequestMapping("cart")
+    public String cart(Model model) {
+        return "/container/shopping-cart";
+    }
+
+    @RequestMapping("forgotpassword")
+    public String forgotpassword(Model model) {
+        return "/auth/forgot-password";
+    }
+
 
 }
 
