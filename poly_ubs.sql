@@ -56,19 +56,20 @@ create table HoaDon(
 create table ChiTietHoaDon(
     hdct_id VARCHAR(8) NOT NULL,
     hd_id VARCHAR(8) NOT NULL,
-    pd_id VARCHAR(8) NOT NULL,
+    sp_id VARCHAR(8) NOT NULL,
     quantity INT NOT NULL,
     PRIMARY KEY (hdct_id),
     FOREIGN KEY (hd_id) REFERENCES HoaDon(hd_id),
-    FOREIGN KEY (pd_id) REFERENCES SanPham(sp_id)
+    FOREIGN KEY (sp_id) REFERENCES SanPham(sp_id)
 );
 create table GioHang(
     gh_id VARCHAR(8) NOT NULL,
+    sp_quantity INT NOT NULL,
     kh_id VARCHAR(8) NOT NULL unique ,
-    pd_id VARCHAR(8) NOT NULL,
+    sp_id VARCHAR(8) NOT NULL,
     PRIMARY KEY (gh_id),
     FOREIGN KEY (kh_id) REFERENCES KhachHang(kh_id),
-    FOREIGN KEY (pd_id) REFERENCES SanPham(sp_id)
+    FOREIGN KEY (sp_id) REFERENCES SanPham(sp_id)
 );
 create table KhuyenMai(
     km_id VARCHAR(8) NOT NULL,
@@ -91,10 +92,20 @@ create table DanhGia(
     dg_id VARCHAR(8) NOT NULL,
     dg_content VARCHAR(100) NOT NULL,
     dg_rating INT NOT NULL,
-    pd_id VARCHAR(8) NOT NULL,
+    sp_id VARCHAR(8) NOT NULL,
     kh_id VARCHAR(8) NOT NULL,
     dg_date DATE NOT NULL,
     PRIMARY KEY (dg_id),
-    FOREIGN KEY (pd_id) REFERENCES SanPham(sp_id),
+    FOREIGN KEY (sp_id) REFERENCES SanPham(sp_id),
     FOREIGN KEY (kh_id) REFERENCES KhachHang(kh_id)
 );
+drop table DanhGia;
+drop table NhapKho;
+drop table KhuyenMai;
+drop table GioHang;
+drop table ChiTietHoaDon;
+drop table HoaDon;
+drop table DiaChi;
+drop table SanPham;
+drop table NhanVien;
+drop table KhachHang;
