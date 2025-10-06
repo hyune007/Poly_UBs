@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{container/orders/order::view(~{::title}, ~{::article})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Đặt hàng thành công</title>
+    <link rel="stylesheet" href="/css/general.css">
+</head>
+<body>
+<article>
+    <div class="complete-wrapper">
+        <h1>🎉 Đặt hàng thành công!</h1>
+        <h3>Cảm ơn bạn đã tin tưởng và đặt hàng tại cửa hàng chúng tôi.</h3>
+        <button>
+            <a href="/home">Quay về trang chủ</a>
+        </button>
+    </div>
+</article>
+</body>
+</html>

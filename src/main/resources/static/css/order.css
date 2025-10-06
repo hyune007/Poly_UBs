@@ -1,0 +1,64 @@
+body {
+    background-color: #f8f9fa;
+}
+
+header {
+    text-align: center;
+    padding: 20px 0 10px 0;
+    font-size: 28px;
+    font-weight: bold;
+    color: #001476;
+}
+
+nav {
+    margin-bottom: 20px;
+}
+
+/* Căn giữa nội dung chính */
+article {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 80vh;
+    padding: 30px 15px;
+}
+
+/* Khung trắng giữa màn hình */
+.content-box {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    padding: 30px;
+}
+
+footer {
+    text-align: center;
+    padding: 15px;
+    color: #666;
+    font-size: 14px;
+    border-top: 1px solid #ddd;
+    margin-top: 20px;
+}
+
+button, .btn-checkout, .btn-submit, .btn-pay {
+    display: block;
+    width: 100%;
+    background-color: #001476;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+}
+
+button:hover, .btn-checkout:hover, .btn-submit:hover, .btn-pay:hover {
+    background-color: #001476;
+}
+
+h3, h5, h6 {
+    text-align: center;
+    color: #333;
+}
