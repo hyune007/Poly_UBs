@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{container/orders/order::view(~{::title}, ~{::article})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<article>
+    <div class="container mb-5">
+        <h3 class="text-center mt-4 mb-4">Thanh toán đơn hàng</h3>
+
+        <div class="row">
+            <!-- Thông tin khách hàng -->
+            <div class="col-lg-8">
+                <div class="checkout-container mb-4">
+                    <div class="form-section-title">Thông tin khách hàng</div>
+                    <form>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label" >Họ và tên</label>
+                                <input type="text" class="form-control" placeholder="Nhập họ tên"readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Số điện thoại</label>
+                                <input type="tel" class="form-control" placeholder="sdt"readonly>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Tỉnh / Thành phố</label>
+                                <input type="tel" class="form-control" placeholder="Thành phố"readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Quận / Huyện</label>
+                                <input type="tel" class="form-control" placeholder="Quận/ huyện"readonly>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Địa chỉ chi tiết</label>
+                            <input type="tel" class="form-control" placeholder="Dia chi chi tiet"readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Ghi chú đơn hàng (không bắt buộc)</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Hình thức thanh toán -->
+                <div class="checkout-container">
+                    <div class="form-section-title">Hình thức thanh toán</div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="paymentMethod" id="cod" checked>
+                        <label class="form-check-label" for="cod">
+                            Thanh toán khi nhận hàng (COD)
+                        </label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="paymentMethod" id="bank">
+                        <label class="form-check-label" for="bank">
+                            Chuyển khoản ngân hàng
+                        </label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="paymentMethod" id="momo">
+                        <label class="form-check-label" for="momo">
+                            Thanh toán qua MoMo / ZaloPay
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tóm tắt đơn hàng -->
+            <div class="col-lg-4">
+                <div class="order-summary">
+                    <h5 class="mb-3">Tóm tắt đơn hàng</h5>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Sản phẩm 1</span>
+                        <strong>250.000₫</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Sản phẩm 2</span>
+                        <strong>400.000₫</strong>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Phí vận chuyển</span>
+                        <strong>40.000₫</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3">
+                        <strong>Tổng cộng</strong>
+                        <strong class="text-danger fs-5">690.000₫</strong>
+                    </div>
+                    <button class="btn-pay">XÁC NHẬN THANH TOÁN</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</article>
+</body>
+</html>
