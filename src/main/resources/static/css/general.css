@@ -3,5 +3,13 @@
     padding: 0;
     box-sizing: border-box;
     text-decoration: none;
+<<<<<<< HEAD
+=======
+    font-weight: normal;
+    font-family: 'Roboto', sans-serif;
+    box-shadow: none;
+    border: none;
+
+>>>>>>> 293ca64f0c27869a7b3c11f4e244f2935732876c
 }
 
