@@ -7,7 +7,7 @@ body {
 
 .checkout-nav {
     max-width: 800px;
-    margin: 40px auto; /* căn giữa theo chiều ngang */
+    margin: 40px auto;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -50,3 +50,4 @@ body {
 .checkout-step:hover {
     color: #000;
 }
+

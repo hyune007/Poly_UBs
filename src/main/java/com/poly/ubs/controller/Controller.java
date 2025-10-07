@@ -58,6 +58,12 @@ public class Controller {
         return "container/orders/complete";
     }
 
+    @RequestMapping("/reset")
+    public String resetPass(Model model) {
+        return "/auth/reset-password";
+    }
+//----------------
+
 
 
 }

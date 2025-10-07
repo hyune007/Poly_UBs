@@ -7,12 +7,13 @@
     <link rel="stylesheet" href="/css/general.css">
 </head>
 <body>
+<div th:replace="container/orders/order-process :: *"></div>
 <article>
     <div class="complete-wrapper">
-        <h1>🎉 Đặt hàng thành công!</h1>
+        <h1 >🎉 Đặt hàng thành công!</h1>
         <h3>Cảm ơn bạn đã tin tưởng và đặt hàng tại cửa hàng chúng tôi.</h3>
-        <button>
-            <a href="/home">Quay về trang chủ</a>
+        <button style="width:400px">
+            <a href="/home" style="text-decoration: none; color: #fff; ">Quay về trang chủ</a>
         </button>
     </div>
 </article>
