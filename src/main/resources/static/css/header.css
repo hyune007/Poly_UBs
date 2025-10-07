@@ -1,10 +1,4 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    text-decoration: none;
-    font-family: Arial ;
-}
+
 header {
     font-size: 14px; /* hoặc 13px nếu bạn muốn nhỏ hơn nữa */
 }
@@ -38,7 +32,7 @@ header {
 
 
 .header-bottom {
-    background-color: #007bff;
+    background-color: #001476;
 }
 .header-bottom a {
     color: white;
