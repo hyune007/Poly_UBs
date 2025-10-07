@@ -1,12 +1,10 @@
 package com.poly.ubs.controller;
 
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @org.springframework.stereotype.Controller
-public class Controller {
+public class ViewController {
 
     @RequestMapping("header")
     public String header(Model model) {
@@ -28,10 +26,6 @@ public class Controller {
         return "/container/home";
     }
 
-    @RequestMapping("cart")
-    public String cart(Model model) {
-        return "/container/shopping-cart";
-    }
 
     @RequestMapping("forgotpassword")
     public String forgotpassword(Model model) {
