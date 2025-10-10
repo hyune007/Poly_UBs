@@ -17,7 +17,7 @@ create table NhanVien (
   nv_phone VARCHAR(15) NOT NULL,
   nv_mail VARCHAR(50) NOT NULL,
   nv_address VARCHAR(100) NOT NULL,
-    nv_role VARCHAR(20) NOT NULL,
+    nv_role BIT NOT NULL,
     nv_birth DATE NOT NULL,
   PRIMARY KEY (nv_id)
 );
@@ -112,19 +112,32 @@ create table DanhGia(
 );
 
 
-drop table DanhGia;
-drop table NhapKho;
-drop table KhuyenMai;
-drop table GioHang;
-drop table ChiTietHoaDon;
-drop table HoaDon;
-drop table DiaChi;
-drop table SanPham;
-drop table NhanVien;
-drop table KhachHang;
-drop table LoaiSanPham;
-drop table Hang;
+-- Drop tables in correct order (children first, then parents)
+drop table DanhGia;          -- Child of SanPham and KhachHang
+drop table NhapKho;          -- Child of SanPham
+drop table KhuyenMai;        -- Independent
+drop table GioHang;          -- Child of SanPham and KhachHang
+drop table ChiTietHoaDon;    -- Child of HoaDon and SanPham
+drop table HoaDon;           -- Child of KhachHang, NhanVien, and DiaChi
+drop table DiaChi;           -- Child of KhachHang
+drop table SanPham;          -- Child of Hang and LoaiSanPham
+drop table NhanVien;         -- Independent
+drop table KhachHang;        -- Independent
+drop table LoaiSanPham;      -- Independent
+drop table Hang;             -- Independent
 
+select * from Hang;
+select * from LoaiSanPham;
+select * from SanPham;
+select * from NhanVien;
+select * from KhachHang;
+select * from KhuyenMai;
+select * from HoaDon;
+select * from ChiTietHoaDon;
+select * from GioHang;
+select * from DanhGia;
+select * from NhapKho;
+select * from DiaChi;
 -- Sample Data
 
 -- Hang
@@ -209,7 +222,9 @@ INSERT INTO Hang (hang_id, hang_name) VALUES
 ('H78', 'Noctua'),
 ('H79', 'Western Digital'),
 ('H80', 'G.Skill'),
-('H81', 'Seagate');
+('H81', 'Seagate'),
+('H82', 'Klipsch'),
+('H83', 'KEF');
 
 -- LoaiSanPham (10 categories)
 INSERT INTO LoaiSanPham (lsp_id, lsp_name) VALUES
@@ -421,8 +436,8 @@ INSERT INTO SanPham (sp_id, sp_name, sp_price, sp_description, sp_image, sp_cate
 ('SP168', 'Google Nest Audio', 3000000, 'Loa thông minh Google Assistant', 'nest_audio.jpg', 'LSP09', 100, 'H03'),
 ('SP169', 'Amazon Echo Studio', 5500000, 'Loa thông minh hỗ trợ Dolby Atmos', 'echo_studio.jpg', 'LSP09', 60, 'H21'),
 ('SP170', 'Edifier S2000MKIII', 8500000, 'Loa bookshelf active', 's2000mkiii.jpg', 'LSP09', 30, 'H41'),
-('SP171', 'Klipsch The Fives', 22000000, 'Loa bookshelf active có HDMI-ARC', 'the_fives.jpg', 'LSP09', 25, 'Klipsch'),
-('SP172', 'KEF LS50 Wireless II', 70000000, 'Loa bookshelf hi-end không dây', 'ls50w2.jpg', 'LSP09', 15, 'KEF'),
+('SP171', 'Klipsch The Fives', 22000000, 'Loa bookshelf active có HDMI-ARC', 'the_fives.jpg', 'LSP09', 25, 'H82'),
+('SP172', 'KEF LS50 Wireless II', 70000000, 'Loa bookshelf hi-end không dây', 'ls50w2.jpg', 'LSP09', 15, 'H83'),
 ('SP173', 'Audioengine A2+', 7000000, 'Loa để bàn nhỏ gọn, chất âm tốt', 'a2plus.jpg', 'LSP09', 90, 'H37'),
 ('SP174', 'Razer Nommo Chroma', 4000000, 'Loa gaming có RGB', 'nommo_chroma.jpg', 'LSP09', 70, 'H15'),
 ('SP175', 'Logitech G560', 5000000, 'Loa gaming có Lightsync', 'g560.jpg', 'LSP09', 80, 'H43'),
@@ -465,4 +480,4 @@ INSERT INTO KhachHang (kh_id, kh_name, kh_password, kh_phone, kh_mail) VALUES
 
 -- NhanVien (1 employee)
 INSERT INTO NhanVien (nv_id, nv_name, nv_password, nv_phone, nv_mail, nv_address, nv_role, nv_birth) VALUES
-('NV001', 'Admin', 'adminpass', '0123456789', 'admin@polyubs.com', '123 FPT Polytechnic', 'Quản lý', '1990-01-01');
+('NV001', 'Admin', 'adminpass', '0123456789', 'admin@polyubs.com', '123 FPT Polytechnic', 0, '1990-01-01');
