@@ -14,13 +14,13 @@ import lombok.Setter;
 @Table(name = "KhachHang")
 public class Customer {
     @Id
-    @Column(name = "kh_id", length = 8, nullable = false)
+    @Column(name = "kh_id")
     private String id;
     
-    @Column(name = "kh_name", length = 100, nullable = false)
+    @Column(name = "kh_name")
     private String name;
     
-    @Column(name = "kh_password", length = 40, nullable = false)
+    @Column(name = "kh_password")
     private String password;
     
     @Column(name = "kh_phone", length = 15, nullable = false)
