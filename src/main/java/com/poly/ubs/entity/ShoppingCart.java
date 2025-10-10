@@ -14,17 +14,17 @@ import lombok.Setter;
 @Table(name = "GioHang")
 public class ShoppingCart {
     @Id
-    @Column(name = "gh_id", length = 8, nullable = false)
+    @Column(name = "gh_id")
     private String id;
 
-    @Column(name = "sp_quantity", nullable = false)
+    @Column(name = "sp_quantity")
     private int quantity;
 
     @OneToOne
-    @JoinColumn(name = "kh_id", nullable = false, unique = true)
+    @JoinColumn(name = "kh_id")
     private Customer customer;
 
     @ManyToOne
-    @JoinColumn(name = "sp_id", nullable = false)
+    @JoinColumn(name = "sp_id")
     private Product product;
 }

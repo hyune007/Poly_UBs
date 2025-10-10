@@ -17,30 +17,30 @@ package com.poly.ubs.entity;
     @Table(name = "SanPham")
     public class Product  {
         @Id
-        @Column(name = "sp_id", length = 8, nullable = false)
+        @Column(name = "sp_id")
         private String id;
 
-        @Column(name = "sp_name", length = 100, nullable = false)
+        @Column(name = "sp_name")
         private String name;
 
-        @Column(name = "sp_price", nullable = false)
+        @Column(name = "sp_price")
         private int price;
 
-        @Column(name = "sp_description", length = 100, nullable = false)
+        @Column(name = "sp_description")
         private String description;
 
-        @Column(name = "sp_image", length = 100, nullable = false)
+        @Column(name = "sp_image")
         private String image;
 
-        @Column(name = "sp_stock", nullable = false)
+        @Column(name = "sp_stock")
         private int stock;
 
         @ManyToOne
-        @JoinColumn(name = "sp_brand_id", nullable = false)
+        @JoinColumn(name = "sp_brand_id")
         private Brand brand;
 
         @ManyToOne
-        @JoinColumn(name = "sp_category_id", nullable = false)
+        @JoinColumn(name = "sp_category_id")
         private Category category;
     }
 

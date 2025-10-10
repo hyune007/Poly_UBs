@@ -14,16 +14,16 @@ import lombok.Setter;
 @Table(name = "DiaChi")
 public class Address {
     @Id
-    @Column(name = "dc_id", length = 8, nullable = false)
+    @Column(name = "dc_id")
     private String id;
     
-    @Column(name = "dc_city", length = 50, nullable = false)
+    @Column(name = "dc_city")
     private String city;
     
-    @Column(name = "dc_ward", length = 50, nullable = false)
+    @Column(name = "dc_ward")
     private String ward;
 
     @ManyToOne
-    @JoinColumn(name = "kh_id", nullable = false)
+    @JoinColumn(name = "kh_id")
     private Customer customer;
 }

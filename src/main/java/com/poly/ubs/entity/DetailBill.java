@@ -14,17 +14,17 @@ import lombok.Setter;
 @Table(name = "ChiTietHoaDon")
 public class DetailBill {
     @Id
-    @Column(name = "hdct_id", length = 8, nullable = false)
+    @Column(name = "hdct_id")
     private String id;
 
     @ManyToOne
-    @JoinColumn(name = "hd_id", nullable = false)
+    @JoinColumn(name = "hd_id")
     private Bill bill;
 
     @ManyToOne
-    @JoinColumn(name = "sp_id", nullable = false)
+    @JoinColumn(name = "sp_id")
     private Product product;
 
-    @Column(name = "quantity", nullable = false)
+    @Column(name = "quantity")
     private int quantity;
 }
