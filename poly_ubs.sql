@@ -17,7 +17,7 @@ create table NhanVien (
   nv_phone VARCHAR(15) NOT NULL,
   nv_mail VARCHAR(50) NOT NULL,
   nv_address VARCHAR(100) NOT NULL,
-    nv_role VARCHAR(20) NOT NULL,
+    nv_role BIT NOT NULL,
     nv_birth DATE NOT NULL,
   PRIMARY KEY (nv_id)
 );
@@ -89,7 +89,9 @@ create table KhuyenMai(
     km_percent INT NOT NULL,
     km_start_date DATE NOT NULL,
     km_end_date DATE NOT NULL,
-    PRIMARY KEY (km_id)
+    km_sp_id VARCHAR(8) NOT NULL,
+    PRIMARY KEY (km_id),
+    FOREIGN KEY (km_sp_id) REFERENCES SanPham(sp_id)
 );
 create table NhapKho(
     nk_id VARCHAR(8) NOT NULL,
@@ -465,4 +467,4 @@ INSERT INTO KhachHang (kh_id, kh_name, kh_password, kh_phone, kh_mail) VALUES
 
 -- NhanVien (1 employee)
 INSERT INTO NhanVien (nv_id, nv_name, nv_password, nv_phone, nv_mail, nv_address, nv_role, nv_birth) VALUES
-('NV001', 'Admin', 'adminpass', '0123456789', 'admin@polyubs.com', '123 FPT Polytechnic', 'Quản lý', '1990-01-01');
+('NV001', 'Admin', 'adminpass', '0123456789', 'admin@polyubs.com', '123 FPT Polytechnic', 0, '1990-01-01');
