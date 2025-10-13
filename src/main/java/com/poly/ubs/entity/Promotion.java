@@ -47,11 +47,13 @@ public class Promotion {
      * Ngày bắt đầu khuyến mãi
      */
     @Column(name = "km_start_date")
+    @Temporal(TemporalType.DATE)
     private Date startDate;
     
     /**
      * Ngày kết thúc khuyến mãi
      */
     @Column(name = "km_end_date")
+    @Temporal(TemporalType.DATE)
     private Date endDate;
 }

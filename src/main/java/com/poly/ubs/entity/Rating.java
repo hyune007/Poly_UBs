@@ -41,6 +41,7 @@ public class Rating {
      * Ngày đánh giá
      */
     @Column(name = "dg_date")
+    @Temporal(TemporalType.DATE)
     private Date date;
 
     /**

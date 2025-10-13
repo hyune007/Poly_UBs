@@ -22,12 +22,14 @@ public class Bill {
      * ID của hóa đơn
      */
     @Id
+    @Column(name = "hd_id", length = 8)
     private String id;
     
     /**
      * Ngày tạo hóa đơn
      */
     @Column(name = "hd_date")
+    @Temporal(TemporalType.DATE)
     private Date date;
     
     /**

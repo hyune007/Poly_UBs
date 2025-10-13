@@ -65,5 +65,6 @@ public class Employee {
      * Ngày sinh của nhân viên
      */
     @Column(name = "nv_birth")
+    @Temporal(TemporalType.DATE)
     private Date birth;
 }

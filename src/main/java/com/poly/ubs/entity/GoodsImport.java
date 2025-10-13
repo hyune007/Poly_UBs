@@ -42,5 +42,6 @@ public class GoodsImport {
      * Ngày nhập kho
      */
     @Column(name = "nk_date")
+    @Temporal(TemporalType.DATE)
     private Date date;
 }
