@@ -70,6 +70,9 @@
     <div th:if="${param.error}" class="alert alert-danger mt-3">
         <p style="color: red; text-align: center;">Email hoặc mật khẩu không đúng!</p>
     </div>
+    <div th:if="${param.message}" class="alert alert-success mt-3">
+        <p style="color: green; text-align: center;">Đăng ký thành công, vui lòng đăng nhập!</p>
+    </div>
 
     <div class="options">
         <p><a href="/forgotpassword">Quên mật khẩu?</a></p>
