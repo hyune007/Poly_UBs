@@ -19,6 +19,11 @@ public class OrderController {
         model.addAttribute("currentURI", request.getRequestURI());
         return "container/orders/infor-order";
     }
+    @GetMapping("/order/payment")
+    public String payment(HttpServletRequest request, Model model) {
+        model.addAttribute("currentURI", request.getRequestURI());
+        return "container/orders/payment";
+    }
     @GetMapping("/order/complete")
     public String complete(HttpServletRequest request, Model model) {
         model.addAttribute("currentURI", request.getRequestURI());

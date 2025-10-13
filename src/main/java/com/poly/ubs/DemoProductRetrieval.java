@@ -9,7 +9,7 @@ import java.util.List;
 public class DemoProductRetrieval {
     
     // Database configuration from application.properties
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/poly_ubs?useSSL=false&serverTimezone=UTC";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/poly_ubs?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
     private static final String DB_USERNAME = "root";
     private static final String DB_PASSWORD = "huyhuyhuy201107";
     
