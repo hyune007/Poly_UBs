@@ -122,7 +122,18 @@ create table DanhGia
     FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id),
     FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id)
 );
+CREATE TABLE IF NOT EXISTS password_reset_tokens
+(
+    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    token       VARCHAR(255) NOT NULL UNIQUE,
+    kh_id       VARCHAR(8)   NOT NULL,
+    expiry_date DATETIME     NOT NULL,
+    FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id) ON DELETE CASCADE
+);
 
+-- Index để tăng tốc độ tìm kiếm theo token
+CREATE INDEX idx_token ON password_reset_tokens(token);
+CREATE INDEX idx_expiry_date ON password_reset_tokens(expiry_date);
 
 -- Drop tables in correct order (children first, then parents)
 drop table DanhGia; -- Child of SanPham and KhachHang

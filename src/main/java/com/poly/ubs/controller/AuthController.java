@@ -2,12 +2,16 @@ package com.poly.ubs.controller;
 
 import com.poly.ubs.entity.Customer;
 import com.poly.ubs.repository.CustomerRepository;
+import com.poly.ubs.service.PasswordResetService;
+import com.poly.ubs.utils.MailSender;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
@@ -18,6 +22,9 @@ public class AuthController {
     
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private PasswordResetService passwordResetService;
 
     /**
      * Hiển thị trang đăng nhập
@@ -110,7 +117,7 @@ public class AuthController {
         
         // Lưu khách hàng vào cơ sở dữ liệu
         customerRepository.save(customer);
-        
+        MailSender.send (customer.getEmail(), "Xác nhận đăng ký tài khoản Poly_UBs", "Xin chào " + customer.getName() + ", tài khoản của bạn đã được tạo thành công!");
 //        redirectAttributes.addFlashAttribute("success", "Đăng ký thành công! Vui lòng đăng nhập.");
         return "redirect:/login?message=true";
     }
@@ -152,11 +159,83 @@ public class AuthController {
     }
     
     /**
+     * Xử lý yêu cầu gửi email reset mật khẩu
+     * @param email email của khách hàng
+     * @param redirectAttributes để truyền thông báo
+     * @return chuyển hướng về trang forgot password với thông báo
+     */
+    @PostMapping("/forgot-password-post")
+    public String forgotPasswordPost(@RequestParam("email") String email,
+                                     RedirectAttributes redirectAttributes) {
+        try {
+            passwordResetService.createPasswordResetToken(email);
+            redirectAttributes.addFlashAttribute("success",
+                "Link đặt lại mật khẩu đã được gửi đến email của bạn. Vui lòng kiểm tra hộp thư!");
+            return "redirect:/forgot-password?success=true";
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/forgot-password?error=true";
+        }
+    }
+
+    /**
      * Hiển thị trang đặt lại mật khẩu
+     * @param token token để xác thực
+     * @param model để truyền dữ liệu sang view
      * @return tên template đặt lại mật khẩu
      */
     @GetMapping("/reset-password")
-    public String resetPassword(){
+    public String resetPassword(@RequestParam(value = "token", required = false) String token,
+                                Model model,
+                                RedirectAttributes redirectAttributes){
+        if (token == null || token.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Link không hợp lệ");
+            return "redirect:/forgot-password";
+        }
+
+        // Kiểm tra token có hợp lệ không
+        if (!passwordResetService.validateToken(token)) {
+            redirectAttributes.addFlashAttribute("error", "Link đã hết hạn hoặc không hợp lệ");
+            return "redirect:/forgot-password";
+        }
+
+        model.addAttribute("token", token);
         return "auth/reset-password";
+    }
+
+    /**
+     * Xử lý yêu cầu đặt lại mật khẩu
+     * @param token token để xác thực
+     * @param newPassword mật khẩu mới
+     * @param confirmPassword xác nhận mật khẩu mới
+     * @param redirectAttributes để truyền thông báo
+     * @return chuyển hướng đến trang đăng nhập
+     */
+    @PostMapping("/reset-password-post")
+    public String resetPasswordPost(@RequestParam("token") String token,
+                                    @RequestParam("newPassword") String newPassword,
+                                    @RequestParam("confirmPassword") String confirmPassword,
+                                    RedirectAttributes redirectAttributes) {
+        try {
+            // Kiểm tra mật khẩu và xác nhận mật khẩu có khớp không
+            if (!newPassword.equals(confirmPassword)) {
+                redirectAttributes.addFlashAttribute("error", "Mật khẩu xác nhận không khớp!");
+                return "redirect:/reset-password?token=" + token;
+            }
+
+            // Kiểm tra mật khẩu có đủ độ dài không
+            if (newPassword.length() < 6) {
+                redirectAttributes.addFlashAttribute("error", "Mật khẩu phải có ít nhất 6 ký tự!");
+                return "redirect:/reset-password?token=" + token;
+            }
+
+            // Đặt lại mật khẩu
+            passwordResetService.resetPassword(token, newPassword);
+            redirectAttributes.addFlashAttribute("success", "Đặt lại mật khẩu thành công! Vui lòng đăng nhập.");
+            return "redirect:/login?resetSuccess=true";
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/forgot-password";
+        }
     }
 }
