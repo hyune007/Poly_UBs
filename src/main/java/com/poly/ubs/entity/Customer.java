@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Thực thể khách hàng
+ */
 @Setter
 @Getter
 @NoArgsConstructor
@@ -13,19 +16,34 @@ import lombok.Setter;
 @Entity
 @Table(name = "KhachHang")
 public class Customer {
+    /**
+     * ID của khách hàng
+     */
     @Id
     @Column(name = "kh_id")
     private String id;
     
+    /**
+     * Tên khách hàng
+     */
     @Column(name = "kh_name")
     private String name;
     
+    /**
+     * Mật khẩu của khách hàng
+     */
     @Column(name = "kh_password")
     private String password;
     
-    @Column(name = "kh_phone", length = 15, nullable = false)
+    /**
+     * Số điện thoại của khách hàng
+     */
+    @Column(name = "kh_phone")
     private String phone;
     
-    @Column(name = "kh_mail", length = 50, nullable = false)
+    /**
+     * Email của khách hàng
+     */
+    @Column(name = "kh_mail")
     private String email;
 }

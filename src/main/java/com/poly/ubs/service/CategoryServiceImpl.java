@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Implementation of service for Category entity using the generic service
+ * Cài đặt dịch vụ cho thực thể Category sử dụng dịch vụ chung
  */
 @Service
 public class CategoryServiceImpl extends GenericServiceImpl<Category, String, CategoryRepository> {

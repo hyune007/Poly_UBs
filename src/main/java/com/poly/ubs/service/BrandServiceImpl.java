@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Implementation of service for Brand entity using the generic service
+ * Cài đặt dịch vụ cho thực thể Brand sử dụng dịch vụ chung
  */
 @Service
 public class BrandServiceImpl extends GenericServiceImpl<Brand, String, BrandRepository> {

@@ -8,6 +8,9 @@ import lombok.Setter;
 
 import java.util.Date;
 
+/**
+ * Thực thể hóa đơn
+ */
 @Setter
 @Getter
 @NoArgsConstructor
@@ -15,23 +18,41 @@ import java.util.Date;
 @Entity
 @Table(name = "HoaDon")
 public class Bill {
+    /**
+     * ID của hóa đơn
+     */
     @Id
     private String id;
     
+    /**
+     * Ngày tạo hóa đơn
+     */
     @Column(name = "hd_date")
     private Date date;
     
+    /**
+     * Trạng thái hóa đơn
+     */
     @Column(name = "hd_status")
     private String status;
     
+    /**
+     * Khách hàng liên quan đến hóa đơn
+     */
     @ManyToOne
     @JoinColumn(name = "kh_id")
     private Customer customer;
     
+    /**
+     * Nhân viên xử lý hóa đơn
+     */
     @ManyToOne
     @JoinColumn(name = "nv_id")
     private Employee employee;
     
+    /**
+     * Địa chỉ giao hàng
+     */
     @ManyToOne
     @JoinColumn(name = "dc_id")
     private Address address;

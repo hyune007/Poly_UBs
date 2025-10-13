@@ -6,10 +6,10 @@ import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 /**
- * Generic abstract service implementation for common CRUD operations
- * @param <T> Entity type
- * @param <ID> Id type
- * @param <R> Repository type
+ * Lớp trừu tượng dịch vụ chung cài đặt các thao tác CRUD cơ bản
+ * @param <T> Loại thực thể
+ * @param <ID> Loại khóa chính
+ * @param <R> Loại repository
  */
 public abstract class GenericServiceImpl<T, ID, R extends JpaRepository<T, ID>> implements IGenericService<T, ID> {
     

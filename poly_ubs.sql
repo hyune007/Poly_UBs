@@ -1,6 +1,6 @@
 CREATE DATABASE Poly_UBs;
 USE Poly_UBs;
-
+DROP DATABASE Poly_UBs;
 create table KhachHang (
   kh_id VARCHAR(8) NOT NULL,
   kh_name VARCHAR(100) NOT NULL,

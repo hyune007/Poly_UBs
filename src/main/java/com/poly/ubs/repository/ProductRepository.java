@@ -9,6 +9,5 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, String> {
-    @Query("SELECT p FROM Product p")
-    List<Product> findFirst20Products();
+
 }

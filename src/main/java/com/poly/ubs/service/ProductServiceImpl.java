@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Example implementation of a service using the generic service
+ * Ví dụ cài đặt dịch vụ sử dụng dịch vụ chung
  */
 @Service
 public class ProductServiceImpl extends GenericServiceImpl<Product, String, ProductRepository> {
