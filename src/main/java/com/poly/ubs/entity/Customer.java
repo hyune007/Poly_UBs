@@ -14,36 +14,36 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "KhachHang")
+@Table(name = "khachhang")
 public class Customer {
     /**
      * ID của khách hàng
      */
     @Id
-    @Column(name = "kh_id")
+    @Column(name = "kh_id", length = 8)
     private String id;
     
     /**
      * Tên khách hàng
      */
-    @Column(name = "kh_name")
+    @Column(name = "kh_name", length = 100)
     private String name;
     
     /**
      * Mật khẩu của khách hàng
      */
-    @Column(name = "kh_password")
+    @Column(name = "kh_password", length = 40)
     private String password;
     
     /**
      * Số điện thoại của khách hàng
      */
-    @Column(name = "kh_phone")
+    @Column(name = "kh_phone", length = 15)
     private String phone;
     
     /**
      * Email của khách hàng
      */
-    @Column(name = "kh_mail")
+    @Column(name = "kh_mail", length = 50)
     private String email;
 }

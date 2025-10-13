@@ -14,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "ChiTietHoaDon")
+@Table(name = "chitiethoadon")
 public class DetailBill {
     /**
      * ID của chi tiết hóa đơn

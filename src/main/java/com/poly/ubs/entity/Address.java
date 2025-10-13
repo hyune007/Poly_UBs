@@ -14,25 +14,25 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "DiaChi")
+@Table(name = "diachi")
 public class Address {
     /**
      * ID của địa chỉ
      */
     @Id
-    @Column(name = "dc_id")
+    @Column(name = "dc_id", length = 8)
     private String id;
     
     /**
      * Thành phố
      */
-    @Column(name = "dc_city")
+    @Column(name = "dc_city", length = 50)
     private String city;
     
     /**
      * Phường/xã
      */
-    @Column(name = "dc_ward")
+    @Column(name = "dc_ward", length = 50)
     private String ward;
 
     /**
