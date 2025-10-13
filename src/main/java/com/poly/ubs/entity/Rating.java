@@ -2,28 +2,37 @@ package com.poly.ubs.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
 
-@Data
-@Builder
-@AllArgsConstructor
+@Setter
+@Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name="DanhGia")
+@Table(name = "DanhGia")
 public class Rating {
     @Id
-    private String dg_id;
-    private String dg_content;
-    private Integer dg_rating;
-    private Date dg_date;
+    @Column(name = "dg_id")
+    private String id;
+
+    @Column(name = "dg_content")
+    private String content;
+
+    @Column(name = "dg_rating")
+    private int rating;
+
+    @Column(name = "dg_date")
+    private Date date;
+
     @ManyToOne
-    @JoinColumn(name="kh_id")
-    private Customer customer;
-    @ManyToOne
-    @JoinColumn(name="sp_id")
+    @JoinColumn(name = "sp_id")
     private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "kh_id")
+    private Customer customer;
 }

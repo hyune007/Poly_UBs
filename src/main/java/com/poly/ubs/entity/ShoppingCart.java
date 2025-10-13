@@ -2,24 +2,29 @@ package com.poly.ubs.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
-@Builder
-@AllArgsConstructor
+@Setter
+@Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name="GioHang")
+@Table(name = "GioHang")
 public class ShoppingCart {
     @Id
-    private String gh_id;
-    private Integer sp_quantity;
-    @ManyToOne
-    @JoinColumn(name="kh_id", unique = true)
+    @Column(name = "gh_id")
+    private String id;
+
+    @Column(name = "sp_quantity")
+    private int quantity;
+
+    @OneToOne
+    @JoinColumn(name = "kh_id")
     private Customer customer;
+
     @ManyToOne
-    @JoinColumn(name="sp_id")
+    @JoinColumn(name = "sp_id")
     private Product product;
 }

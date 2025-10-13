@@ -1,41 +1,46 @@
 package com.poly.ubs.entity;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+    import jakarta.persistence.*;
+    import lombok.AllArgsConstructor;
+    import lombok.Getter;
+    import lombok.NoArgsConstructor;
+    import lombok.Setter;
 
-import java.util.List;
+    import java.io.Serializable;
 
-@Data
-@Builder
-@AllArgsConstructor
+@Setter
+@Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name="SanPham")
-public class Product {
-    @Id
-    private String sp_id;
-    private String sp_name;
-    private Integer sp_price;
-    private String sp_description;
-    private String sp_image;
-    private Integer sp_stock;
-    @ManyToOne
-    @JoinColumn(name="sp_category_id")
-    private Category category;
-    @ManyToOne
-    @JoinColumn(name="sp_brand_id")
-    private Brand brand;
-    @OneToMany(mappedBy = "product")
-    private List<DetailBill> detailBills;
-    @OneToMany(mappedBy = "product")
-    private List<GoodsImport> goodsImports;
-    @OneToMany(mappedBy = "product")
-    private List<Promotion> promotions;
-    @OneToMany(mappedBy = "product")
-    private List<Rating> ratings;
-    @OneToMany(mappedBy = "product")
-    private List<ShoppingCart> shoppingCarts;
-}
+
+    @Table(name = "SanPham")
+    public class Product  {
+        @Id
+        @Column(name = "sp_id")
+        private String id;
+
+        @Column(name = "sp_name")
+        private String name;
+
+        @Column(name = "sp_price")
+        private int price;
+
+        @Column(name = "sp_description")
+        private String description;
+
+        @Column(name = "sp_image")
+        private String image;
+
+        @Column(name = "sp_stock")
+        private int stock;
+
+        @ManyToOne
+        @JoinColumn(name = "sp_brand_id")
+        private Brand brand;
+
+        @ManyToOne
+        @JoinColumn(name = "sp_category_id")
+        private Category category;
+    }
+

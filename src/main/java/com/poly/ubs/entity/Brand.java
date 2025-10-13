@@ -1,26 +1,22 @@
 package com.poly.ubs.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.List;
-
-@Data
-@Builder
-@AllArgsConstructor
+@Setter
+@Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name="Hang")
+@Table(name = "Hang")
 public class Brand {
     @Id
-    private String hang_id;
-    private String hang_name;
-    @OneToMany(mappedBy = "brand")
-    private List<Product> products;
+    @Column(name = "hang_id")
+    private String id;
+    
+    @Column(name = "hang_name")
+    private String name;
 }
