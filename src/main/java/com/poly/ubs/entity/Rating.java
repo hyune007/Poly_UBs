@@ -16,7 +16,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "DanhGia")
+@Table(name = "danhgia")
 public class Rating {
     /**
      * ID của đánh giá

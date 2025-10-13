@@ -14,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "GioHang")
+@Table(name = "giohang")
 public class ShoppingCart {
     /**
      * ID của mục trong giỏ hàng

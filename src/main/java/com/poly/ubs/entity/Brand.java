@@ -14,18 +14,18 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Hang")
+@Table(name = "hang")
 public class Brand {
     /**
      * ID của thương hiệu
      */
     @Id
-    @Column(name = "hang_id")
+    @Column(name = "hang_id", length = 10)
     private String id;
     
     /**
      * Tên thương hiệu
      */
-    @Column(name = "hang_name")
+    @Column(name = "hang_name", length = 50)
     private String name;
 }

@@ -16,7 +16,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "NhapKho")
+@Table(name = "nhapkho")
 public class GoodsImport {
     /**
      * ID của phiếu nhập kho

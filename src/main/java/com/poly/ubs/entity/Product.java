@@ -17,19 +17,19 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Entity
 
-@Table(name = "SanPham")
+@Table(name = "sanpham")
 public class Product  {
     /**
      * ID của sản phẩm
      */
     @Id
-    @Column(name = "sp_id")
+    @Column(name = "sp_id", length = 8)
     private String id;
 
     /**
      * Tên sản phẩm
      */
-    @Column(name = "sp_name")
+    @Column(name = "sp_name", length = 100)
     private String name;
 
     /**
@@ -41,13 +41,13 @@ public class Product  {
     /**
      * Mô tả sản phẩm
      */
-    @Column(name = "sp_description")
+    @Column(name = "sp_description", length = 100)
     private String description;
 
     /**
      * Hình ảnh sản phẩm
      */
-    @Column(name = "sp_image")
+    @Column(name = "sp_image", length = 100)
     private String image;
 
     /**

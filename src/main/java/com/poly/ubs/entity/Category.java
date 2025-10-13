@@ -14,18 +14,18 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "LoaiSanPham")
+@Table(name = "loaisanpham")
 public class Category {
     /**
      * ID của danh mục
      */
     @Id
-    @Column(name = "lsp_id")
+    @Column(name = "lsp_id", length = 20)
     private String id;
     
     /**
      * Tên danh mục
      */
-    @Column(name = "lsp_name")
+    @Column(name = "lsp_name", length = 100)
     private String name;
 }
