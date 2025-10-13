@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Thực thể thương hiệu
+ */
 @Setter
 @Getter
 @NoArgsConstructor
@@ -13,10 +16,16 @@ import lombok.Setter;
 @Entity
 @Table(name = "Hang")
 public class Brand {
+    /**
+     * ID của thương hiệu
+     */
     @Id
     @Column(name = "hang_id")
     private String id;
     
+    /**
+     * Tên thương hiệu
+     */
     @Column(name = "hang_name")
     private String name;
 }
