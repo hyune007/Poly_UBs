@@ -2,33 +2,37 @@ package com.poly.ubs.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
-import java.util.List;
 
-@Data
-@Builder
-@AllArgsConstructor
+@Setter
+@Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name="HoaDon")
+@Table(name = "HoaDon")
 public class Bill {
     @Id
-    private String hd_id;
-    private Date hd_date;
-    private String hd_status;
+    private String id;
+    
+    @Column(name = "hd_date")
+    private Date date;
+    
+    @Column(name = "hd_status")
+    private String status;
+    
     @ManyToOne
-    @JoinColumn(name="kh_id")
+    @JoinColumn(name = "kh_id")
     private Customer customer;
+    
     @ManyToOne
-    @JoinColumn(name="nv_id")
+    @JoinColumn(name = "nv_id")
     private Employee employee;
+    
     @ManyToOne
-    @JoinColumn(name="dc_id")
+    @JoinColumn(name = "dc_id")
     private Address address;
-    @OneToMany(mappedBy = "bill")
-    private List<DetailBill> detailBills;
 }
