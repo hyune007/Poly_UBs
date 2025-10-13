@@ -111,8 +111,8 @@ public class AuthController {
         // Lưu khách hàng vào cơ sở dữ liệu
         customerRepository.save(customer);
         
-        redirectAttributes.addFlashAttribute("success", "Đăng ký thành công! Vui lòng đăng nhập.");
-        return "redirect:/login";
+//        redirectAttributes.addFlashAttribute("success", "Đăng ký thành công! Vui lòng đăng nhập.");
+        return "redirect:/login?message=true";
     }
     
     /**
