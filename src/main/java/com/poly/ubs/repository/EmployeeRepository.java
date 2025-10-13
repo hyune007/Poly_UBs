@@ -1,4 +1,7 @@
 package com.poly.ubs.repository;
 
-public interface EmployeeRepository {
+import com.poly.ubs.entity.Employee;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface EmployeeRepository extends JpaRepository<Employee, String> {
 }

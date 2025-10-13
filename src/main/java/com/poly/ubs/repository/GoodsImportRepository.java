@@ -1,4 +1,7 @@
 package com.poly.ubs.repository;
 
-public interface GoodsImportRepository {
+import com.poly.ubs.entity.GoodsImport;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface GoodsImportRepository extends JpaRepository<GoodsImport, String> {
 }

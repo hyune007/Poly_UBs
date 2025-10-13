@@ -1,4 +1,7 @@
 package com.poly.ubs.repository;
 
-public interface PromotionRepository {
+import com.poly.ubs.entity.Promotion;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PromotionRepository extends JpaRepository<Promotion, String> {
 }

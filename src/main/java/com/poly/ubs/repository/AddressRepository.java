@@ -1,4 +1,7 @@
 package com.poly.ubs.repository;
 
-public interface AddressRepository {
+import com.poly.ubs.entity.Address;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AddressRepository extends JpaRepository<Address, String> {
 }
