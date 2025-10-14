@@ -1,7 +1,7 @@
 package com.poly.ubs.controller;
 
 import com.poly.ubs.entity.Customer;
-import com.poly.ubs.repository.CustomerRepository;
+import com.poly.ubs.service.CustomerServiceImpl;
 import com.poly.ubs.service.PasswordResetService;
 import com.poly.ubs.utils.MailSender;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AuthController {
     
     @Autowired
-    private CustomerRepository customerRepository;
+    private CustomerServiceImpl customerService;
 
     @Autowired
     private PasswordResetService passwordResetService;
@@ -44,9 +44,9 @@ public class AuthController {
     public String loginPost(HttpServletRequest req){
         String email = req.getParameter("email");
         String password = req.getParameter("password");
-        
+
         // Kiểm tra thông tin đăng nhập
-        Customer customer = customerRepository.findByEmailAndPassword(email, password);
+        Customer customer = customerService.findByEmailAndPassword(email, password);
         
         if (customer != null) {
             // Đăng nhập thành công, lưu thông tin người dùng vào session
@@ -96,7 +96,7 @@ public class AuthController {
         String confirmPassword = req.getParameter("confirmPassword");
         
         // Kiểm tra xem email đã tồn tại chưa
-        if (customerRepository.findByEmail(email) != null) {
+        if (customerService.findByEmail(email) != null) {
             redirectAttributes.addFlashAttribute("error", "Email đã được sử dụng!");
             return "redirect:/register";
         }
@@ -116,7 +116,7 @@ public class AuthController {
         customer.setPassword(password);
         
         // Lưu khách hàng vào cơ sở dữ liệu
-        customerRepository.save(customer);
+        customerService.save(customer);
         MailSender.send (customer.getEmail(), "Xác nhận đăng ký tài khoản Poly_UBs", "Xin chào " + customer.getName() + ", tài khoản của bạn đã được tạo thành công!");
 //        redirectAttributes.addFlashAttribute("success", "Đăng ký thành công! Vui lòng đăng nhập.");
         return "redirect:/login?message=true";
@@ -132,7 +132,7 @@ public class AuthController {
         int maxId = 0;
         
         // Duyệt qua tất cả khách hàng để tìm số ID lớn nhất
-        for (Customer customer : customerRepository.findAll()) {
+        for (Customer customer : customerService.findAll()) {
             if (customer.getId().startsWith(prefix)) {
                 try {
                     int idNum = Integer.parseInt(customer.getId().substring(prefix.length()));
