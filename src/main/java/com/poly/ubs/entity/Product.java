@@ -1,41 +1,72 @@
 package com.poly.ubs.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.io.Serializable;
+
+/**
+ * Thực thể sản phẩm
+ */
+@Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-public class Product {
 
+@Table(name = "sanpham")
+public class Product  {
+    /**
+     * ID của sản phẩm
+     */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "sp_id", length = 8)
+    private String id;
 
+    /**
+     * Tên sản phẩm
+     */
+    @Column(name = "sp_name", length = 100)
     private String name;
-    private String brand;
-    private double price;
+
+    /**
+     * Giá sản phẩm
+     */
+    @Column(name = "sp_price")
+    private int price;
+
+    /**
+     * Mô tả sản phẩm
+     */
+    @Column(name = "sp_description", length = 100)
     private String description;
-    private String imageUrl;
 
-    // 👇 Thêm trường category
-    private String category;
+    /**
+     * Hình ảnh sản phẩm
+     */
+    @Column(name = "sp_image", length = 100)
+    private String image;
 
-    // ==== SETTERS ====
-    public void setId(Long id) { this.id = id; }
+    /**
+     * Số lượng tồn kho
+     */
+    @Column(name = "sp_stock")
+    private int stock;
 
-    public void setName(String name) { this.name = name; }
+    /**
+     * Thương hiệu của sản phẩm
+     */
+    @ManyToOne
+    @JoinColumn(name = "sp_brand_id")
+    private Brand brand;
 
-    public void setBrand(String brand) { this.brand = brand; }
-
-    public void setPrice(double price) { this.price = price; }
-
-    public void setDescription(String description) { this.description = description; }
-
-    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
-
-    // 👇 Setter cho category
-    public void setCategory(String category) { this.category = category; }
+    /**
+     * Danh mục của sản phẩm
+     */
+    @ManyToOne
+    @JoinColumn(name = "sp_category_id")
+    private Category category;
 }
