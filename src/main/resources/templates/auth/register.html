@@ -54,13 +54,24 @@
 <!-- 💧 Form đăng ký -->
 <div class="register-container">
     <h2>Đăng ký tài khoản</h2>
-    <form>
-        <input type="text" placeholder="Họ và tên" required>
-        <input type="email" placeholder="Email" required>
-        <input type="password" placeholder="Mật khẩu" required>
-        <input type="password" placeholder="Xác nhận mật khẩu" required>
+    <form action="/register-post" method="post">
+        <input type="text" name="name" placeholder="Họ và tên" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="text" name="phone" placeholder="Số điện thoại" required>
+        <input type="password" name="password" placeholder="Mật khẩu" required>
+        <input type="password" name="confirmPassword" placeholder="Xác nhận mật khẩu" required>
         <button class="btn" type="submit">Tạo tài khoản</button>
     </form>
+    
+    <!-- Hiển thị thông báo lỗi nếu có -->
+    <div th:if="${error}" class="alert alert-danger mt-3">
+        <p style="color: red; text-align: center;" th:text="${error}"></p>
+    </div>
+    
+    <!-- Hiển thị thông báo thành công nếu có -->
+    <div th:if="${success}" class="alert alert-success mt-3">
+        <p style="color: green; text-align: center;" th:text="${success}"></p>
+    </div>
 
     <!-- 🟡 Đăng ký bằng Google -->
     <button type="button" class="google-btn">
