@@ -8,35 +8,63 @@ import lombok.Setter;
 
 import java.util.Date;
 
+/**
+ * Thực thể nhân viên
+ */
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "NhanVien")
+@Table(name = "nhanvien")
 public class Employee {
+    /**
+     * ID của nhân viên
+     */
     @Id
-    @Column(name = "nv_id")
+    @Column(name = "nv_id", length = 8)
     private String id;
     
-    @Column(name = "nv_name")
+    /**
+     * Tên nhân viên
+     */
+    @Column(name = "nv_name", length = 100)
     private String name;
     
-    @Column(name = "nv_password")
+    /**
+     * Mật khẩu của nhân viên
+     */
+    @Column(name = "nv_password", length = 40)
     private String password;
     
-    @Column(name = "nv_phone")
+    /**
+     * Số điện thoại của nhân viên
+     */
+    @Column(name = "nv_phone", length = 15)
     private String phone;
     
-    @Column(name = "nv_mail")
+    /**
+     * Email của nhân viên
+     */
+    @Column(name = "nv_mail", length = 50)
     private String mail;
     
-    @Column(name = "nv_address")
+    /**
+     * Địa chỉ của nhân viên
+     */
+    @Column(name = "nv_address", length = 100)
     private String address;
     
+    /**
+     * Vai trò của nhân viên (true: admin, false: staff)
+     */
     @Column(name = "nv_role")
     private Boolean role;
     
+    /**
+     * Ngày sinh của nhân viên
+     */
     @Column(name = "nv_birth")
+    @Temporal(TemporalType.DATE)
     private Date birth;
 }

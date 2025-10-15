@@ -1,35 +1,87 @@
 <!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>Header TNC - Bootstrap</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/general.css">
-    <link rel="stylesheet" href="/css/header.css">
-    <style>
-    </style>
-</head>
-<body>
-<header th:fragment="mainHeader">
-<!--Header Top -->
-<div class="header-top py-1 px-3 d-flex justify-content-end gap-2">
-    <div class="contact">📞 (096) 000 0000</div>
-    <div class="contact">📧 Sale.ubraintech@gmail.com</div>
-</div>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="header">
+    <!--Header Top -->
+    <div class="header-top py-2">
+        <div class="container-fluid px-5 d-flex justify-content-between align-items-center">
+            <div class="header-contact d-flex align-items-center gap-3">
+                <span>📞 0394 000 000</span>
+                <span>✉️ techstore@gmail.com</span>
+            </div>
+            <div class="header-social d-flex gap-3">
+                <a href="#" class="text-dark">📘</a>
+                <a href="#" class="text-dark">📷</a>
+                <a href="#" class="text-dark">🐦</a>
+            </div>
+        </div>
+    </div>
 
-<!--Header Mid -->
-<div class="header-mid py-3 border-bottom">
-    <div class="container-fluid px-5 d-flex justify-content-between align-items-center">
-        <a href="/home" class="d-block">
-            <img src="/photos/logo-ubraintech.png" alt="Logo" style="height: 50px;">
+    <!--Header Mid -->
+    <div class="header-mid py-3">
+        <div class="container-fluid px-5 d-flex justify-content-between align-items-center">
+            <a href="/home" class="navbar-brand fs-3 fw-bold">TECH STORE</a>
 
-        </a>
-        <form class="d-flex flex-grow-1 mx-4" role="search">
+            <form class="d-flex search-form w-50">
+                <select class="form-select w-auto me-2">
+                    <option>Tất cả danh mục</option>
+                    <option>Điện thoại</option>
+                    <option>Laptop - Máy tính xách tay</option>
+                    <option>Máy tính bảng</option>
+                    <option>Đồng hồ thông minh</option>
+                    <option>Tai nghe</option>
+                    <option>Bàn phím</option>
+                    <option>Chuột máy tính</option>
+                    <option>Core i [CPU, PC và Laptop]</option>
+                    <option>Core Ultra [CPU, PC và Laptop]</option>
+                    <option>PC AMD</option>
+                    <option>PC AI</option>
+                    <option>Laptop - Máy Tính Xách Tay</option>
+                    <option>Màn Hình Máy Tính</option>
+                    <option>Máy chơi game - Console</option>
+                    <option>Tay Cầm Chơi Game</option>
+                </select>
+                <input class="form-control me-2" type="search" placeholder="Nhập sản phẩm cần tìm..." aria-label="Search">
+                <button class="btn btn-primary w-auto" style="min-width: 100px;" type="submit">Tìm kiếm</button>
+            </form>
+
+            <div class="d-flex align-items-center gap-3 position-relative">
+                <div class="nav-button position-relative">
+                    <a href="/order/shopping-cart" class="text-dark text-decoration-none d-block" id="cart-icon">
+                        🛒 Giỏ hàng
+                        <span class="cart-badge">0</span>
+                    </a>
+                </div>
+                <div class="nav-button" th:if="${session.loggedInUser == null}">
+                    <a href="/login" class="text-dark text-decoration-none">👤Đăng nhập</a>
+                </div>
+                <div class="nav-button dropdown" th:if="${session.loggedInUser != null}">
+                    <a class="text-dark text-decoration-none dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        👤<span th:text="${session.loggedInUser.name}"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/profile">Thông tin cá nhân</a></li>
+                        <li><a class="dropdown-item" href="/orders">Đơn hàng của tôi</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Header Bottom -->
+    <div class="header-bottom py-1">
+        <div class="container-fluid px-5 d-flex flex-wrap justify-content-start">
             <select class="form-select w-auto me-2 ">
-                <option selected>Tất cả danh mục</option>
-                <option >Xây dựng cấu hình PC</option>
-                <option>PC Gaming</option>
-                <option>PC Đồ Họa - Thiết Kế - Edit video</option>
+                <option>Danh mục sản phẩm ▼</option>
+                <option>Điện thoại</option>
+                <option>Laptop - Máy tính xách tay</option>
+                <option>Máy tính bảng</option>
+                <option>Đồng hồ thông minh</option>
+                <option>Tai nghe</option>
+                <option>Bàn phím</option>
+                <option>Chuột máy tính</option>
+                <option>Core i [CPU, PC và Laptop]</option>
                 <option>Core Ultra [CPU, PC và Laptop]</option>
                 <option>PC AMD</option>
                 <option>PC AI</option>
@@ -38,58 +90,14 @@
                 <option>Máy chơi game - Console</option>
                 <option>Tay Cầm Chơi Game</option>
             </select>
-            <input class="form-control me-2" type="search" placeholder="Nhập sản phẩm cần tìm..." aria-label="Search">
-            <button class="btn btn-primary w-auto" style="min-width: 100px;" type="submit">Tìm kiếm</button>
-        </form>
-
-        <div class="d-flex align-items-center gap-3 position-relative">
-            <div class="nav-button position-relative">
-                <a href="/order/shopping-cart" class="text-dark text-decoration-none d-block" id="cart-icon">
-                    🛒 Giỏ hàng
-                    <span class="cart-badge">0</span>
-                </a>
+            <div class="d-flex">
+                <a href="/home" class="nav-link px-3">Trang chủ</a>
+                <a href="#" class="nav-link px-3">Giới thiệu</a>
+                <a href="#" class="nav-link px-3">Sản phẩm</a>
+                <a href="#" class="nav-link px-3">Tin tức</a>
+                <a href="#" class="nav-link px-3">Liên hệ</a>
             </div>
-            <div class="nav-button">
-                <a href="/login" class="text-dark text-decoration-none">👤Đăng nhập</a>
-            </div>
-
         </div>
-
     </div>
-</div>
-
-<!--Header Bottom -->
-<div class="header-bottom py-1">
-    <div class="container-fluid px-5 d-flex flex-wrap justify-content-start">
-        <select class="form-select w-auto me-2 ">
-            <option selected>Tất cả danh mục</option>
-            <option >Xây dựng cấu hình PC</option>
-            <option>PC Gaming</option>
-            <option>PC Đồ Họa - Thiết Kế - Edit video</option>
-            <option>Core Ultra [CPU, PC và Laptop]</option>
-            <option>PC AMD</option>
-            <option>PC AI</option>
-            <option>Laptop - Máy Tính Xách Tay</option>
-            <option>Màn Hình Máy Tính</option>
-            <option>Máy chơi game - Console</option>
-            <option>Tay Cầm Chơi Game</option>
-        </select>
-
-        <a href="#">Build PC</a>
-        <a href="#">PC Gaming</a>
-        <a href="#">PC Đồ họa - Editor</a>
-        <a href="#">Mac</a>
-        <a href="#">Laptop Gaming</a>
-        <a href="#">Laptop Văn phòng</a>
-        <a href="#">PS5</a>
-        <a href="#">RTX 3050</a>
-        <a href="#">RTX 3060</a>
-        <a href="#">Màn Hình</a>
-    </div>
-</div>
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    </header>
-</body>
+</th:block>
 </html>

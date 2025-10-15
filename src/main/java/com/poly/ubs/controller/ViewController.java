@@ -1,65 +1,37 @@
 package com.poly.ubs.controller;
 
+import com.poly.ubs.entity.Customer;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * Bộ điều khiển xem giao diện
+ */
 @org.springframework.stereotype.Controller
 public class ViewController {
 
+    /**
+     * Hiển thị phần header
+     * @param model đối tượng model để truyền dữ liệu đến view
+     * @return đường dẫn đến template header
+     */
     @RequestMapping("header")
     public String header(Model model) {
         return "/main-frame/header";
     }
-
-    @RequestMapping("login")
-    public String login(Model model) {
-        return "/auth/login";
-    }
-
-    @RequestMapping("register")
-    public String register(Model model) {
-        return "/auth/register";
-    }
-
-    @RequestMapping("home")
-    public String home(Model model) {
-
+    
+    /**
+     * Hiển thị trang chủ
+     * @param model đối tượng model để truyền dữ liệu đến view
+     * @param session đối tượng session để lấy thông tin người dùng
+     * @return đường dẫn đến template trang chủ
+     */
+    @GetMapping("home")
+    public String home(Model model, HttpSession session) {
+        Customer loggedInUser = (Customer) session.getAttribute("loggedInUser");
+        model.addAttribute("loggedInUser", loggedInUser);
         return "/container/home";
     }
-
-
-    @RequestMapping("forgotpassword")
-    public String forgotpassword(Model model) {
-        return "/auth/forgot-password";
-    }
-
-    @RequestMapping("order/shopping-cart")
-    public String shopping(Model model) {
-        return "container/orders/shopping-cart";
-    }
-
-    @RequestMapping("order/infor-order")
-    public String infor(Model model) {
-        return "/container/orders/infor-order";
-    }
-
-    @RequestMapping("order/payment")
-    public String payment(Model model) {
-        return "container/orders/payment";
-    }
-
-    @RequestMapping("order/complete")
-    public String complete(Model model) {
-        return "container/orders/complete";
-    }
-
-    @RequestMapping("/reset")
-    public String resetPass(Model model) {
-        return "/auth/reset-password";
-    }
-//----------------
-
-
-
 }
-
