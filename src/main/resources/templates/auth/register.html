@@ -6,6 +6,11 @@
     <title>Đăng ký - Tech Store</title>
     <link rel="stylesheet" href="/css/general.css">
     <link rel="stylesheet" href="/css/auth/register.css">
+    <!-- Google Auth -->
+    <!-- Firebase core -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
     <style>
 
     </style>
@@ -19,6 +24,49 @@
 <a href="/login" class="back-btn">
     ← <span>Quay lại đăng nhập</span>
 </a>
+
+<!-- Code cho đăng nhập bằng google -->
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyCL7fPCKVUMPpLnQjAfIQi7KavT8pEdBJw",
+        authDomain: "assignment-ts00705.firebaseapp.com",
+        projectId: "assignment-ts00705",
+        storageBucket: "assignment-ts00705.appspot.com",
+        messagingSenderId: "1000313447098",
+        appId: "1:1000313447098:web:c1264a8b461d29473b9883",
+        measurementId: "G-3GTN9GLB3J"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    document.getElementById('googleSignIn').addEventListener('click', async () => {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        try {
+            const result = await auth.signInWithPopup(provider);
+            const user = result.user;
+            const idToken = await user.getIdToken();
+
+            // POST idToken to backend to create session
+            const res = await fetch('/sessionLogin', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ idToken })
+            });
+
+            if (res.ok) {
+                // Redirect to home page where Thymeleaf will show info from session
+                window.location.href = '/';
+            } else {
+                const txt = await res.text();
+                alert('Login failed: ' + txt);
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Sign-in error: ' + err.message);
+        }
+    });
+</script>
 
 <!-- ☁️ Sinh nhiều mây -->
 <script>
@@ -74,7 +122,7 @@
     </div>
 
     <!-- 🟡 Đăng ký bằng Google -->
-    <button type="button" class="google-btn">
+    <button id="googleSignIn" type="button" class="google-btn">
         <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo">
         Đăng ký bằng Google
     </button>
