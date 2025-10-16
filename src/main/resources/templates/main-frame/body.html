@@ -4,129 +4,166 @@
     <meta charset="UTF-8">
     <title>Danh sách Laptop</title>
     <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+        }
+
+        /* GRID căn giữa */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 30px;
+            justify-content: center;
+            justify-items: center;
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 60px 10px 50px 10px; /* cách đều trên dưới */
+        }
+
+        /* CARD sản phẩm */
+        .product-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            text-align: center;
+            padding: 18px;
+            width: 100%;
+            max-width: 240px; /* khung card lớn hơn */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            transition: transform 0.25s ease-in-out;
+        }
+
+        .product-card:hover {
+            transform: scale(1.06);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 220px; /* tăng kích thước ảnh */
+            object-fit: contain;
+            border-radius: 8px;
+            background-color: #fafafa;
+            padding: 5px;
+        }
+
+        .product-card h4 {
+            color: #333;
+            margin: 12px 0 6px 0;
+            font-size: 17px;
+        }
+
+        .product-card p {
+            margin: 0 0 12px 0;
+            color: #555;
+            font-size: 15px;
+        }
+
+        .product-card button {
+            background-color: #001476;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 14px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .product-card button:hover {
+            background-color: #0044cc;
+        }
+
+        /* Pagination */
+        .pagination-container {
+            margin-top: 70px; /* cách xa khỏi hàng sản phẩm */
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .pagination {
+            display: inline-flex;
+            gap: 8px;
+        }
+
+        .page-item .page-link {
+            color: #001476;
+            border: 1px solid #001476;
+            border-radius: 8px;
+            padding: 6px 12px;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .page-item .page-link:hover {
+            background-color: #001476;
+            color: white;
+        }
+
+        .page-item.active .page-link {
+            background-color: #001476;
+            border-color: #001476;
+            color: white;
+        }
+
+        .page-item.disabled .page-link {
+            color: #aaa;
+            border-color: #ddd;
+            cursor: not-allowed;
+            background-color: #f8f9fa;
+        }
 
     </style>
+
+
 </head>
 <body>
 <div th:fragment="Content">
 
 
-<h2 style="text-align:center; color:#001476; margin-bottom:30px;">Danh sách Laptop</h2>
+<h2 style="text-align:center; color:#001476; margin-bottom:30px;">Danh sách sản phẩm</h2>
 
-<div class="product-grid">
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 1">
-        <h4>Laptop Dell Inspiron</h4>
-        <p>Giá: 17.000.000₫</p>
-        <button>Mua ngay</button>
+    <div id="products" class="product-grid">
+        <div class="product-card" th:each="item : ${items}">
+            <img th:src="@{|/photos/${item.image}|}" alt="Sản phẩm">
+            <h4 th:text="${item.name}"></h4>
+            <p>Giá: <span th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')}"></span>₫</p>
+            <button>Mua ngay</button>
+        </div>
     </div>
+    <br>
+    <div class="pagination-container">
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center flex-wrap">
 
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 2">
-        <h4>Laptop HP Pavilion</h4>
-        <p>Giá: 15.500.000₫</p>
-        <button>Mua ngay</button>
+                <!-- Nút về trang đầu -->
+                <li class="page-item" th:classappend="${items.first} ? 'disabled' : ''">
+                    <a class="page-link" th:href="@{|/home?p=0#products|}">«</a>
+                </li>
+
+                <!-- Nút trước -->
+                <li class="page-item" th:classappend="${items.first} ? 'disabled' : ''">
+                    <a class="page-link" th:href="@{|/home?p=${items.number - 1}#products|}">‹</a>
+                </li>
+
+                <!-- Danh sách số trang -->
+                <li th:each="i : ${#numbers.sequence(0, items.totalPages - 1)}"
+                    class="page-item"
+                    th:classappend="${i == items.number} ? 'active' : ''">
+                    <a class="page-link" th:href="@{|/home?p=${i}#products|}" th:text="${i + 1}"></a>
+                </li>
+
+                <!-- Nút sau -->
+                <li class="page-item" th:classappend="${items.last} ? 'disabled' : ''">
+                    <a class="page-link" th:href="@{|/home?p=${items.number + 1}#products|}">›</a>
+                </li>
+
+                <!-- Nút cuối -->
+                <li class="page-item" th:classappend="${items.last} ? 'disabled' : ''">
+                    <a class="page-link" th:href="@{|/home?p=${items.totalPages - 1}#products|}">»</a>
+                </li>
+            </ul>
+        </nav>
     </div>
-
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 3">
-        <h4>Laptop Asus VivoBook</h4>
-        <p>Giá: 14.200.000₫</p>
-        <button>Mua ngay</button>
-    </div>
-
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 4">
-        <h4>Laptop Lenovo IdeaPad</h4>
-        <p>Giá: 13.800.000₫</p>
-        <button>Mua ngay</button>
-    </div>
-
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 5">
-        <h4>Laptop MacBook Air M1</h4>
-        <p>Giá: 21.000.000₫</p>
-        <button>Mua ngay</button>
-    </div>
-
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 6">
-        <h4>Laptop Acer Aspire</h4>
-        <p>Giá: 12.900.000₫</p>
-        <button>Mua ngay</button>
-    </div>
-
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 7">
-        <h4>Laptop MSI Modern</h4>
-        <p>Giá: 16.400.000₫</p>
-        <button>Mua ngay</button>
-    </div>
-
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 8">
-        <h4>Laptop Gigabyte G5</h4>
-        <p>Giá: 18.300.000₫</p>
-        <button>Mua ngay</button>
-    </div>
-
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 9">
-        <h4>Laptop Huawei MateBook</h4>
-        <p>Giá: 14.900.000₫</p>
-        <button>Mua ngay</button>
-    </div>
-
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 10">
-        <h4>Laptop LG Gram</h4>
-        <p>Giá: 22.500.000₫</p>
-        <button>Mua ngay</button>
-    </div>
-
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 10">
-        <h4>Laptop LG Gram</h4>
-        <p>Giá: 22.500.000₫</p>
-        <button>Mua ngay</button>
-    </div>
-
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 10">
-        <h4>Laptop LG Gram</h4>
-        <p>Giá: 22.500.000₫</p>
-        <button>Mua ngay</button>
-    </div>
-
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 10">
-        <h4>Laptop LG Gram</h4>
-        <p>Giá: 22.500.000₫</p>
-        <button>Mua ngay</button>
-    </div>
-
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 10">
-        <h4>Laptop LG Gram</h4>
-        <p>Giá: 22.500.000₫</p>
-        <button>Mua ngay</button>
-    </div>
-
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 10">
-        <h4>Laptop LG Gram</h4>
-        <p>Giá: 22.500.000₫</p>
-        <button>Mua ngay</button>
-    </div>
-
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 10">
-        <h4>Laptop LG Gram</h4>
-        <p>Giá: 22.500.000₫</p>
-        <button>Mua ngay</button>
-    </div>
-
-</div>
 </div>
 
 </body>
