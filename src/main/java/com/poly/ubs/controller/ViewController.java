@@ -34,4 +34,9 @@ public class ViewController {
         model.addAttribute("loggedInUser", loggedInUser);
         return "/container/home";
     }
+
+//    @GetMapping("/profile")
+//    public String userProfile(Model model, HttpSession session) {
+//        return "/container/user/profile";
+//    }
 }

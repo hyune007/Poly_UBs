@@ -238,4 +238,10 @@ public class AuthController {
             return "redirect:/forgot-password";
         }
     }
+
+    /**
+     * Xử lý đổi mật khẩu của người dùng đang đăng nhập
+     */
+
+
 }
