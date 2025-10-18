@@ -6,12 +6,46 @@ header {
     background-color: #f8f9fa;
     font-size: 14px;
 }
+
+/* Giữ phần header-top nằm cùng hàng, không xuống dòng */
+.header-top .container-fluid {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap; /* 🔒 không cho xuống hàng */
+    justify-content: space-between;
+    gap: 20px;
+    overflow: hidden;
+}
+
+.header-top .scrolling-text {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.header-top .scrolling-text p {
+    display: inline-block;
+    color: #0055ff;
+    font-weight: 500;
+    animation: marquee 30s linear infinite;
+    will-change: transform;
+}
+
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+p {
+    margin: 0;
+}
+
+
 .header-mid select,
 .header-bottom select {
     font-size: 14px;
     padding: 4px 8px;
 }
-
 
 
 .header-bottom select option{
@@ -29,8 +63,6 @@ header {
     font-size: 14px;
     padding: 6px 12px;
 }
-
-
 
 
 .header-bottom {
@@ -56,6 +88,14 @@ header {
 
 .nav-button:hover {
     background-color: #e0e0e0;
+
+}
+.nav-link:hover{
+    color: #fff;
+}
+
+.nav-link:focus{
+    color: #fff!important;
 }
 
 .cart-badge {
@@ -87,8 +127,8 @@ header {
     text-decoration: none;
 }
 
+
 .hover-underline::after {
-    color: #fff!important;
     content: "";
     position: absolute;
     left: 0;
@@ -101,4 +141,10 @@ header {
 
 .hover-underline:hover::after {
     width: 100%;
+}
+
+.hover-underline:focus::after,
+.hover-underline:active::after {
+    width: 100%;
+    background-color: white;
 }
