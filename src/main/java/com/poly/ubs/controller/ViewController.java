@@ -5,6 +5,8 @@ import com.poly.ubs.entity.Customer;
 import com.poly.ubs.entity.Product;
 import com.poly.ubs.repository.CategoryRepository;
 import com.poly.ubs.repository.ProductRepository;
+import com.poly.ubs.service.CategoryServiceImpl;
+import com.poly.ubs.service.ProductServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,12 +24,12 @@ import java.util.Optional;
 @org.springframework.stereotype.Controller
 public class ViewController {
     @Autowired
-    private ProductRepository productRepository;
+    private CategoryServiceImpl categoryService;
     @Autowired
-    private CategoryRepository categoryRepository;
+    private ProductServiceImpl productService;
     @ModelAttribute("categories")
     public List<Category> getCategories() {
-        return categoryRepository.findAll();
+        return categoryService.findAll();
     }
     /**
      * Hiển thị phần header
@@ -53,9 +55,9 @@ public class ViewController {
         Page<Product> items;
 
         if (categoryId != null && !categoryId.isEmpty()) {
-            items = productRepository.findByCategoryId(categoryId, pageable);
+            items = productService.findByCategoryId(categoryId, pageable);
         } else {
-            items = productRepository.findAll(pageable);
+            items = productService.findAll(pageable);
         }
 
         /**
@@ -85,7 +87,7 @@ public class ViewController {
 
     @GetMapping("/product/detail/{id}")
     public String detail(@PathVariable("id") String id, Model model) {
-        Product item = productRepository.findById(id).orElse(null);
+        Product item = productService.findById(id);
         String folder = "";
         switch (item.getCategory().getId()) {
             case "LSP01": folder = "phone/"; break;

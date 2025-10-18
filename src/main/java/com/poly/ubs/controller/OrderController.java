@@ -1,16 +1,28 @@
 package com.poly.ubs.controller;
 
+import com.poly.ubs.entity.Category;
+import com.poly.ubs.repository.CategoryRepository;
+import com.poly.ubs.service.CategoryServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+
+import java.util.List;
 
 /**
  * Bộ điều khiển đơn hàng
  */
 @Controller
 public class OrderController {
-
+    @Autowired
+    private CategoryServiceImpl categoryService;
+    @ModelAttribute("categories")
+    public List<Category> getCategories() {
+        return categoryService.findAll();
+    }
     /**
      * Hiển thị trang giỏ hàng
      * @param request yêu cầu HTTP
