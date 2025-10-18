@@ -3,6 +3,8 @@ package com.poly.ubs.service;
 import com.poly.ubs.entity.Product;
 import com.poly.ubs.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,5 +19,13 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, String, Prod
     @Override
     protected ProductRepository getRepository() {
         return productRepository;
+    }
+
+    public Page<Product> findByCategoryId(String categoryId, Pageable pageable) {
+        return productRepository.findByCategoryId(categoryId, pageable);
+    }
+
+    public Page<Product> findAll(Pageable pageable){
+        return productRepository.findAll(pageable);
     }
 }
