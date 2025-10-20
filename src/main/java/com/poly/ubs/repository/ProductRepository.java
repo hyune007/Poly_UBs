@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, String> {
     Page<Product> findByCategoryId(String categoryId, Pageable pageable);
+
+
 }
