@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Lớp trừu tượng dịch vụ chung cài đặt các thao tác CRUD cơ bản
@@ -14,7 +15,7 @@ import java.util.List;
 public abstract class GenericServiceImpl<T, ID, R extends JpaRepository<T, ID>> implements IGenericService<T, ID> {
     
     protected abstract R getRepository();
-    
+
     @Override
     public T save(T entity) {
         return getRepository().save(entity);
@@ -48,5 +49,10 @@ public abstract class GenericServiceImpl<T, ID, R extends JpaRepository<T, ID>> 
     @Override
     public long count() {
         return getRepository().count();
+    }
+
+    // ✅ Thêm hàm này
+    public Optional<T> findOptionalById(ID id) {
+        return getRepository().findById(id);
     }
 }

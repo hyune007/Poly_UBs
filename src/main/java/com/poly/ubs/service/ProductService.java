@@ -1,13 +1,11 @@
 package com.poly.ubs.service;
 
 import com.poly.ubs.entity.Product;
-import java.util.List;
-import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-public interface ProductService {
-    List<Product> findAll();
-    Optional<Product> findById(Long id);
-    Product save(Product product);
-    void deleteById(Long id);
-    List<Product> findByCategory(String category);
+public interface ProductService extends IGenericService<Product, Long> {
+    Page<Product> findByCategory(String categoryName, Pageable pageable);
+    Page<Product> findAll(Pageable pageable);
+    long countByCategory(String categoryName);
 }

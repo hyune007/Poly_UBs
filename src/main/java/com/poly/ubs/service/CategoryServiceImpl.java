@@ -6,14 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Cài đặt dịch vụ cho thực thể Category sử dụng dịch vụ chung
+ * Cài đặt dịch vụ cho Category sử dụng GenericServiceImpl
  */
 @Service
-public class CategoryServiceImpl extends GenericServiceImpl<Category, String, CategoryRepository> {
-    
+public class CategoryServiceImpl extends GenericServiceImpl<Category, String, CategoryRepository>
+        implements CategoryService {
+
     @Autowired
     private CategoryRepository categoryRepository;
-    
+
     @Override
     protected CategoryRepository getRepository() {
         return categoryRepository;

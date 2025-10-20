@@ -1,103 +1,106 @@
 package com.poly.ubs.controller;
 
+import com.poly.ubs.entity.Brand;
+import com.poly.ubs.entity.Category;
 import com.poly.ubs.entity.Product;
+import com.poly.ubs.service.BrandServiceImpl;
+import com.poly.ubs.service.CategoryService;
 import com.poly.ubs.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 @Controller
 @RequestMapping("/admin/products")
 public class ProductController {
 
     @Autowired
-    private ProductService service;
+    private ProductService productService;
 
-    // 📁 Thư mục lưu ảnh upload (nằm trong static)
-    private static final String UPLOAD_DIR = "src/main/resources/static/uploads/";
+    @Autowired
+    private CategoryService categoryService;
 
-    // Danh sách sản phẩm theo category
+    @Autowired
+    private BrandServiceImpl brandServiceimpl; // mới: cần có service/ repo cho Brand
+
+    // Danh sách (paging + filter)
     @GetMapping
-    public String list(@RequestParam(name = "category", required = false) String category, Model model) {
-        if (category != null && !category.isEmpty()) {
-            model.addAttribute("products", service.findByCategory(category));
-            model.addAttribute("currentCategory", category);
-        } else {
-            model.addAttribute("products", service.findAll());
-            model.addAttribute("currentCategory", "");
-        }
-        return "admin/list";
+    public String list(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String category,
+            Model model) {
+
+        var pageable = PageRequest.of(page, size);
+        var productPage = (category != null && !category.isEmpty())
+                ? productService.findByCategory(category, pageable)
+                : productService.findAll(pageable);
+
+        long totalProducts = (category != null && !category.isEmpty())
+                ? productService.countByCategory(category)
+                : productService.count();
+
+        model.addAttribute("products", productPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", productPage.getTotalPages());
+        model.addAttribute("totalProducts", totalProducts);
+        model.addAttribute("selectedCategory", category);
+        model.addAttribute("categories", categoryService.findAll());
+
+        return "admin/products/list";
     }
 
-    // Tạo mới sản phẩm, lấy category từ URL
+    // Hiển thị form thêm
     @GetMapping("/create")
-    public String createForm(@RequestParam(name = "category", required = false) String category, Model model) {
-        Product product = new Product();
-        if (category != null) {
-            product.setCategory(category);
-        }
-        model.addAttribute("product", product);
-        return "admin/form";
+    public String createForm(Model model) {
+        model.addAttribute("product", new Product());
+        model.addAttribute("categories", categoryService.findAll());
+        model.addAttribute("brands", brandServiceimpl.findAll()); // <-- trả về List<Brand>
+        return "admin/products/form";
     }
 
-    // ✅ Lưu sản phẩm (có upload ảnh)
-    @PostMapping("/save")
-    public String save(@ModelAttribute Product product,
-                       @RequestParam(value = "file", required = false) MultipartFile file) {
-
-        try {
-            // Nếu người dùng có upload file
-            if (file != null && !file.isEmpty()) {
-                // Tạo thư mục nếu chưa có
-                File uploadDir = new File(UPLOAD_DIR);
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdirs();
-                }
-
-                // Tạo đường dẫn lưu file
-                String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-                Path filePath = Paths.get(UPLOAD_DIR, fileName);
-
-                // Lưu file vào thư mục static/uploads
-                Files.write(filePath, file.getBytes());
-
-                // Gán đường dẫn truy cập ảnh (URL tĩnh)
-                String imageUrl = "/uploads/" + fileName;
-                product.setImageUrl(imageUrl);
-            }
-
-            service.save(product);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return "redirect:/admin/products?category=" + product.getCategory();
-    }
-
-    // Sửa sản phẩm
+    // Hiển thị form sửa
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable Long id, Model model) {
-        Product product = service.findById(id).orElse(new Product());
+    public String editForm(@PathVariable String id, Model model) {
+        Product product = productService.findById(Long.valueOf(id));
+        if (product == null) {
+            return "redirect:/admin/products";
+        }
         model.addAttribute("product", product);
-        return "admin/form";
+        model.addAttribute("categories", categoryService.findAll());
+        model.addAttribute("brands", brandServiceimpl.findAll());
+        return "admin/products/form";
     }
 
-    // Xóa sản phẩm
-    @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Long id,
-                         @RequestParam(name = "category", required = false) String category) {
-        service.deleteById(id);
-        if (category != null) {
-            return "redirect:/admin/products?category=" + category;
+    // Lưu (tạo hoặc cập nhật)
+    @PostMapping("/save")
+    public String save(@ModelAttribute Product product) {
+        // Nếu form gửi brand.id và category.id (nested binding), product.getBrand() và getCategory()
+        // có thể chứa chỉ id — ta cần load entity thực từ DB và set lại để JPA hiểu quan hệ.
+        if (product.getBrand() != null && product.getBrand().getId() != null) {
+            Brand b = brandServiceimpl.findById(product.getBrand().getId());
+            product.setBrand(b);
+        } else {
+            product.setBrand(null);
         }
+
+        if (product.getCategory() != null && product.getCategory().getId() != null) {
+            Category c = categoryService.findById(product.getCategory().getId());
+            product.setCategory(c);
+        } else {
+            product.setCategory(null);
+        }
+
+        productService.save(product);
+        return "redirect:/admin/products";
+    }
+
+    // Xóa
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable String id) {
+        productService.deleteById(Long.valueOf(id));
         return "redirect:/admin/products";
     }
 }
