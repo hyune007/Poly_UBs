@@ -2,11 +2,13 @@ package com.poly.ubs;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Ứng dụng Spring Boot chính cho hệ thống PolyUBs
  */
 @SpringBootApplication
+@EnableScheduling
 public class PolyUBsApplication {
 
     /**
