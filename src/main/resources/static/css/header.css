@@ -17,17 +17,25 @@ header {
     overflow: hidden;
 }
 
+.scrolling-wrapper {
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+}
+
+
 .header-top .scrolling-text {
     flex: 1;
     overflow: hidden;
     white-space: nowrap;
 }
 
+
 .header-top .scrolling-text p {
     display: inline-block;
-    color: #0055ff;
+    color: #002a81;
     font-weight: 500;
-    animation: marquee 30s linear infinite;
+    animation: marquee 40s linear infinite;
     will-change: transform;
 }
 

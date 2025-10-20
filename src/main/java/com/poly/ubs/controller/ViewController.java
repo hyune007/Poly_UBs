@@ -1,5 +1,6 @@
 package com.poly.ubs.controller;
 
+import com.poly.ubs.entity.Category;
 import com.poly.ubs.entity.Customer;
 import com.poly.ubs.entity.Product;
 import com.poly.ubs.service.CategoryServiceImpl;
@@ -10,11 +11,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -32,6 +31,10 @@ public class ViewController {
      * @param model đối tượng model để truyền dữ liệu đến view
      * @return đường dẫn đến template header
      */
+    @ModelAttribute("categories")
+    public List<Category> getCategories() {
+        return categoryService.getCategories();
+    }
     @RequestMapping("header")
     public String header(Model model) {
         return "/main-frame/header";
@@ -52,8 +55,13 @@ public class ViewController {
 
         if (categoryId != null && !categoryId.isEmpty()) {
             items = productService.findByCategoryId(categoryId, pageable);
+            Category category = categoryService.findById(categoryId);
+            if (category != null) {
+                model.addAttribute("selectedCategoryName", category.getName());
+            }
         } else {
             items = productService.findAll(pageable);
+            model.addAttribute("selectedCategoryName", "Tất cả sản phẩm");
         }
 
         /**
