@@ -27,7 +27,7 @@
                     <option th:each="c : ${categories}"
                             th:value="${c.id}"
                             th:text="${c.name}"
-                            th:selected="${c.id == selectedCategoryId}">
+                            th:selected="${selectedCategoryId != null and c.id == selectedCategoryId}">
                     </option>
                 </select>
                 <input class="form-control me-2" type="search" placeholder="Nhập sản phẩm cần tìm..." aria-label="Search">
