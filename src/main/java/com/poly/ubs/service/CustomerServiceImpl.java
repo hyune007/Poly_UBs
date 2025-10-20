@@ -14,8 +14,28 @@ public class CustomerServiceImpl extends GenericServiceImpl<Customer, String, Cu
 
     @Autowired
     private CustomerRepository customerRepository;
+    
     @Override
     protected CustomerRepository getRepository() {
         return customerRepository;
+    }
+    
+    /**
+     * Tìm khách hàng theo email và mật khẩu
+     * @param email email của khách hàng
+     * @param password mật khẩu của khách hàng
+     * @return khách hàng nếu tìm thấy, null nếu không tìm thấy
+     */
+    public Customer findByEmailAndPassword(String email, String password) {
+        return customerRepository.findByEmailAndPassword(email, password);
+    }
+    
+    /**
+     * Tìm khách hàng theo email
+     * @param email email của khách hàng
+     * @return khách hàng nếu tìm thấy, null nếu không tìm thấy
+     */
+    public Customer findByEmail(String email) {
+        return customerRepository.findByEmail(email);
     }
 }
