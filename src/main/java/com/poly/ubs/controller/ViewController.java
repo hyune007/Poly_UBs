@@ -1,5 +1,6 @@
 package com.poly.ubs.controller;
 
+import com.poly.ubs.entity.Category;
 import com.poly.ubs.entity.Customer;
 import com.poly.ubs.entity.Product;
 import com.poly.ubs.service.CategoryServiceImpl;
@@ -10,11 +11,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -27,6 +26,10 @@ public class ViewController {
     private ProductServiceImpl productService;
     @Autowired
     private CategoryServiceImpl categoryService;
+    @ModelAttribute("categories")
+    public List<Category> getCategories() {
+        return categoryService.getCategories();
+    }
     /**
      * Hiển thị phần header
      * @param model đối tượng model để truyền dữ liệu đến view
@@ -47,6 +50,7 @@ public class ViewController {
     public String home(Model model, HttpSession session, @RequestParam("p") Optional<Integer> p, @RequestParam(value = "categoryId", required = false) String categoryId) {
         Customer loggedInUser = (Customer) session.getAttribute("loggedInUser");
         model.addAttribute("loggedInUser", loggedInUser);
+        model.addAttribute("categories", categoryService.getCategories());
         Pageable pageable = PageRequest.of(p.orElse(0), 18);
         Page<Product> items;
 
@@ -83,6 +87,7 @@ public class ViewController {
 
     @GetMapping("/product/detail/{id}")
     public String detail(@PathVariable("id") String id, Model model) {
+        model.addAttribute("categories", categoryService.getCategories());
         Product item = productService.findById(id);
         String folder = "";
         switch (item.getCategory().getId()) {
