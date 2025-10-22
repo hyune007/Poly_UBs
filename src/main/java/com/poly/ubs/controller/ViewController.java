@@ -112,4 +112,5 @@ public class ViewController {
         }
         return "/container/products/product-detail";
     }
+
 }
