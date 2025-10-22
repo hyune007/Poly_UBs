@@ -30,6 +30,7 @@ public interface IGenericService<T, ID> {
      */
     T findById(ID id);
 
+
     /**
      * Tìm tất cả các thực thể
      * @return danh sách tất cả các thực thể

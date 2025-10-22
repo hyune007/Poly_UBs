@@ -22,7 +22,7 @@ public class Category {
     @Id
     @Column(name = "lsp_id", length = 20)
     private String id;
-    
+
     /**
      * Tên danh mục
      */
