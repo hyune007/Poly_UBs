@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thêm / Sửa Nhân Viên</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5 bg-white p-4 rounded shadow">
+    <h2 class="fw-bold mb-4" th:text="${employee.id == null} ? 'Thêm nhân viên mới' : 'Cập nhật nhân viên'"></h2>
+
+    <form th:action="@{/admin/employee/save}" th:object="${employee}" method="post">
+
+        <!-- ID -->
+        <div class="mb-3">
+            <label class="form-label">Mã nhân viên</label>
+            <input type="text" th:field="*{id}" class="form-control" placeholder="Nhập mã nhân viên" required>
+        </div>
+
+        <!-- Tên -->
+        <div class="mb-3">
+            <label class="form-label">Tên nhân viên</label>
+            <input type="text" th:field="*{name}" class="form-control" placeholder="Nhập tên nhân viên" required>
+        </div>
+
+        <!-- Mật khẩu -->
+        <div class="mb-3">
+            <label class="form-label">Mật khẩu</label>
+            <input type="password" th:field="*{password}" class="form-control" placeholder="Nhập mật khẩu" required>
+        </div>
+
+        <!-- Số điện thoại -->
+        <div class="mb-3">
+            <label class="form-label">Số điện thoại</label>
+            <input type="text" th:field="*{phone}" class="form-control" placeholder="Nhập số điện thoại">
+        </div>
+
+        <!-- Email -->
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" th:field="*{email}" class="form-control" placeholder="Nhập email">
+        </div>
+
+        <!-- Địa chỉ -->
+        <div class="mb-3">
+            <label class="form-label">Địa chỉ</label>
+            <input type="text" th:field="*{address}" class="form-control" placeholder="Nhập địa chỉ">
+        </div>
+
+        <!-- Vai trò -->
+        <div class="mb-3">
+            <label class="form-label">Vai trò</label>
+            <select th:field="*{role}" class="form-select">
+                <option th:value="true">Nhân viên</option>
+                <option th:value="false">Admin</option>
+            </select>
+        </div>
+
+        <!-- Ngày sinh -->
+        <div class="mb-3">
+            <label class="form-label">Ngày sinh</label>
+            <input type="date" th:field="*{birth}" class="form-control">
+        </div>
+
+        <!-- Nút hành động -->
+        <div class="d-flex justify-content-between">
+            <a href="/admin/employee" class="btn btn-secondary">← Quay lại</a>
+            <button type="submit" class="btn btn-success">Lưu nhân viên</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
