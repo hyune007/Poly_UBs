@@ -66,6 +66,7 @@ create table DiaChi
     kh_id   VARCHAR(8)  NOT NULL,
     dc_city VARCHAR(50) NOT NULL,
     dc_ward VARCHAR(50) NOT NULL,
+    dc_detailaddress VARCHAR(255) NOT NULL,
     PRIMARY KEY (dc_id),
     FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id)
 );
@@ -88,6 +89,7 @@ create table ChiTietHoaDon
     hd_id    VARCHAR(8) NOT NULL,
     sp_id    VARCHAR(8) NOT NULL,
     quantity INT        NOT NULL,
+    hdct_total INT        NOT NULL,
     PRIMARY KEY (hdct_id),
     FOREIGN KEY (hd_id) REFERENCES HoaDon (hd_id),
     FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id)
