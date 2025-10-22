@@ -55,19 +55,19 @@
     </style>
 </head>
 <body>
-    <div th:replace="main-frame/header :: header"></div>
-    <div class="product-detail">
-        <img th:src="@{|/photos/${item.image}|}" alt="Hình sản phẩm">
-        <div class="product-info">
-            <h2 th:text="${item.name}"></h2>
-            <p><strong>Giá:</strong> <span th:text="${#numbers.formatDecimal(item.price,0,'COMMA',0,'POINT')}"></span>₫</p>
-            <p><strong>Mô tả:</strong> <span th:text="${item.description}"></span></p>
-            <p><strong>Thương hiệu:</strong> <span th:text="${item.brand.name}"></span></p>
-            <p><strong>Danh mục:</strong> <span th:text="${item.category.name}"></span></p>
-            <p><strong>Số lượng tồn:</strong> <span th:text="${item.stock}"></span></p>
-            <button class="btn-buy">Thêm vào giỏ hàng</button>
-        </div>
+<div th:replace="main-frame/header :: header"></div>
+<div class="product-detail">
+    <img th:src="@{|/photos/${item.image}|}" alt="Hình sản phẩm">
+    <div class="product-info">
+        <h2 th:text="${item.name}"></h2>
+        <p><strong>Giá:</strong> <span th:text="${#numbers.formatDecimal(item.price,0,'COMMA',0,'POINT')}"></span>₫</p>
+        <p><strong>Mô tả:</strong> <span th:text="${item.description}"></span></p>
+        <p><strong>Thương hiệu:</strong> <span th:text="${item.brand.name}"></span></p>
+        <p><strong>Danh mục:</strong> <span th:text="${item.category.name}"></span></p>
+        <p><strong>Số lượng tồn:</strong> <span th:text="${item.stock}"></span></p>
+        <button class="btn-buy">Thêm vào giỏ hàng</button>
     </div>
-    <div th:replace="main-frame/footer :: footer"></div>
+</div>
+<div th:replace="main-frame/footer :: footer"></div>
 </body>
 </html>

@@ -5,6 +5,8 @@ import com.poly.ubs.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Cài đặt dịch vụ cho thực thể Category sử dụng dịch vụ chung
  */
@@ -17,5 +19,8 @@ public class CategoryServiceImpl extends GenericServiceImpl<Category, String, Ca
     @Override
     protected CategoryRepository getRepository() {
         return categoryRepository;
+    }
+    public List<Category> getCategories() {
+        return categoryRepository.findAll();
     }
 }

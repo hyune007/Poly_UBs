@@ -1,26 +1,38 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="header">
-    <!--Header Top -->
-    <div class="header-top py-2">
-        <div class="container-fluid px-5 d-flex justify-content-between align-items-center">
+    <!-- Header Top -->
+    <div class="header-top py-1">
+        <div class="container-fluid px-1">
+            <div class="scrolling-wrapper">
+                <div class="scrolling-text">
+                    <p>
+                        Chào mừng bạn đến với UbrainTech —nền tảng mua sắm công nghệ uy tín!
+                        Cảm ơn bạn đã tin tưởng và đồng hành cùng chúng tôi.
+                        Giao hàng nhanh chóng — sản phẩm chính hãng, hóa đơn đầy đủ.
+                        &nbsp;
+                        Chào mừng bạn đến với UbrainTech — nền tảng mua sắm công nghệ uy tín!
+                        Cảm ơn bạn đã tin tưởng và đồng hành cùng chúng tôi.
+                        Giao hàng nhanh chóng — sản phẩm chính hãng, hóa đơn đầy đủ.
+                    </p>
+                </div>
+            </div>
+
             <div class="header-contact d-flex align-items-center gap-3">
                 <span>📞 0394 000 000</span>
-                <span>✉️ techstore@gmail.com</span>
-            </div>
-            <div class="header-social d-flex gap-3">
-                <a href="#" class="text-dark">📘</a>
-                <a href="#" class="text-dark">📷</a>
-                <a href="#" class="text-dark">🐦</a>
+                <span>✉️ UBrainTech@gmail.com</span>
             </div>
         </div>
     </div>
 
-    <!--Header Mid -->
-    <div class="header-mid py-3">
-        <div class="container-fluid px-5 d-flex justify-content-between align-items-center">
-            <a href="/home" class="navbar-brand fs-3 fw-bold">TECH STORE</a>
 
+
+    <!--Header Mid -->
+    <div class="header-mid py-3" style="background-color: #fff">
+        <div class="container-fluid px-5 d-flex justify-content-between align-items-center">
+            <a href="/home" class="navbar-brand fs-3 fw-bold d-flex align-items-center">
+                <img src="/photos/logo-ubraintech.png" alt="UBrainTech Logo" style="height: 55px;">
+            </a>
             <form action="/home" method="get" class="d-flex align-items-center flex-grow-1 mx-3" style="max-width: 700px;">
                 <select name="categoryId" class="form-select w-auto me-2" onchange="this.form.submit()">
                     <option value="">Tất cả danh mục</option>
@@ -31,7 +43,7 @@
                     </option>
                 </select>
                 <input class="form-control me-2" type="search" placeholder="Nhập sản phẩm cần tìm..." aria-label="Search">
-                <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                <button class="btn btn-primary w-auto" style="min-width: 100px;" type="submit">Tìm kiếm</button>
             </form>
 
             <div class="d-flex align-items-center gap-3 position-relative">
@@ -64,7 +76,7 @@
         <div class="container-fluid px-5 d-flex flex-wrap justify-content-start">
             <form action="/home" method="get" class="d-flex">
                 <select name="categoryId" class="form-select w-auto me-2" onchange="this.form.submit()" style="padding-right: 4.5rem;">
-                    <option value="">Danh mục sản phẩm ▼</option>
+                    <option value="">Danh mục sản phẩm</option>
                     <option th:each="c : ${categories}"
                             th:value="${c.id}"
                             th:text="${c.name}"
