@@ -25,6 +25,9 @@ public class ProductController {
     @Autowired
     private CategoryServiceImpl categoryService;
 
+    @Autowired
+    private BrandServiceImpl brandService;
+
     /**
      * Hiển thị danh sách sản phẩm với phân trang và bộ lọc
      *
@@ -34,9 +37,6 @@ public class ProductController {
      * @param model đối tượng model để truyền dữ liệu đến view
      * @return đường dẫn đến template danh sách sản phẩm
      */
-    private BrandServiceImpl brandServiceimpl;
-
-    // Danh sách (paging + filter)
     @GetMapping
     public String list(
             @RequestParam(defaultValue = "0") int page,
@@ -44,60 +44,123 @@ public class ProductController {
             @RequestParam(required = false) String category,
             Model model) {
 
-        var pageable = PageRequest.of (page, size);
-        var productPage = (category != null && !category.isEmpty ())
-                ? productService.findByCategoryName (category, pageable)
-                : productService.findAll (pageable);
+        var pageable = PageRequest.of(page, size);
+        var productPage = (category != null && !category.isEmpty())
+                ? productService.findByCategoryName(category, pageable)
+                : productService.findAll(pageable);
 
-        long totalProducts = (category != null && !category.isEmpty ())
-                ? productService.countByCategoryName (category)
-                : productService.count ();
+        long totalProducts = (category != null && !category.isEmpty())
+                ? productService.countByCategoryName(category)
+                : productService.count();
 
-        /**
-         * Hiển thị form thêm sản phẩm mới
-         * @param model đối tượng model để truyền dữ liệu đến view
-         * @return đường dẫn đến template form
-         */
-        model.addAttribute ("currentPage", page);
-        model.addAttribute ("totalPages", productPage.getTotalPages ());
-        model.addAttribute ("totalProducts", totalProducts);
-        model.addAttribute ("selectedCategory", category);
-        model.addAttribute ("categories", categoryService.findAll ());
+        // Xử lý đường dẫn hình ảnh cho từng sản phẩm
+        for (Product item : productPage.getContent()) {
+            if (item.getCategory() != null) {
+                String folder = "";
+                switch (item.getCategory().getId()) {
+                    case "LSP01":
+                        folder = "phone/";
+                        break;
+                    case "LSP02":
+                        folder = "laptop/";
+                        break;
+                    case "LSP03":
+                        folder = "pad/";
+                        break;
+                    case "LSP04":
+                        folder = "smartwatch/";
+                        break;
+                    case "LSP05":
+                        folder = "headphone/";
+                        break;
+                    case "LSP06":
+                        folder = "keyboard/";
+                        break;
+                    case "LSP07":
+                        folder = "mouse/";
+                        break;
+                    case "LSP08":
+                        folder = "screen/";
+                        break;
+                    case "LSP09":
+                        folder = "speaker/";
+                        break;
+                    default:
+                        folder = "other/";
+                }
+                item.setImage("products/" + folder + item.getImage());
+            }
+        }
+
+        model.addAttribute("products", productPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", productPage.getTotalPages());
+        model.addAttribute("totalProducts", totalProducts);
+        model.addAttribute("selectedCategory", category);
+        model.addAttribute("categories", categoryService.findAll());
 
         return "admin/product/list";
     }
 
     /**
-     * Hiển thị form sửa sản phẩm
+     * Hiển thị form thêm sản phẩm mới
      *
-     * @param id    ID của sản phẩm cần sửa
      * @param model đối tượng model để truyền dữ liệu đến view
-     * @return đường dẫn đến template form hoặc redirect nếu không tìm thấy
+     * @return đường dẫn đến template form
      */
-    // Hiển thị form thêm
     @GetMapping("/create")
     public String createForm(Model model) {
-        /**
-         * Lưu sản phẩm (tạo mới hoặc cập nhật)
-         * @param product đối tượng sản phẩm cần lưu
-         * @return chuyển hướng về danh sách sản phẩm
-         */
-        model.addAttribute ("categories", categoryService.findAll ());
-        model.addAttribute ("brands", brandServiceimpl.findAll ()); // <-- trả về List<Brand>
+        model.addAttribute("product", new Product());
+        model.addAttribute("categories", categoryService.findAll());
+        model.addAttribute("brands", brandService.findAll());
         return "admin/product/form";
     }
 
-    // Hiển thị form sửa
+    /**
+     * Hiển thị form sửa sản phẩm
+     *
+     * @param id ID của sản phẩm cần sửa
+     * @param model đối tượng model để truyền dữ liệu đến view
+     * @return đường dẫn đến template form hoặc redirect nếu không tìm thấy
+     */
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable String id, Model model) {
-        Product product = productService.findById (id);
+        Product product = productService.findById(id);
         if (product == null) {
-            return "redirect:/admin/product";
+            return "redirect:/admin/products";
         }
-        model.addAttribute ("product", product);
-        model.addAttribute ("categories", categoryService.findAll ());
-        model.addAttribute ("brands", brandServiceimpl.findAll ());
+        model.addAttribute("product", product);
+        model.addAttribute("categories", categoryService.findAll());
+        model.addAttribute("brands", brandService.findAll());
         return "admin/product/form";
+    }
+
+    /**
+     * Lưu sản phẩm (tạo mới hoặc cập nhật)
+     *
+     * @param product đối tượng sản phẩm cần lưu
+     * @return chuyển hướng về danh sách sản phẩm
+     */
+    @PostMapping("/save")
+    public String save(@ModelAttribute Product product) {
+        // Nếu form gửi brand.id và category.id (nested binding), product.getBrand() và getCategory()
+        // có thể chứa chỉ id — ta cần load entity thực từ DB và set lại để JPA hiểu quan hệ.
+        if (product.getBrand() != null && product.getBrand().getId() != null) {
+            Brand b = brandService.findById(product.getBrand().getId());
+            product.setBrand(b);
+        } else {
+            product.setBrand(null);
+        }
+
+        if (product.getCategory() != null && product.getCategory().getId() != null) {
+            Category c = categoryService.findById(product.getCategory().getId());
+            product.setCategory(c);
+        } else {
+            product.setCategory(null);
+        }
+
+        productService.save(product);
+        return "redirect:/admin/products";
     }
 
     /**
@@ -106,32 +169,10 @@ public class ProductController {
      * @param id ID của sản phẩm cần xóa
      * @return chuyển hướng về danh sách sản phẩm
      */
-    @PostMapping("/save")
-    public String save(@ModelAttribute Product product) {
-        // Nếu form gửi brand.id và category.id (nested binding), product.getBrand() và getCategory()
-        // có thể chứa chỉ id — ta cần load entity thực từ DB và set lại để JPA hiểu quan hệ.
-        if (product.getBrand () != null && product.getBrand ().getId () != null) {
-            Brand b = brandServiceimpl.findById (product.getBrand ().getId ());
-            product.setBrand (b);
-        } else {
-            product.setBrand (null);
-        }
-
-        if (product.getCategory () != null && product.getCategory ().getId () != null) {
-            Category c = categoryService.findById (product.getCategory ().getId ());
-            product.setCategory (c);
-        } else {
-            product.setCategory (null);
-        }
-
-        productService.save (product);
-        return "redirect:/admin/product";
-    }
-
-    // Xóa
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable String id) {
-        productService.deleteById (id);
-        return "redirect:/admin/product";
+        productService.deleteById(id);
+        return "redirect:/admin/products";
     }
 }
+
