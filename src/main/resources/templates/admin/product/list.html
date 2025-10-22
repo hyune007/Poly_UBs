@@ -55,7 +55,7 @@
                 <td th:text="${#numbers.formatInteger(p.price, 0)} + ' ₫'" class="text-danger fw-bold"></td>
                 <td th:text="${p.category.name}"></td>
                 <td>
-                    <img th:src="${p.image}" alt="Ảnh" class="img-thumbnail"
+                    <img th:src="@{|/photos/${p.image}|}" alt="Ảnh" class="img-thumbnail"
                          style="width:60px; height:60px; object-fit:cover;">
                 </td>
                 <td class="text-center">
