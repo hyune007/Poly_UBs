@@ -20,7 +20,8 @@ public class ShoppingCart {
      * ID của mục trong giỏ hàng
      */
     @Id
-    @Column(name = "gh_id")
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "gh_id", length = 36)
     private String id;
 
     /**

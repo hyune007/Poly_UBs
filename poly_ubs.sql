@@ -58,32 +58,31 @@ create table DiaChi
     PRIMARY KEY (dc_id),
     FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id)
 );
-create table HoaDon
-(
-    hd_id     VARCHAR(8)  NOT NULL,
-    hd_date   DATE        NOT NULL,
-    hd_status VARCHAR(20) NOT NULL,
-    kh_id     VARCHAR(8)  NOT NULL,
-    nv_id     VARCHAR(8)  NOT NULL,
-    dc_id     VARCHAR(8)  NOT NULL,
-    PRIMARY KEY (hd_id),
-    FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id),
-    FOREIGN KEY (nv_id) REFERENCES NhanVien (nv_id),
-    FOREIGN KEY (dc_id) REFERENCES DiaChi (dc_id)
+create table HoaDon(
+                       hd_id INT NOT NULL AUTO_INCREMENT,
+                       hd_date DATE NOT NULL,
+                       hd_status VARCHAR(20) NOT NULL,
+                       hd_payment VARCHAR (50) NOT NULL,
+                       kh_id VARCHAR(8) NOT NULL,
+                       nv_id VARCHAR(8) NULL,
+                       dc_id VARCHAR(8) NOT NULL,
+                       PRIMARY KEY (hd_id),
+                       FOREIGN KEY (kh_id) REFERENCES KhachHang(kh_id),
+                       FOREIGN KEY (nv_id) REFERENCES NhanVien(nv_id),
+                       FOREIGN KEY (dc_id) REFERENCES DiaChi(dc_id)
 );
-create table ChiTietHoaDon
-(
-    hdct_id  VARCHAR(8) NOT NULL,
-    hd_id    VARCHAR(8) NOT NULL,
-    sp_id    VARCHAR(8) NOT NULL,
-    quantity INT        NOT NULL,
-    PRIMARY KEY (hdct_id),
-    FOREIGN KEY (hd_id) REFERENCES HoaDon (hd_id),
-    FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id)
+create table ChiTietHoaDon(
+                              hdct_id INT NOT NULL AUTO_INCREMENT,
+                              hd_id INT NOT NULL,
+                              sp_id VARCHAR(8) NOT NULL,
+                              quantity INT NOT NULL,
+                              PRIMARY KEY (hdct_id),
+                              FOREIGN KEY (hd_id) REFERENCES HoaDon(hd_id),
+                              FOREIGN KEY (sp_id) REFERENCES SanPham(sp_id)
 );
 create table GioHang
 (
-    gh_id       VARCHAR(8) NOT NULL,
+    gh_id       VARCHAR(50) NOT NULL,
     sp_quantity INT        NOT NULL,
     kh_id       VARCHAR(8) NOT NULL unique,
     sp_id       VARCHAR(8) NOT NULL,
@@ -526,3 +525,10 @@ VALUES ('KH001', 'Nguyễn Văn A', 'password123', '0912345678', 'nguyenvana@ema
 -- NhanVien (1 employee)
 INSERT INTO NhanVien (nv_id, nv_name, nv_password, nv_phone, nv_mail, nv_address, nv_role, nv_birth)
 VALUES ('NV001', 'Admin', 'adminpass', '0123456789', 'admin@polyubs.com', '123 FPT Polytechnic', 0, '1990-01-01');
+
+INSERT INTO DiaChi (dc_id, kh_id, dc_city, dc_ward)
+VALUES ('DC001', 'KH001', 'TP.HCM', '23/3 Phạm Văn Chiêu, P. An Hội Tây'),
+       ('DC002', 'KH001', 'TP.HCM', '26/37 Trương Thị Hoa, P. Tân Thới Hiệp'),
+       ('DC003', 'KH001', 'TP.HCM', '32/33 Nguyễn Duy Cung, P. 12'),
+       ('DC004', 'KH002', 'TP.HCM', '5/49 Tô Ký, P. Tân Chánh Hiệp'),
+       ('DC005', 'KH002', 'TP.HCM', '17/32 Nguyễn Ảnh Thủ, P. Hiệp Thành');

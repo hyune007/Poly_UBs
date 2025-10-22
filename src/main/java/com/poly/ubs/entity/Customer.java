@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 /**
  * Thực thể khách hàng
  */
@@ -46,4 +48,7 @@ public class Customer {
      */
     @Column(name = "kh_mail", length = 50)
     private String email;
+
+    @OneToMany(mappedBy = "customer")
+    private List<Address> addresses;
 }
