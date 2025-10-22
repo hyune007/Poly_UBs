@@ -10,7 +10,7 @@
 <div class="container mt-5 bg-white p-4 rounded shadow">
     <h2 class="fw-bold mb-4" th:text="${employee.id == null} ? 'Thêm nhân viên mới' : 'Cập nhật nhân viên'"></h2>
 
-    <form th:action="@{/admin/employees/save}" th:object="${employee}" method="post">
+    <form th:action="@{/admin/employee/save}" th:object="${employee}" method="post">
 
         <!-- ID -->
         <div class="mb-3">
@@ -39,7 +39,7 @@
         <!-- Email -->
         <div class="mb-3">
             <label class="form-label">Email</label>
-            <input type="email" th:field="*{mail}" class="form-control" placeholder="Nhập email">
+            <input type="email" th:field="*{email}" class="form-control" placeholder="Nhập email">
         </div>
 
         <!-- Địa chỉ -->
@@ -52,8 +52,8 @@
         <div class="mb-3">
             <label class="form-label">Vai trò</label>
             <select th:field="*{role}" class="form-select">
-                <option th:value="true">Admin</option>
-                <option th:value="false">Nhân viên</option>
+                <option th:value="true">Nhân viên</option>
+                <option th:value="false">Admin</option>
             </select>
         </div>
 
@@ -65,7 +65,7 @@
 
         <!-- Nút hành động -->
         <div class="d-flex justify-content-between">
-            <a href="/admin/employees" class="btn btn-secondary">← Quay lại</a>
+            <a href="/admin/employee" class="btn btn-secondary">← Quay lại</a>
             <button type="submit" class="btn btn-success">Lưu nhân viên</button>
         </div>
     </form>

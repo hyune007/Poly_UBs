@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Brand Management</title>
+</head>
+<body>
+<h2>Brand Management</h2>
+
+<form th:action="@{/brand/save}" method="post" th:object="${brand}">
+    <input type="hidden" th:field="*{id}">
+    <label>Name:</label>
+    <input type="text" th:field="*{name}" placeholder="Brand name" required>
+    <button type="submit">Save</button>
+</form>
+
+<hr>
+<table border="1" cellpadding="5">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="b : ${brands}">
+        <td th:text="${b.id}">1</td>
+        <td th:text="${b.name}">BrandName</td>
+        <td>
+            <a th:href="@{|/brand/edit/${b.id}|}">Edit</a> |
+            <a th:href="@{|/brand/delete/${b.id}|}"
+               onclick="return confirm('Are you sure?')">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

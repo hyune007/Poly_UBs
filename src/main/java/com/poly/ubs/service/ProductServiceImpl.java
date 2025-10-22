@@ -62,9 +62,5 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, String, Prod
     public long countByCategoryName(String categoryName) {
         return productRepository.countByCategory_Name (categoryName);
     }
-//    public Page<Product> findByCategory(String categoryName, Pageable pageable) {
-//        return productRepository.findByCategory(categoryName, pageable);
-//    }
-//    public long countByCategory(String categoryName) {
-//        return productRepository.countByCategory(categoryName);
+
 }
