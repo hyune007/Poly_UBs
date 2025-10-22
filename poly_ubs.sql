@@ -10,17 +10,16 @@ create table KhachHang
     kh_mail     VARCHAR(50)  NOT NULL,
     PRIMARY KEY (kh_id)
 );
-DROP TABLE IF EXISTS GioHang;
 
 CREATE TABLE GioHang (
                          gh_id       VARCHAR(8) NOT NULL,
                          sp_quantity INT        NOT NULL,
-                         kh_id       VARCHAR(8) NOT NULL,  -- ✅ Bỏ unique
+                         kh_id       VARCHAR(8) NOT NULL,
                          sp_id       VARCHAR(8) NOT NULL,
                          PRIMARY KEY (gh_id),
                          FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id),
                          FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id),
-                         UNIQUE KEY unique_customer_product (kh_id, sp_id)  -- ✅ Unique kết hợp
+                         UNIQUE KEY unique_customer_product (kh_id, sp_id)
 );
 create table NhanVien
 (
@@ -92,17 +91,15 @@ create table ChiTietHoaDon
     FOREIGN KEY (hd_id) REFERENCES HoaDon (hd_id),
     FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id)
 );
-DROP TABLE IF EXISTS GioHang;
-
 CREATE TABLE GioHang (
                          gh_id       VARCHAR(8) NOT NULL,
                          sp_quantity INT        NOT NULL,
-                         kh_id       VARCHAR(8) NOT NULL,  -- ✅ Bỏ unique
+                         kh_id       VARCHAR(8) NOT NULL,
                          sp_id       VARCHAR(8) NOT NULL,
                          PRIMARY KEY (gh_id),
                          FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id),
                          FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id),
-                         UNIQUE KEY unique_customer_product (kh_id, sp_id)  -- ✅ Unique kết hợp
+                         UNIQUE KEY unique_customer_product (kh_id, sp_id)
 );
 create table KhuyenMai
 (
