@@ -28,7 +28,7 @@ public class OrderController {
     private CustomerServiceImpl customerService;
 
     @Autowired
-    private AddressService addressService;
+    private AddressServiceImpl addressService;
 
     @Autowired
     private BillService billService;
