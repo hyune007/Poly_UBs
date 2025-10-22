@@ -22,13 +22,13 @@ public class Address {
     @Id
     @Column(name = "dc_id", length = 8)
     private String id;
-    
+
     /**
      * Thành phố
      */
     @Column(name = "dc_city", length = 50)
     private String city;
-    
+
     /**
      * Phường/xã
      */

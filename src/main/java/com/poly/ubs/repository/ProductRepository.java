@@ -13,22 +13,25 @@ import org.springframework.stereotype.Repository;
 public interface ProductRepository extends JpaRepository<Product, String> {
     /**
      * Tìm sản phẩm theo ID danh mục với phân trang
+     *
      * @param categoryId ID danh mục
-     * @param pageable thông tin phân trang
+     * @param pageable   thông tin phân trang
      * @return Page chứa danh sách sản phẩm
      */
     Page<Product> findByCategoryId(String categoryId, Pageable pageable);
 
     /**
      * Tìm sản phẩm theo tên danh mục với phân trang
+     *
      * @param categoryName tên danh mục
-     * @param pageable thông tin phân trang
+     * @param pageable     thông tin phân trang
      * @return Page chứa danh sách sản phẩm
      */
     Page<Product> findByCategoryName(String categoryName, Pageable pageable);
 
     /**
      * Đếm số lượng sản phẩm theo tên danh mục
+     *
      * @param categoryName tên danh mục
      * @return số lượng sản phẩm
      */

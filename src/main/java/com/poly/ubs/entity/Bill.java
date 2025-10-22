@@ -24,34 +24,34 @@ public class Bill {
     @Id
     @Column(name = "hd_id", length = 8)
     private String id;
-    
+
     /**
      * Ngày tạo hóa đơn
      */
     @Column(name = "hd_date")
     @Temporal(TemporalType.DATE)
     private Date date;
-    
+
     /**
      * Trạng thái hóa đơn
      */
     @Column(name = "hd_status")
     private String status;
-    
+
     /**
      * Khách hàng liên quan đến hóa đơn
      */
     @ManyToOne
     @JoinColumn(name = "kh_id")
     private Customer customer;
-    
+
     /**
      * Nhân viên xử lý hóa đơn
      */
     @ManyToOne
     @JoinColumn(name = "nv_id")
     private Employee employee;
-    
+
     /**
      * Địa chỉ giao hàng
      */

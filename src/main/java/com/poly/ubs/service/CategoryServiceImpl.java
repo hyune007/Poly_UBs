@@ -12,10 +12,10 @@ import java.util.List;
  */
 @Service
 public class CategoryServiceImpl extends GenericServiceImpl<Category, String, CategoryRepository> {
-    
+
     @Autowired
     private CategoryRepository categoryRepository;
-    
+
     @Override
     protected CategoryRepository getRepository() {
         return categoryRepository;
@@ -23,9 +23,10 @@ public class CategoryServiceImpl extends GenericServiceImpl<Category, String, Ca
 
     /**
      * Lấy tất cả danh mục
+     *
      * @return danh sách tất cả các danh mục
      */
     public List<Category> getCategories() {
-        return categoryRepository.findAll();
+        return categoryRepository.findAll ();
     }
 }
