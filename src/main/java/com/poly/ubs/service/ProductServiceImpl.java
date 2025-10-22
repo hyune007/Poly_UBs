@@ -63,4 +63,16 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, String, Prod
         return productRepository.countByCategory_Name (categoryName);
     }
 
+
+    public Page<Product> findByCategoryAndName(String categoryId, String keyword, Pageable pageable) {
+        return productRepository.findByCategory_IdAndNameContainingIgnoreCase(categoryId, keyword, pageable);
+    }
+
+    public Page<Product> findByNameContaining(String keyword, Pageable pageable) {
+        return productRepository.findByNameContainingIgnoreCase(keyword, pageable);
+    }
+
+
+
+
 }

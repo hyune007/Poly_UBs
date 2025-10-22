@@ -112,4 +112,35 @@ public class ViewController {
         }
         return "/container/products/product-detail";
     }
+    @GetMapping("/product/search")
+    public String searchProducts(
+            @RequestParam(value="keyword", required=false) String keyword,
+            @RequestParam(value="categoryId", required=false) String categoryId,
+            @RequestParam(value="p", required=false) Optional<Integer> p,
+            Model model
+    ) {
+        Pageable pageable = PageRequest.of(p.orElse(0), 18);
+        Page<Product> items;
+
+        boolean hasKeyword = keyword != null && !keyword.isBlank();
+        boolean hasCategory = categoryId != null && !categoryId.isBlank();
+
+        if (hasCategory && hasKeyword) {
+            items = productService.findByCategoryAndName(categoryId, keyword, pageable);
+        } else if (hasCategory) {
+            items = productService.findByCategoryId(categoryId, pageable);
+        } else if (hasKeyword) {
+            items = productService.findByNameContaining(keyword, pageable);
+        } else {
+            items = productService.findAll(pageable);
+        }
+
+        model.addAttribute("items", items);
+        model.addAttribute("selectedCategoryId", categoryId);
+        model.addAttribute("keyword", keyword);
+
+        return "/container/home";
+    }
+
+
 }
