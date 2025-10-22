@@ -5,10 +5,26 @@ import jakarta.mail.*;
 import jakarta.mail.internet.*;
 import jakarta.mail.Authenticator;
 
+/**
+ * Lớp tiện ích để gửi email
+ */
 public class MailSender {
+    /**
+     * Tên đăng nhập email
+     */
     private static final String USERNAME = "huysclone001@gmail.com";
+
+    /**
+     * Mật khẩu ứng dụng email
+     */
     private static final String PASSWORD = "zygp gdwv zpyw yuyk";
 
+    /**
+     * Gửi email với nội dung HTML
+     * @param to địa chỉ email người nhận
+     * @param subject tiêu đề email
+     * @param body nội dung email (hỗ trợ HTML)
+     */
     public static void send(String to, String subject, String body) {
         Properties props = new Properties();
         props.setProperty("mail.smtp.auth", "true");

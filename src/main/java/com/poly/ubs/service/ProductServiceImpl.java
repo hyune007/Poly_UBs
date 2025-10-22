@@ -6,8 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
 /**
- * Ví dụ cài đặt dịch vụ sử dụng dịch vụ chung
+ * Cài đặt dịch vụ cho thực thể Product sử dụng dịch vụ chung
  */
 @Service
 public class ProductServiceImpl extends GenericServiceImpl<Product, String, ProductRepository> {
@@ -20,11 +21,46 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, String, Prod
         return productRepository;
     }
 
+    /**
+     * Tìm sản phẩm theo ID danh mục với phân trang
+     * @param categoryId ID danh mục
+     * @param pageable thông tin phân trang
+     * @return Page chứa danh sách sản phẩm
+     */
     public Page<Product> findByCategoryId(String categoryId, Pageable pageable) {
         return productRepository.findByCategoryId(categoryId, pageable);
     }
-    
+
+    /**
+     * Tìm tất cả sản phẩm với phân trang
+     * @param pageable thông tin phân trang
+     * @return Page chứa danh sách sản phẩm
+     */
     public Page<Product> findAll(Pageable pageable) {
         return productRepository.findAll(pageable);
     }
-}
+
+    /**
+     * Tìm sản phẩm theo tên danh mục với phân trang
+     * @param categoryName tên danh mục
+     * @param pageable thông tin phân trang
+     * @return Page chứa danh sách sản phẩm
+     */
+    public Page<Product> findByCategoryName(String categoryName, Pageable pageable) {
+        return productRepository.findByCategoryName(categoryName, pageable);
+    }
+
+    /**
+     * Đếm số lượng sản phẩm theo tên danh mục
+     * @param categoryName tên danh mục
+     * @return số lượng sản phẩm
+     */
+    public long countByCategoryName(String categoryName) {
+        return productRepository.countByCategory_Name(categoryName);
+    }
+//    public Page<Product> findByCategory(String categoryName, Pageable pageable) {
+//        return productRepository.findByCategory(categoryName, pageable);
+//    }
+//    public long countByCategory(String categoryName) {
+//        return productRepository.countByCategory(categoryName);
+    }
