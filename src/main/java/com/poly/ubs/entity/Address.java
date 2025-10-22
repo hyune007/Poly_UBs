@@ -35,6 +35,8 @@ public class Address {
     @Column(name = "dc_ward", length = 50)
     private String ward;
 
+    @Column(name = "dc_detailaddress", length = 255)
+    private String detailAddress;
     /**
      * Khách hàng sở hữu địa chỉ này
      */
