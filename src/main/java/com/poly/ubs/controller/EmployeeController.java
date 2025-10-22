@@ -33,39 +33,35 @@ public class EmployeeController {
 
         int pageSize = 10;
         Page<Employee> employeePage = employeeService.findByKeyword(keyword, page, pageSize);
-    /**
-     * Hiển thị form thêm nhân viên mới
-     * @param model đối tượng model để truyền dữ liệu đến view
-     * @return đường dẫn đến template form
-     */
+        /**
+         * Hiển thị form thêm nhân viên mới
+         * @param model đối tượng model để truyền dữ liệu đến view
+         * @return đường dẫn đến template form
+         */
 
         model.addAttribute("employees", employeePage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", employeePage.getTotalPages());
         model.addAttribute("totalItems", employeePage.getTotalElements());
         model.addAttribute("keyword", keyword);
-    /**
-     * Lưu nhân viên (tạo mới hoặc cập nhật)
-     * @param employee đối tượng nhân viên cần lưu
-     * @return chuyển hướng về danh sách nhân viên
-     */
+        /**
+         * Lưu nhân viên (tạo mới hoặc cập nhật)
+         * @param employee đối tượng nhân viên cần lưu
+         * @return chuyển hướng về danh sách nhân viên
+         */
 
         return "admin/employee/list";
     }
 
     @GetMapping("/create")
     public String createForm(Model model) {
-    /**
-     * Xóa nhân viên
-     * @param id ID của nhân viên cần xóa
-     * @return chuyển hướng về danh sách nhân viên
-     */
-     * Hiển thị form sửa nhân viên
-     * @param id ID của nhân viên cần sửa
-     * @param model đối tượng model để truyền dữ liệu đến view
-     * @return đường dẫn đến template form
-     * @throws RuntimeException nếu không tìm thấy nhân viên
-     */
+        /**
+         * Hiển thị form sửa nhân viên
+         * @param id ID của nhân viên cần sửa
+         * @param model đối tượng model để truyền dữ liệu đến view
+         * @return đường dẫn đến template form
+         * @throws RuntimeException nếu không tìm thấy nhân viên
+         */
         model.addAttribute("employee", new Employee());
         return "admin/employee/form";
     }

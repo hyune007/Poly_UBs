@@ -4,8 +4,6 @@ import com.poly.ubs.entity.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 /**
  * Repository cho thực thể Customer
  */
@@ -13,7 +11,8 @@ import java.util.List;
 public interface CustomerRepository extends JpaRepository<Customer, String> {
     /**
      * Tìm khách hàng theo email và mật khẩu
-     * @param email email của khách hàng
+     *
+     * @param email    email của khách hàng
      * @param password mật khẩu của khách hàng
      * @return Customer nếu tìm thấy, null nếu không
      */
@@ -21,6 +20,7 @@ public interface CustomerRepository extends JpaRepository<Customer, String> {
 
     /**
      * Tìm khách hàng theo email
+     *
      * @param email email của khách hàng
      * @return Customer nếu tìm thấy, null nếu không
      */
