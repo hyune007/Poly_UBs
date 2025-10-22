@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Customer Management</title>
+</head>
+<body>
+<h2>Customer Management</h2>
+
+<form th:action="@{/customer/save}" method="post" th:object="${customer}">
+    <input type="hidden" th:field="*{id}">
+    <label>Name:</label>
+    <input type="text" th:field="*{name}" placeholder="Customer name" required>
+    <label>Email:</label>
+    <input type="email" th:field="*{email}" placeholder="Email" required>
+    <button type="submit">Save</button>
+</form>
+
+<hr>
+<table border="1" cellpadding="5">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="c : ${customers}">
+        <td th:text="${c.id}">1</td>
+        <td th:text="${c.name}">Customer Name</td>
+        <td th:text="${c.email}">Email</td>
+        <td>
+            <a th:href="@{|/customer/edit/${c.id}|}">Edit</a> |
+            <a th:href="@{|/customer/delete/${c.id}|}"
+               onclick="return confirm('Are you sure?')">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
