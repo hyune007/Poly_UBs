@@ -20,6 +20,11 @@ public class CategoryServiceImpl extends GenericServiceImpl<Category, String, Ca
     protected CategoryRepository getRepository() {
         return categoryRepository;
     }
+
+    /**
+     * Lấy tất cả danh mục
+     * @return danh sách tất cả các danh mục
+     */
     public List<Category> getCategories() {
         return categoryRepository.findAll();
     }

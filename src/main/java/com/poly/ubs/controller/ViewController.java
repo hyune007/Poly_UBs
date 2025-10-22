@@ -26,6 +26,11 @@ public class ViewController {
     private ProductServiceImpl productService;
     @Autowired
     private CategoryServiceImpl categoryService;
+
+    /**
+     * Cung cấp danh sách các danh mục cho tất cả các view
+     * @return danh sách tất cả các danh mục
+     */
     @ModelAttribute("categories")
     public List<Category> getCategories() {
         return categoryService.getCategories();
@@ -80,6 +85,12 @@ public class ViewController {
             }
             item.setImage("products/" + folder + item.getImage());
         }
+    /**
+     * Hiển thị trang chi tiết sản phẩm
+     * @param id ID của sản phẩm
+     * @param model đối tượng model để truyền dữ liệu đến view
+     * @return đường dẫn đến template chi tiết sản phẩm
+     */
         model.addAttribute("items", items);
         model.addAttribute("selectedCategoryId", categoryId);
         return "/container/home";
