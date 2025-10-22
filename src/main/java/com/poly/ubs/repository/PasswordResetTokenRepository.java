@@ -15,6 +15,7 @@ public interface PasswordResetTokenRepository extends JpaRepository<PasswordRese
 
     /**
      * Tìm token theo chuỗi token
+     *
      * @param token chuỗi token
      * @return Optional chứa PasswordResetToken nếu tìm thấy
      */
@@ -22,6 +23,7 @@ public interface PasswordResetTokenRepository extends JpaRepository<PasswordRese
 
     /**
      * Xóa tất cả token của một khách hàng
+     *
      * @param customer khách hàng
      */
     void deleteByCustomer(Customer customer);

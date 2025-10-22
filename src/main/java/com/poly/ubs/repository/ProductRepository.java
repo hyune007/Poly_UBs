@@ -6,11 +6,37 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
+/**
+ * Repository cho thực thể Product
+ */
 @Repository
 public interface ProductRepository extends JpaRepository<Product, String> {
+    /**
+     * Tìm sản phẩm theo ID danh mục với phân trang
+     *
+     * @param categoryId ID danh mục
+     * @param pageable   thông tin phân trang
+     * @return Page chứa danh sách sản phẩm
+     */
     Page<Product> findByCategoryId(String categoryId, Pageable pageable);
 
-    List<Product> findByNameContainingIgnoreCase(String keyword);
+    /**
+     * Tìm sản phẩm theo tên danh mục với phân trang
+     *
+     * @param categoryName tên danh mục
+     * @param pageable     thông tin phân trang
+     * @return Page chứa danh sách sản phẩm
+     */
+    Page<Product> findByCategoryName(String categoryName, Pageable pageable);
+
+    /**
+     * Đếm số lượng sản phẩm theo tên danh mục
+     *
+     * @param categoryName tên danh mục
+     * @return số lượng sản phẩm
+     */
+    long countByCategory_Name(String categoryName);
+//    Page<Product> findByCategory(String categoryName, Pageable pageable);
+//    Page<Product> findAll(Pageable pageable);
+//    long countByCategory(String categoryName);
 }

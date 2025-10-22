@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class BrandServiceImpl extends GenericServiceImpl<Brand, String, BrandRepository> {
-    
+
     @Autowired
     private BrandRepository brandRepository;
-    
+
     @Override
     protected BrandRepository getRepository() {
         return brandRepository;
