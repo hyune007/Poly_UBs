@@ -65,7 +65,10 @@
         <p><strong>Thương hiệu:</strong> <span th:text="${item.brand.name}"></span></p>
         <p><strong>Danh mục:</strong> <span th:text="${item.category.name}"></span></p>
         <p><strong>Số lượng tồn:</strong> <span th:text="${item.stock}"></span></p>
-        <button class="btn-buy">Thêm vào giỏ hàng</button>
+        <form action="/order/add-to-cart" method="post">
+            <input type="hidden" name="productId" th:value="${item.id}">
+            <button type="submit" class="btn-buy">Thêm vào giỏ hàng</button>
+        </form>
     </div>
 </div>
 <div th:replace="main-frame/footer :: footer"></div>

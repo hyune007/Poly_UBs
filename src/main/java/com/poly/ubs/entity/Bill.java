@@ -22,8 +22,9 @@ public class Bill {
      * ID của hóa đơn
      */
     @Id
-    @Column(name = "hd_id", length = 8)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "hd_id")
+    private Integer id;
     
     /**
      * Ngày tạo hóa đơn
@@ -37,6 +38,9 @@ public class Bill {
      */
     @Column(name = "hd_status")
     private String status;
+
+    @Column(name = "hd_payment")
+    private String payment;
     
     /**
      * Khách hàng liên quan đến hóa đơn
@@ -49,7 +53,7 @@ public class Bill {
      * Nhân viên xử lý hóa đơn
      */
     @ManyToOne
-    @JoinColumn(name = "nv_id")
+    @JoinColumn(name = "nv_id", nullable = true)
     private Employee employee;
     
     /**

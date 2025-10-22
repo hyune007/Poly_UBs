@@ -51,7 +51,7 @@ public class ViewController {
     public String home(Model model, HttpSession session, @RequestParam("p") Optional<Integer> p, @RequestParam(value = "categoryId", required = false) String categoryId) {
         Customer loggedInUser = (Customer) session.getAttribute("loggedInUser");
         model.addAttribute("loggedInUser", loggedInUser);
-        Pageable pageable = PageRequest.of(p.orElse(0), 18);
+        Pageable pageable = PageRequest.of(p.orElse(0), 20);
         Page<Product> items;
 
         if (categoryId != null && !categoryId.isEmpty()) {

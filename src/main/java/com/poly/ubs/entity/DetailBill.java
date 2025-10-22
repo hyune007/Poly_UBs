@@ -20,8 +20,9 @@ public class DetailBill {
      * ID của chi tiết hóa đơn
      */
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "hdct_id")
-    private String id;
+    private Integer id;
 
     /**
      * Hóa đơn liên quan

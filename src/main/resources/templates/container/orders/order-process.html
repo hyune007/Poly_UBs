@@ -11,18 +11,12 @@
          th:classappend="${currentURI.contains('/shopping-cart')} ? ' active'">
         <a href="/order/shopping-cart">Giỏ hàng</a>
     </div>
-
-    <div class="checkout-step"
-         th:classappend="${currentURI.contains('/infor-order')} ? ' active'">
-        <a href="/order/infor-order">Thông tin đặt hàng</a>
-    </div>
     <div class="checkout-step"
          th:classappend="${currentURI.contains('/payment')} ? ' active'">
         <a href="/order/payment">Thanh toán</a>
     </div>
-    <div class="checkout-step"
-         th:classappend="${currentURI.contains('/complete')} ? ' active'">
-        <a href="/order/complete">Hoàn tất</a>
+    <div class="checkout-step">
+        Hoàn tất
     </div>
 </div>
 
