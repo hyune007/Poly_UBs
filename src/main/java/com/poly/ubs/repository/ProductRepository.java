@@ -39,4 +39,13 @@ public interface ProductRepository extends JpaRepository<Product, String> {
 //    Page<Product> findByCategory(String categoryName, Pageable pageable);
 //    Page<Product> findAll(Pageable pageable);
 //    long countByCategory(String categoryName);
+// Tìm theo tên sản phẩm
+Page<Product> findByNameContainingIgnoreCase(String name, Pageable pageable);
+
+    // Tìm theo category + tên sản phẩm
+    Page<Product> findByCategory_IdAndNameContainingIgnoreCase(String categoryId, String name, Pageable pageable);
+
+    Page<Product> findByPriceBetween(double min, double max, Pageable pageable);
+
+    Page<Product> findByPriceBetweenAndBrandId(double min, double max, String brandId, Pageable pageable);
 }
