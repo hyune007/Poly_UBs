@@ -1,5 +1,6 @@
 package com.poly.ubs.controller;
 
+import com.poly.ubs.dto.OrderInfoDTO;
 import com.poly.ubs.entity.*;
 import com.poly.ubs.service.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,10 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,196 +20,226 @@ import java.util.List;
  */
 @Controller
 public class OrderController {
+
     @Autowired
-    private CategoryServiceImpl categoryService;
-    @Autowired
-    private ShoppingCartServiceImpl shoppingCartService;
-    @Autowired
-    private AddressServiceImpl addressService;
+    private ShoppingCartService shoppingCartService;
+
     @Autowired
     private CustomerServiceImpl customerService;
+
     @Autowired
-    private BillServiceImpl billService;
+    private AddressServiceImpl addressService;
+
     @Autowired
-    private DetailBillServiceImpl detailBillService;
+    private BillService billService;
+
     @Autowired
-    private ProductServiceImpl productService;
-    @ModelAttribute("categories")
-    public List<Category> getCategories() {
-        return categoryService.findAll();
-    }
+    private EmployeeServiceImpl employeeService;
+
     /**
      * Hiển thị trang giỏ hàng
+     *
      * @param request yêu cầu HTTP
-     * @param model đối tượng model để truyền dữ liệu đến view
+     * @param model   đối tượng model để truyền dữ liệu đến view
+     * @param session session để lấy thông tin khách hàng
      * @return đường dẫn đến template giỏ hàng
      */
     @GetMapping("/order/shopping-cart")
-    public String shoppingCart(HttpServletRequest request, HttpSession session, Model model) {
+    public String shoppingCart(HttpServletRequest request, Model model, HttpSession session) {
         model.addAttribute("currentURI", request.getRequestURI());
-        Customer loggedInUser = (Customer) session.getAttribute("loggedInUser");
-        List<ShoppingCart> cartItems = shoppingCartService.getCartItems(loggedInUser);
-        for (ShoppingCart cartItem : cartItems) {
-            Product item = cartItem.getProduct();
-            String folder = "";
-            switch (item.getCategory().getId()) {
-                case "LSP01": folder = "phone/"; break;
-                case "LSP02": folder = "laptop/"; break;
-                case "LSP03": folder = "pad/"; break;
-                case "LSP04": folder = "smartwatch/"; break;
-                case "LSP05": folder = "headphone/"; break;
-                case "LSP06": folder = "keyboard/"; break;
-                case "LSP07": folder = "mouse/"; break;
-                case "LSP08": folder = "screen/"; break;
-                case "LSP09": folder = "speaker/"; break;
-                default: folder = "other/";
-            }
-            item.setImage("products/" + folder + item.getImage());
-        }
-        double subtotal = cartItems.stream()
-                .mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity())
-                .sum();
 
-        double shippingFee = (subtotal > 0) ? 40000 : 0; // phí cố định
-        double total = subtotal + shippingFee;
+        // Lấy thông tin khách hàng từ session
+        Object loggedInUser = session.getAttribute("loggedInUser");
+        if (loggedInUser == null || !(loggedInUser instanceof Customer)) {
+            // Nếu chưa đăng nhập, chuyển về trang đăng nhập
+            return "redirect:/auth/login";
+        }
+
+        Customer customer = (Customer) loggedInUser;
+
+        // Lấy danh sách sản phẩm trong giỏ hàng
+        List<ShoppingCart> cartItems = shoppingCartService.findByCustomerId(customer.getId());
+        int total = shoppingCartService.calculateTotal(customer.getId());
 
         model.addAttribute("cartItems", cartItems);
-        model.addAttribute("subtotal", subtotal);
-        model.addAttribute("shippingFee", shippingFee);
         model.addAttribute("total", total);
+
         return "container/orders/shopping-cart";
     }
 
-    @PostMapping("/order/add-to-cart")
-    public String addToCart(@RequestParam("productId") String productId,
-                            @RequestParam(value = "quantity", defaultValue = "1") int quantity,
-                            HttpSession session) {
-        Customer loggedInUser = (Customer) session.getAttribute("loggedInUser");
-        shoppingCartService.addToCart(loggedInUser.getId(), productId, quantity);
-        return "redirect:/order/shopping-cart";
-    }
-
-    @PostMapping("/order/update-quantity")
-    public String updateQuantity(@RequestParam("productId") String productId,
-                                 @RequestParam("quantity") int quantity,
-                                 HttpSession session) {
-        Customer loggedInUser = (Customer) session.getAttribute("loggedInUser");
-        shoppingCartService.updateQuantity(loggedInUser.getId(), productId, quantity);
-        return "redirect:/order/shopping-cart";
-    }
-
-    @PostMapping("/order/remove-from-cart")
-    public String removeFromCart(@RequestParam("productId") String productId,
-                                 HttpSession session) {
-        Customer loggedInUser = (Customer) session.getAttribute("loggedInUser");
-        shoppingCartService.removeFromCart(loggedInUser.getId(), productId);
-        return "redirect:/order/shopping-cart";
-    }
     /**
-     * Hiển thị trang thanh toán
+     * Hiển thị trang thông tin đơn hàng
+     *
      * @param request yêu cầu HTTP
-     * @param model đối tượng model để truyền dữ liệu đến view
-     * @return đường dẫn đến template thanh toán
+     * @param model   đối tượng model để truyền dữ liệu đến view
+     * @param session session để lấy thông tin khách hàng
+     * @return đường dẫn đến template thông tin đơn hàng
      */
-    @GetMapping("/order/payment")
-    public String payment(HttpServletRequest request, HttpSession session, Model model) {
+    @GetMapping("/order/infor-order")
+    public String inforOrder(HttpServletRequest request, Model model, HttpSession session) {
         model.addAttribute("currentURI", request.getRequestURI());
-        Customer loggedInUser = (Customer) session.getAttribute("loggedInUser");
-        Customer customer = customerService.findById(loggedInUser.getId());
-        List<Address> addresses = addressService.findByCustomerId(loggedInUser.getId());
-        List<ShoppingCart> cartItems = shoppingCartService.getCartItems(loggedInUser);
-        for (ShoppingCart cartItem : cartItems) {
-            Product item = cartItem.getProduct();
-            String folder = "";
-            switch (item.getCategory().getId()) {
-                case "LSP01": folder = "phone/"; break;
-                case "LSP02": folder = "laptop/"; break;
-                case "LSP03": folder = "pad/"; break;
-                case "LSP04": folder = "smartwatch/"; break;
-                case "LSP05": folder = "headphone/"; break;
-                case "LSP06": folder = "keyboard/"; break;
-                case "LSP07": folder = "mouse/"; break;
-                case "LSP08": folder = "screen/"; break;
-                case "LSP09": folder = "speaker/"; break;
-                default: folder = "other/";
-            }
-            item.setImage("products/" + folder + item.getImage());
+
+        // Lấy thông tin khách hàng từ session
+        Object loggedInUser = session.getAttribute("loggedInUser");
+        if (loggedInUser == null || !(loggedInUser instanceof Customer)) {
+            return "redirect:/auth/login";
         }
-        double subtotal = cartItems.stream()
-                .mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity())
-                .sum();
 
-        double shippingFee = (subtotal > 0) ? 40000 : 0; // phí cố định
-        double total = subtotal + shippingFee;
+        Customer customer = (Customer) loggedInUser;
 
-        model.addAttribute("cartItems", cartItems);
-        model.addAttribute("shippingFee", shippingFee);
-        model.addAttribute("total", total);
-        model.addAttribute("customer", customer);
-        model.addAttribute("addresses", addresses);
-        return "container/orders/payment";
-    }
-    
-    /**
-     * Hiển thị trang hoàn thành đơn hàng
-     * @param request yêu cầu HTTP
-     * @param model đối tượng model để truyền dữ liệu đến view
-     * @return đường dẫn đến template hoàn thành
-     */
-    @PostMapping("/order/complete")
-    public String completeOrder(@RequestParam("addressId") String addressId,
-                                @RequestParam("paymentMethod") String paymentMethod,
-                                HttpSession session, HttpServletRequest request, Model model,
-                                RedirectAttributes redirectAttributes) {
-        model.addAttribute("currentURI", request.getRequestURI());
-        Customer loggedInUser = (Customer) session.getAttribute("loggedInUser");
-
-        List<ShoppingCart> cartItems = shoppingCartService.getCartItems(loggedInUser);
-
+        // Kiểm tra giỏ hàng có sản phẩm không
+        List<ShoppingCart> cartItems = shoppingCartService.findByCustomerId(customer.getId());
         if (cartItems == null || cartItems.isEmpty()) {
-            redirectAttributes.addFlashAttribute("error", "Giỏ hàng của bạn đang trống!");
             return "redirect:/order/shopping-cart";
         }
 
-        // ✅ Kiểm tra tồn kho trước khi đặt hàng
-        for (ShoppingCart item : cartItems) {
-            Product product = item.getProduct();
-            if (item.getQuantity() > product.getStock()) {
-                redirectAttributes.addFlashAttribute("error",
-                        "Sản phẩm '" + product.getName() + "' chỉ còn " + product.getStock() + " sản phẩm trong kho!");
-                return "redirect:/order/shopping-cart";
-            }
-            if(item.getQuantity()<=0){
-                redirectAttributes.addFlashAttribute("error",
-                        "Sản phẩm '" + product.getName() + "' trong giỏ hàng của bạn có số lượng không phù hợp!");
-                return "redirect:/order/shopping-cart";
-            }
+        // Tính tổng tiền
+        int total = shoppingCartService.calculateTotal(customer.getId());
+
+        model.addAttribute("customer", customer);
+        model.addAttribute("total", total);
+        model.addAttribute("orderInfo", new OrderInfoDTO());
+
+        return "container/orders/infor-order";
+    }
+
+    /**
+     * Xử lý submit form thông tin đơn hàng và chuyển sang trang thanh toán
+     *
+     * @param orderInfo thông tin đơn hàng từ form
+     * @param session   session để lưu thông tin
+     * @return redirect sang trang thanh toán
+     */
+    @PostMapping("/order/submit-info")
+    public String submitOrderInfo(@ModelAttribute OrderInfoDTO orderInfo, HttpSession session, RedirectAttributes redirectAttributes) {
+        // Lấy thông tin khách hàng từ session
+        Object loggedInUser = session.getAttribute("loggedInUser");
+        if (loggedInUser == null || !(loggedInUser instanceof Customer)) {
+            return "redirect:/auth/login";
         }
 
-        Bill bill = new Bill();
-        bill.setDate(new Date());
-        bill.setStatus("Đang chuẩn bị");
-        bill.setPayment(paymentMethod);
+        Customer customer = (Customer) loggedInUser;
 
-        Address address = addressService.findById(addressId);
-        bill.setAddress(address);
-        bill.setCustomer(loggedInUser);
+        // Tính tổng tiền
+        int subtotal = shoppingCartService.calculateTotal(customer.getId());
+        int shippingFee = "standard".equals(orderInfo.getShippingMethod()) ? 40000 : 0;
+        orderInfo.setTotalAmount(subtotal + shippingFee);
+        orderInfo.setShippingFee(shippingFee);
 
-        billService.save(bill);
+        // Lưu thông tin vào session để sử dụng ở trang payment
+        session.setAttribute("orderInfo", orderInfo);
 
-        for (ShoppingCart item : cartItems) {
-            DetailBill detail = new DetailBill();
-            detail.setBill(bill);
-            detail.setProduct(item.getProduct());
-            detail.setQuantity(item.getQuantity());
-            detailBillService.save(detail);
-            Product product = item.getProduct();
-            int newStock = product.getStock() - item.getQuantity();
-            product.setStock(newStock);
-            productService.save(product);
+        return "redirect:/order/payment";
+    }
+
+    /**
+     * Hiển thị trang thanh toán
+     *
+     * @param request yêu cầu HTTP
+     * @param model   đối tượng model để truyền dữ liệu đến view
+     * @param session session để lấy thông tin đơn hàng
+     * @return đường dẫn đến template thanh toán
+     */
+    @GetMapping("/order/payment")
+    public String payment(HttpServletRequest request, Model model, HttpSession session) {
+        model.addAttribute("currentURI", request.getRequestURI());
+
+        // Lấy thông tin khách hàng và đơn hàng từ session
+        Object loggedInUser = session.getAttribute("loggedInUser");
+        OrderInfoDTO orderInfo = (OrderInfoDTO) session.getAttribute("orderInfo");
+
+        if (loggedInUser == null || !(loggedInUser instanceof Customer)) {
+            return "redirect:/auth/login";
         }
 
-        shoppingCartService.clearCart(loggedInUser);
+        Customer customer = (Customer) loggedInUser;
+
+        if (orderInfo == null) {
+            return "redirect:/order/infor-order";
+        }
+
+        // Lấy danh sách sản phẩm trong giỏ hàng
+        List<ShoppingCart> cartItems = shoppingCartService.findByCustomerId(customer.getId());
+
+        model.addAttribute("customer", customer);
+        model.addAttribute("orderInfo", orderInfo);
+        model.addAttribute("cartItems", cartItems);
+
+        return "container/orders/payment";
+    }
+
+    /**
+     * Xử lý xác nhận thanh toán và tạo hóa đơn
+     *
+     * @param session            session để lấy thông tin
+     * @param redirectAttributes để truyền thông báo
+     * @return redirect sang trang hoàn thành
+     */
+    @PostMapping("/order/confirm-payment")
+    public String confirmPayment(HttpSession session, RedirectAttributes redirectAttributes) {
+        try {
+            // Lấy thông tin từ session
+            Object loggedInUser = session.getAttribute("loggedInUser");
+            OrderInfoDTO orderInfo = (OrderInfoDTO) session.getAttribute("orderInfo");
+
+            if (loggedInUser == null || !(loggedInUser instanceof Customer)) {
+                return "redirect:/auth/login";
+            }
+
+            Customer customer = (Customer) loggedInUser;
+
+            if (orderInfo == null) {
+                return "redirect:/order/infor-order";
+            }
+
+            // Tạo địa chỉ giao hàng mới và lưu vào database
+            Address address = addressService.createAddress(
+                    customer,
+                    orderInfo.getCity(),
+                    orderInfo.getWard(),
+                    orderInfo.getDetailAddress()
+            );
+
+            // Tạo hóa đơn từ giỏ hàng (employee có thể null nếu đặt online)
+            Bill bill = billService.createBillFromCart(customer, null, address);
+
+            // Lưu ID hóa đơn vào session để hiển thị trang complete
+            session.setAttribute("completedBillId", bill.getId());
+
+            // Xóa orderInfo khỏi session
+            session.removeAttribute("orderInfo");
+
+            redirectAttributes.addFlashAttribute("success", "Đặt hàng thành công!");
+            return "redirect:/order/complete";
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Có lỗi xảy ra: " + e.getMessage());
+            return "redirect:/order/payment";
+        }
+    }
+
+    /**
+     * Hiển thị trang hoàn thành đơn hàng
+     *
+     * @param request yêu cầu HTTP
+     * @param model   đối tượng model để truyền dữ liệu đến view
+     * @param session session để lấy thông tin hóa đơn
+     * @return đường dẫn đến template hoàn thành
+     */
+    @GetMapping("/order/complete")
+    public String complete(HttpServletRequest request, Model model, HttpSession session) {
+        model.addAttribute("currentURI", request.getRequestURI());
+
+        // Lấy ID hóa đơn từ session
+        String billId = (String) session.getAttribute("completedBillId");
+        if (billId != null) {
+            Bill bill = billService.findById(billId);
+            model.addAttribute("bill", bill);
+
+            // Xóa billId khỏi session sau khi đã sử dụng
+            session.removeAttribute("completedBillId");
+        }
+
         return "container/orders/complete";
     }
 }

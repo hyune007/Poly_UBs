@@ -22,19 +22,21 @@ public class Address {
     @Id
     @Column(name = "dc_id", length = 8)
     private String id;
-    
+
     /**
      * Thành phố
      */
     @Column(name = "dc_city", length = 50)
     private String city;
-    
+
     /**
      * Phường/xã
      */
     @Column(name = "dc_ward", length = 50)
     private String ward;
 
+    @Column(name = "dc_detailaddress", length = 255)
+    private String detailAddress;
     /**
      * Khách hàng sở hữu địa chỉ này
      */

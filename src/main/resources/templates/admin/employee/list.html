@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách nhân viên</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container my-5">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold fs-3 text-dark">👨‍💼 Quản lý nhân viên</h2>
+        <a href="/admin/employee/create" class="btn btn-primary shadow">+ Thêm nhân viên</a>
+    </div>
+
+    <!-- Thanh tìm kiếm -->
+    <form class="d-flex mb-4" method="get" action="/admin/employee">
+        <input type="text" name="keyword" th:value="${keyword}" class="form-control me-2" placeholder="Tìm theo tên nhân viên...">
+        <button type="submit" class="btn btn-secondary">Tìm kiếm</button>
+    </form>
+
+    <!-- Tổng số nhân viên -->
+    <div class="mb-3">
+        <strong>Tổng số nhân viên:</strong> <span th:text="${totalItems}" class="text-primary"></span>
+    </div>
+
+    <!-- Bảng nhân viên -->
+    <div class="table-responsive shadow rounded">
+        <table class="table table-hover align-middle mb-0 bg-white">
+            <thead class="bg-dark text-white">
+            <tr>
+                <th>Mã</th>
+                <th>Tên</th>
+                <th>Số điện thoại</th>
+                <th>Email</th>
+                <th>Vai trò</th>
+                <th>Ngày sinh</th>
+                <th class="text-center">Hành động</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="e : ${employee}">
+                <td th:text="${e.id}"></td>
+                <td th:text="${e.name}" class="fw-semibold"></td>
+                <td th:text="${e.phone}"></td>
+                <td th:text="${e.email}"></td>
+                <td>
+                    <span th:text="${e.role} ? 'Nhân viên' : 'Admin'"
+                          th:classappend="${e.role} ? 'badge bg-secondary' : 'badge bg-danger'"></span>
+                </td>
+                <td th:text="${#dates.format(e.birth, 'dd/MM/yyyy')}"></td>
+                <td class="text-center">
+                    <a th:href="@{'/admin/employee/edit/' + ${e.id}}" class="btn btn-sm btn-warning me-1">✏️</a>
+                    <a th:href="@{'/admin/employee/delete/' + ${e.id}}" class="btn btn-sm btn-danger"
+                       onclick="return confirm('Xóa nhân viên này?')">🗑️</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Phân trang -->
+    <nav th:if="${totalPages > 1}" class="mt-4">
+        <ul class="pagination justify-content-center">
+
+            <!-- Trang đầu -->
+            <li th:classappend="${currentPage == 0} ? 'disabled'" class="page-item">
+                <a class="page-link" th:href="@{/admin/employee(page=0, keyword=${keyword})}">&laquo;</a>
+            </li>
+
+            <!-- Các trang -->
+            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                th:classappend="${i == currentPage} ? 'active'" class="page-item">
+                <a class="page-link" th:href="@{/admin/employee(page=${i}, keyword=${keyword})}" th:text="${i+1}"></a>
+            </li>
+
+            <!-- Trang cuối -->
+            <li th:classappend="${currentPage == totalPages - 1} ? 'disabled'" class="page-item">
+                <a class="page-link" th:href="@{/admin/employee(page=${totalPages - 1}, keyword=${keyword})}">&raquo;</a>
+            </li>
+        </ul>
+    </nav>
+
+</div>
+
+</body>
+</html>
