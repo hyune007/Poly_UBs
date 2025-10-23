@@ -2,6 +2,7 @@ package com.poly.ubs.controller;
 
 import com.poly.ubs.entity.Customer;
 import com.poly.ubs.repository.CustomerRepository;
+import com.poly.ubs.service.CustomerServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class ProfileController {
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private CustomerServiceImpl customerService;
 
     @GetMapping("/profile")
     public String profile(HttpSession session, Model model) {
@@ -47,7 +48,7 @@ public class ProfileController {
         loggedInUser.setPhone(phone);
         loggedInUser.setEmail(email);
 
-        customerRepository.save(loggedInUser);
+        customerService.save(loggedInUser);
 
         session.setAttribute("loggedInUser", loggedInUser);
 
@@ -84,7 +85,7 @@ public class ProfileController {
 
         loggedInUser.setPassword(newPass);
 
-        customerRepository.save(loggedInUser);
+        customerService.save(loggedInUser);
 
         session.setAttribute("loggedInUser", loggedInUser);
 

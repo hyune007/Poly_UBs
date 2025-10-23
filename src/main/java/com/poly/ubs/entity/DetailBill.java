@@ -43,4 +43,10 @@ public class DetailBill {
      */
     @Column(name = "quantity")
     private int quantity;
+
+    /**
+     * Tổng tiền của chi tiết hóa đơn
+     */
+    @Column(name = "hdct_total")
+    private int total;
 }

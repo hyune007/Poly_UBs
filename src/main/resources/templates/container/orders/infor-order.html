@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{container/orders/order::view(~{::title}, ~{::article})}">
+<head>
+  <title>Giới thiệu</title>
+</head>
+<body>
+<div th:replace="container/orders/order-process :: *"></div>
+<article>
+  <div class="form-container">
+    <h5 class="mb-3">Thông tin khách mua hàng</h5>
+
+    <form th:action="@{/order/submit-info}" method="post" th:object="${orderInfo}">
+      <div class="mb-3">
+        <label class="form-label me-3"><input type="radio" th:field="*{gender}" value="Anh" checked> Anh</label>
+        <label class="form-label"><input type="radio" th:field="*{gender}" value="Chị"> Chị</label>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <input type="text" class="form-control" th:field="*{fullName}" placeholder="Nhập họ tên"
+                 th:value="${customer.name}" required>
+        </div>
+        <div class="col-md-6">
+          <input type="text" class="form-control" th:field="*{phone}" placeholder="Nhập số điện thoại"
+                 th:value="${customer.phone}" required>
+        </div>
+      </div>
+
+      <hr class="my-4">
+
+      <h6>Chọn cách nhận hàng</h6>
+      <div class="form-check mb-2">
+        <input class="form-check-input" type="radio" th:field="*{deliveryType}" value="home" checked>
+        <label class="form-check-label">Giao hàng tận nơi</label>
+      </div>
+
+      <div class="row g-2 mb-3">
+        <div class="col-md-4">
+          <select class="form-select" th:field="*{city}" required>
+            <option value="">Tỉnh / Thành phố</option>
+            <option value="ha-noi">TP Hà Nội</option>
+            <option value="hue">TP Huế</option>
+            <option value="quang-ninh">Quảng Ninh</option>
+            <option value="cao-bang">Cao Bằng</option>
+            <option value="lang-son">Lạng Sơn</option>
+            <option value="lai-chau">Lai Châu</option>
+            <option value="dien-bien">Điện Biên</option>
+            <option value="son-la">Sơn La</option>
+            <option value="thanh-hoa">Thanh Hóa</option>
+            <option value="nghe-an">Nghệ An</option>
+            <option value="ha-tinh">Hà Tĩnh</option>
+            <option value="tuyen-quang">Tuyên Quang </option>
+            <option value="lao-cai">Lào Cai </option>
+            <option value="thai-nguyen">Thái Nguyên </option>
+            <option value="phu-tho">Phú Thọ </option>
+            <option value="bac-ninh">Bắc Ninh </option>
+            <option value="hung-yen">Hưng Yên </option>
+            <option value="hai-phong">TP Hải Phòng </option>
+            <option value="ninh-binh">Ninh Bình </option>
+            <option value="quang-tri">Quảng Trị </option>
+            <option value="da-nang">TP Đà Nẵng</option>
+            <option value="quang-ngai">Quảng Ngãi </option>
+            <option value="gia-lai">Gia Lai </option>
+            <option value="khanh-hoa">Khánh Hòa </option>
+            <option value="lam-dong">Lâm Đồng </option>
+            <option value="dak-lak">Đắk Lắk </option>
+            <option value="tphcm">TP Hồ Chí Minh </option>
+            <option value="dong-nai">Đồng Nai </option>
+            <option value="tay-ninh"></option>
+            <option value="can-tho">TP Cần Thơ </option>
+            <option value="vinh-long">Vĩnh Long </option>
+            <option value="dong-thap">Đồng Tháp </option>
+            <option value="ca-mau">Cà Mau </option>
+            <option value="an-giang">An Giang</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <input type="text" class="form-control" th:field="*{ward}" placeholder="Quận / Huyện / Phường / Xã" required>
+        </div>
+        <div class="col-md-4">
+          <input type="text" class="form-control" th:field="*{detailAddress}" placeholder="Số nhà, tên đường" required>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <textarea class="form-control" th:field="*{note}" placeholder="Lưu ý, yêu cầu khác (Không bắt buộc)" rows="2"></textarea>
+      </div>
+
+      <hr>
+
+      <h6>Dịch vụ giao hàng</h6>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" th:field="*{shippingMethod}" value="standard" checked>
+        <label class="form-check-label">Giao hàng tiêu chuẩn - 40.000₫</label>
+      </div>
+      <div class="form-check mb-3">
+        <input class="form-check-input" type="radio" th:field="*{shippingMethod}" value="pickup">
+        <label class="form-check-label">Nhận tại cửa hàng - 0₫</label>
+      </div>
+
+      <div class="mb-3">
+        <strong>Tạm tính:</strong> <span th:text="${#numbers.formatDecimal(total,0,'COMMA',0,'POINT')} + '₫'">0₫</span> <br>
+        <strong>Phí vận chuyển:</strong> 40.000₫ <br>
+        <strong>Tổng tiền:</strong> <span style="color: red; font-size: 18px;" th:text="${#numbers.formatDecimal(total + 40000,0,'COMMA',0,'POINT')} + '₫'">0₫</span>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg w-100">Đặt hàng ngay</button>
+      <p class="note mt-2 text-center">Bạn có thể chọn hình thức thanh toán sau khi đặt hàng</p>
+    </form>
+  </div>
+</article>
+</body>
+</html>
+

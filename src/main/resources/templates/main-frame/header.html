@@ -39,7 +39,7 @@
                     <option th:each="c : ${categories}"
                             th:value="${c.id}"
                             th:text="${c.name}"
-                            th:selected="${c.id == selectedCategoryId}">
+                            th:selected="${selectedCategoryId != null and c.id == selectedCategoryId}">
                     </option>
                 </select>
                 <input class="form-control me-2" type="search" placeholder="Nhập sản phẩm cần tìm..." aria-label="Search">
@@ -48,7 +48,7 @@
 
             <div class="d-flex align-items-center gap-3 position-relative">
                 <div class="nav-button position-relative">
-                    <a href="/order/shopping-cart" class="text-dark text-decoration-none d-block" id="cart-icon">
+                    <a href="/cart" class="text-dark text-decoration-none d-block" id="cart-icon">
                         🛒 Giỏ hàng
                         <span class="cart-badge">0</span>
                     </a>

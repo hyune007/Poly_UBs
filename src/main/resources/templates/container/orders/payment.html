@@ -10,7 +10,7 @@
 <article>
     <div class="container mb-5">
         <h3 class="text-center mt-4 mb-4">Thanh toán đơn hàng</h3>
-        <form action="/order/complete" method="post">
+
         <div class="row">
             <!-- Thông tin khách hàng -->
             <div class="col-lg-8">
@@ -20,22 +20,33 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">Họ và tên</label>
-                                <input type="text" class="form-control" th:value="${customer.name}" readonly>
+                                <input type="text" class="form-control" th:value="${orderInfo.fullName}" readonly>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Số điện thoại</label>
-                                <input type="tel" class="form-control" th:value="${customer.phone}" readonly>
+                                <input type="tel" class="form-control" th:value="${orderInfo.phone}" readonly>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Tỉnh / Thành phố</label>
+                                <input type="text" class="form-control" th:value="${orderInfo.city}" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Quận / Huyện / Phường</label>
+                                <input type="text" class="form-control" th:value="${orderInfo.ward}" readonly>
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Địa chỉ giao hàng</label>
-                            <select name="addressId" class="form-select">
-                                <option th:each="addr : ${addresses}"
-                                        th:value="${addr.id}"
-                                        th:text="${addr.ward + ', ' + addr.city}">
-                                </option>
-                            </select>
+                            <label class="form-label">Địa chỉ chi tiết</label>
+                            <input type="text" class="form-control" th:value="${orderInfo.detailAddress}" readonly>
+                        </div>
+
+                        <div class="mb-3" th:if="${orderInfo.note != null && !orderInfo.note.isEmpty()}">
+                            <label class="form-label">Ghi chú đơn hàng</label>
+                            <textarea class="form-control" rows="3" th:text="${orderInfo.note}" readonly></textarea>
                         </div>
                     </form>
                 </div>
@@ -44,16 +55,22 @@
                 <div class="checkout-container">
                     <div class="form-section-title">Hình thức thanh toán</div>
                     <div class="form-check mb-2">
-                        <input class="form-check-input" type="radio" name="paymentMethod" id="cod" value="COD" checked>
-                        <label class="form-check-label" for="cod">Thanh toán khi nhận hàng (COD)</label>
+                        <input class="form-check-input" type="radio" name="paymentMethod" id="cod" checked>
+                        <label class="form-check-label" for="cod">
+                            Thanh toán khi nhận hàng (COD)
+                        </label>
                     </div>
                     <div class="form-check mb-2">
-                        <input class="form-check-input" type="radio" name="paymentMethod" id="bank" value="BANK">
-                        <label class="form-check-label" for="bank">Chuyển khoản ngân hàng</label>
+                        <input class="form-check-input" type="radio" name="paymentMethod" id="bank">
+                        <label class="form-check-label" for="bank">
+                            Chuyển khoản ngân hàng
+                        </label>
                     </div>
                     <div class="form-check mb-2">
-                        <input class="form-check-input" type="radio" name="paymentMethod" id="momo" value="MOMO">
-                        <label class="form-check-label" for="momo">Thanh toán qua MoMo / ZaloPay</label>
+                        <input class="form-check-input" type="radio" name="paymentMethod" id="momo">
+                        <label class="form-check-label" for="momo">
+                            Thanh toán qua MoMo / ZaloPay
+                        </label>
                     </div>
                 </div>
             </div>
@@ -63,28 +80,28 @@
                 <div class="order-summary">
                     <h5 class="mb-3">Tóm tắt đơn hàng</h5>
 
+                    <!-- Danh sách sản phẩm -->
                     <div th:each="item : ${cartItems}" class="d-flex justify-content-between mb-2">
-                        <span th:text="${item.product.name} + ' x' + ${item.quantity}"></span>
-                        <strong th:text="${#numbers.formatDecimal(item.product.price * item.quantity, 0, 'COMMA', 0, 'POINT')} + '₫'"></strong>
+                        <span th:text="${item.product.name} + ' x' + ${item.quantity}">Sản phẩm</span>
+                        <strong th:text="${#numbers.formatDecimal(item.product.price * item.quantity,0,'COMMA',0,'POINT')} + '₫'">0₫</strong>
                     </div>
 
                     <hr>
                     <div class="d-flex justify-content-between mb-2">
                         <span>Phí vận chuyển</span>
-                        <strong th:text="${#numbers.formatDecimal(shippingFee, 0, 'COMMA', 0, 'POINT')} + '₫'"></strong>
+                        <strong th:text="${#numbers.formatDecimal(orderInfo.shippingFee,0,'COMMA',0,'POINT')} + '₫'">40.000₫</strong>
                     </div>
-                    <hr>
                     <div class="d-flex justify-content-between mb-3">
                         <strong>Tổng cộng</strong>
-                        <strong class="text-danger fs-5"
-                                th:text="${#numbers.formatDecimal(total, 0, 'COMMA', 0, 'POINT')} + '₫'"></strong>
+                        <strong class="text-danger fs-5" th:text="${#numbers.formatDecimal(orderInfo.totalAmount,0,'COMMA',0,'POINT')} + '₫'">0₫</strong>
                     </div>
 
-                    <button type="submit">Xác nhận thanh toán</button>
+                    <form th:action="@{/order/confirm-payment}" method="post">
+                        <button type="submit" class="btn btn-success btn-lg w-100">Xác nhận thanh toán</button>
+                    </form>
                 </div>
             </div>
         </div>
-        </form>
     </div>
 </article>
 </body>
