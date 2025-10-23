@@ -62,5 +62,25 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, String, Prod
     public long countByCategoryName(String categoryName) {
         return productRepository.countByCategory_Name (categoryName);
     }
+    public Page<Product> findByCategoryAndName(String categoryId, String keyword, Pageable pageable) {
+        return productRepository.findByCategory_IdAndNameContainingIgnoreCase(categoryId, keyword, pageable);
+    }
 
+    public Page<Product> findByNameContaining(String keyword, Pageable pageable) {
+        return productRepository.findByNameContainingIgnoreCase(keyword, pageable);
+    }
+
+    // Method tìm theo khoảng giá với phân trang
+    public Page<Product> findByPrice(double min, double max, Pageable pageable) {
+        return productRepository.findByPriceBetween(min, max, pageable);
+    }
+
+    public Page<Product> findByPriceAndBrand(double min, double max, String brandId, Pageable pageable) {
+        if (brandId != null && !brandId.isEmpty()) {
+            return productRepository.findByPriceBetweenAndBrandId(min, max, brandId, pageable);
+        } else {
+            return productRepository.findByPriceBetween(min, max, pageable);
+        }
+
+}
 }
