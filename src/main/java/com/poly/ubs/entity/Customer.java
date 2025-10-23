@@ -1,13 +1,13 @@
 package com.poly.ubs.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Thực thể khách hàng
@@ -49,4 +49,8 @@ public class Customer {
      */
     @Column(name = "kh_mail", length = 50)
     private String email;
+
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    private List<Address> addresses;
+
 }

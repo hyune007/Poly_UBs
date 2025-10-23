@@ -72,14 +72,17 @@ public class ProfileController {
         }
 
 
+        // Sai mật khẩu hiện tại
         if (!loggedInUser.getPassword().equals(currentPass)) {
-            redirectAttributes.addFlashAttribute("error", "Mật khẩu hiện tại không đúng!");
+            redirectAttributes.addFlashAttribute("errorChangePass", "Mật khẩu hiện tại không đúng!");
+            redirectAttributes.addFlashAttribute("openChangePassModal", true);
             return "redirect:/profile";
         }
 
-
+        // Mật khẩu xác nhận không khớp
         if (!newPass.equals(confirmPass)) {
-            redirectAttributes.addFlashAttribute("error", "Mật khẩu mới và xác nhận không khớp!");
+            redirectAttributes.addFlashAttribute("errorChangePass", "Mật khẩu mới và xác nhận không khớp!");
+            redirectAttributes.addFlashAttribute("openChangePassModal", true);
             return "redirect:/profile";
         }
 
