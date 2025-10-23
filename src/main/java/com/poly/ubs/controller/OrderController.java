@@ -31,7 +31,7 @@ public class OrderController {
     private AddressServiceImpl addressService;
 
     @Autowired
-    private BillService billService;
+    private BillServiceImpl billService;
 
     @Autowired
     private EmployeeServiceImpl employeeService;

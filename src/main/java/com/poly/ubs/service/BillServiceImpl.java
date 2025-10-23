@@ -15,7 +15,7 @@ import java.util.UUID;
  * Service xử lý nghiệp vụ hóa đơn
  */
 @Service
-public class BillService extends GenericServiceImpl<Bill, String, BillRepository> {
+public class BillServiceImpl extends GenericServiceImpl<Bill, String, BillRepository> {
 
     @Autowired
     private BillRepository billRepository;
