@@ -135,12 +135,38 @@ public class ViewController {
             items = productService.findAll(pageable);
         }
 
+        String selectedCategoryName;
+        if (hasCategory) {
+            Category category = categoryService.findById(categoryId);
+            selectedCategoryName = (category != null ? category.getName() : "Danh mục không xác định");
+        } else if (hasKeyword) {
+            selectedCategoryName = "Kết quả tìm kiếm cho: \"" + keyword + "\"";
+        } else {
+            selectedCategoryName = "Tất cả sản phẩm";
+        }
+
+        for (Product item : items) {
+            String folder = "";
+            switch (item.getCategory().getId()) {
+                case "LSP01": folder = "phone/"; break;
+                case "LSP02": folder = "laptop/"; break;
+                case "LSP03": folder = "pad/"; break;
+                case "LSP04": folder = "smartwatch/"; break;
+                case "LSP05": folder = "headphone/"; break;
+                case "LSP06": folder = "keyboard/"; break;
+                case "LSP07": folder = "mouse/"; break;
+                case "LSP08": folder = "screen/"; break;
+                case "LSP09": folder = "speaker/"; break;
+                default: folder = "other/";
+            }
+            item.setImage("products/" + folder + item.getImage());
+        }
         model.addAttribute("items", items);
         model.addAttribute("selectedCategoryId", categoryId);
+        model.addAttribute("selectedCategoryName", selectedCategoryName); // 🟩 Thêm dòng này
         model.addAttribute("keyword", keyword);
 
         return "/container/home";
     }
-
 
 }
