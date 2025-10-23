@@ -1,7 +1,7 @@
 package com.poly.ubs.controller;
 
-import com.poly.ubs.entity.Brand
-import com.poly.ubs.service.BrandServiceImpl
+import com.poly.ubs.entity.Brand;
+import com.poly.ubs.service.BrandServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +18,7 @@ public class BrandController {
     public String listBrands(Model model) {
         model.addAttribute("brands", brandService.findAll());
         model.addAttribute("brand", new Brand());
-        return "brand";
+        return "admin/product/brand";
     }
 
     @PostMapping("/save")
@@ -28,14 +28,14 @@ public class BrandController {
     }
 
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("brand", brandService.findById(id).orElse(new Brand()));
+    public String edit(@PathVariable("id") String id, Model model) {
+        model.addAttribute("brand", brandService.findById(id));
         model.addAttribute("brands", brandService.findAll());
-        return "brand";
+        return "admin/product/brand";
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") Long id) {
+    public String delete(@PathVariable("id") String id) {
         brandService.deleteById(id);
         return "redirect:/brand";
     }

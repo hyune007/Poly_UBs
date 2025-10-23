@@ -21,32 +21,22 @@
         <div class="container-fluid px-5 d-flex justify-content-between align-items-center">
             <a href="/home" class="navbar-brand fs-3 fw-bold">TECH STORE</a>
 
-            <form class="d-flex search-form w-50">
-                <select class="form-select w-auto me-2">
-                    <option>Tất cả danh mục</option>
-                    <option>Điện thoại</option>
-                    <option>Laptop - Máy tính xách tay</option>
-                    <option>Máy tính bảng</option>
-                    <option>Đồng hồ thông minh</option>
-                    <option>Tai nghe</option>
-                    <option>Bàn phím</option>
-                    <option>Chuột máy tính</option>
-                    <option>Core i [CPU, PC và Laptop]</option>
-                    <option>Core Ultra [CPU, PC và Laptop]</option>
-                    <option>PC AMD</option>
-                    <option>PC AI</option>
-                    <option>Laptop - Máy Tính Xách Tay</option>
-                    <option>Màn Hình Máy Tính</option>
-                    <option>Máy chơi game - Console</option>
-                    <option>Tay Cầm Chơi Game</option>
+            <form action="/home" method="get" class="d-flex align-items-center flex-grow-1 mx-3" style="max-width: 700px;">
+                <select name="categoryId" class="form-select w-auto me-2" onchange="this.form.submit()">
+                    <option value="">Tất cả danh mục</option>
+                    <option th:each="c : ${categories}"
+                            th:value="${c.id}"
+                            th:text="${c.name}"
+                            th:selected="${selectedCategoryId != null and c.id == selectedCategoryId}">
+                    </option>
                 </select>
                 <input class="form-control me-2" type="search" placeholder="Nhập sản phẩm cần tìm..." aria-label="Search">
-                <button class="btn btn-primary w-auto" style="min-width: 100px;" type="submit">Tìm kiếm</button>
+                <button class="btn btn-primary" type="submit">Tìm kiếm</button>
             </form>
 
             <div class="d-flex align-items-center gap-3 position-relative">
                 <div class="nav-button position-relative">
-                    <a href="/order/shopping-cart" class="text-dark text-decoration-none d-block" id="cart-icon">
+                    <a href="/cart" class="text-dark text-decoration-none d-block" id="cart-icon">
                         🛒 Giỏ hàng
                         <span class="cart-badge">0</span>
                     </a>
@@ -72,24 +62,16 @@
     <!--Header Bottom -->
     <div class="header-bottom py-1">
         <div class="container-fluid px-5 d-flex flex-wrap justify-content-start">
-            <select class="form-select w-auto me-2 ">
-                <option>Danh mục sản phẩm ▼</option>
-                <option>Điện thoại</option>
-                <option>Laptop - Máy tính xách tay</option>
-                <option>Máy tính bảng</option>
-                <option>Đồng hồ thông minh</option>
-                <option>Tai nghe</option>
-                <option>Bàn phím</option>
-                <option>Chuột máy tính</option>
-                <option>Core i [CPU, PC và Laptop]</option>
-                <option>Core Ultra [CPU, PC và Laptop]</option>
-                <option>PC AMD</option>
-                <option>PC AI</option>
-                <option>Laptop - Máy Tính Xách Tay</option>
-                <option>Màn Hình Máy Tính</option>
-                <option>Máy chơi game - Console</option>
-                <option>Tay Cầm Chơi Game</option>
-            </select>
+            <form action="/home" method="get" class="d-flex">
+                <select name="categoryId" class="form-select w-auto me-2" onchange="this.form.submit()" style="padding-right: 4.5rem;">
+                    <option value="">Danh mục sản phẩm ▼</option>
+                    <option th:each="c : ${categories}"
+                            th:value="${c.id}"
+                            th:text="${c.name}"
+                            th:selected="${c.id == selectedCategoryId}">
+                    </option>
+                </select>
+            </form>
             <div class="d-flex">
                 <a href="/home" class="nav-link px-3">Trang chủ</a>
                 <a href="#" class="nav-link px-3">Giới thiệu</a>

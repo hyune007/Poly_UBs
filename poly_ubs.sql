@@ -11,6 +11,17 @@ create table KhachHang
     PRIMARY KEY (kh_id)
 );
 
+CREATE TABLE GioHang
+(
+    gh_id       VARCHAR(8) NOT NULL,
+    sp_quantity INT        NOT NULL,
+    kh_id       VARCHAR(8) NOT NULL,
+    sp_id       VARCHAR(8) NOT NULL,
+    PRIMARY KEY (gh_id),
+    FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id),
+    FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id),
+    UNIQUE KEY unique_customer_product (kh_id, sp_id)
+);
 create table NhanVien
 (
     nv_id       VARCHAR(8)   NOT NULL,
@@ -55,6 +66,7 @@ create table DiaChi
     kh_id   VARCHAR(8)  NOT NULL,
     dc_city VARCHAR(50) NOT NULL,
     dc_ward VARCHAR(50) NOT NULL,
+    dc_detailaddress VARCHAR(255) NOT NULL,
     PRIMARY KEY (dc_id),
     FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id)
 );
@@ -77,19 +89,21 @@ create table ChiTietHoaDon
     hd_id    VARCHAR(8) NOT NULL,
     sp_id    VARCHAR(8) NOT NULL,
     quantity INT        NOT NULL,
+    hdct_total INT        NOT NULL,
     PRIMARY KEY (hdct_id),
     FOREIGN KEY (hd_id) REFERENCES HoaDon (hd_id),
     FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id)
 );
-create table GioHang
+CREATE TABLE GioHang
 (
     gh_id       VARCHAR(8) NOT NULL,
     sp_quantity INT        NOT NULL,
-    kh_id       VARCHAR(8) NOT NULL unique,
+    kh_id       VARCHAR(8) NOT NULL,
     sp_id       VARCHAR(8) NOT NULL,
     PRIMARY KEY (gh_id),
     FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id),
-    FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id)
+    FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id),
+    UNIQUE KEY unique_customer_product (kh_id, sp_id)
 );
 create table KhuyenMai
 (
@@ -132,8 +146,8 @@ CREATE TABLE IF NOT EXISTS password_reset_tokens
 );
 
 -- Index để tăng tốc độ tìm kiếm theo token
-CREATE INDEX idx_token ON password_reset_tokens(token);
-CREATE INDEX idx_expiry_date ON password_reset_tokens(expiry_date);
+CREATE INDEX idx_token ON password_reset_tokens (token);
+CREATE INDEX idx_expiry_date ON password_reset_tokens (expiry_date);
 
 -- Drop tables in correct order (children first, then parents)
 drop table DanhGia; -- Child of SanPham and KhachHang

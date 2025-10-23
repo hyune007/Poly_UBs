@@ -19,34 +19,34 @@
                     <form>
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label class="form-label" >Họ và tên</label>
-                                <input type="text" class="form-control" placeholder="Nhập họ tên"readonly>
+                                <label class="form-label">Họ và tên</label>
+                                <input type="text" class="form-control" th:value="${orderInfo.fullName}" readonly>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Số điện thoại</label>
-                                <input type="tel" class="form-control" placeholder="sdt"readonly>
+                                <input type="tel" class="form-control" th:value="${orderInfo.phone}" readonly>
                             </div>
                         </div>
 
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">Tỉnh / Thành phố</label>
-                                <input type="tel" class="form-control" placeholder="Thành phố"readonly>
+                                <input type="text" class="form-control" th:value="${orderInfo.city}" readonly>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Quận / Huyện</label>
-                                <input type="tel" class="form-control" placeholder="Quận/ huyện"readonly>
+                                <label class="form-label">Quận / Huyện / Phường</label>
+                                <input type="text" class="form-control" th:value="${orderInfo.ward}" readonly>
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Địa chỉ chi tiết</label>
-                            <input type="tel" class="form-control" placeholder="Dia chi chi tiet"readonly>
+                            <input type="text" class="form-control" th:value="${orderInfo.detailAddress}" readonly>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Ghi chú đơn hàng (không bắt buộc)</label>
-                            <textarea class="form-control" rows="3"></textarea>
+                        <div class="mb-3" th:if="${orderInfo.note != null && !orderInfo.note.isEmpty()}">
+                            <label class="form-label">Ghi chú đơn hàng</label>
+                            <textarea class="form-control" rows="3" th:text="${orderInfo.note}" readonly></textarea>
                         </div>
                     </form>
                 </div>
@@ -79,25 +79,25 @@
             <div class="col-lg-4">
                 <div class="order-summary">
                     <h5 class="mb-3">Tóm tắt đơn hàng</h5>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Sản phẩm 1</span>
-                        <strong>250.000₫</strong>
+
+                    <!-- Danh sách sản phẩm -->
+                    <div th:each="item : ${cartItems}" class="d-flex justify-content-between mb-2">
+                        <span th:text="${item.product.name} + ' x' + ${item.quantity}">Sản phẩm</span>
+                        <strong th:text="${#numbers.formatDecimal(item.product.price * item.quantity,0,'COMMA',0,'POINT')} + '₫'">0₫</strong>
                     </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Sản phẩm 2</span>
-                        <strong>400.000₫</strong>
-                    </div>
+
                     <hr>
                     <div class="d-flex justify-content-between mb-2">
                         <span>Phí vận chuyển</span>
-                        <strong>40.000₫</strong>
+                        <strong th:text="${#numbers.formatDecimal(orderInfo.shippingFee,0,'COMMA',0,'POINT')} + '₫'">40.000₫</strong>
                     </div>
                     <div class="d-flex justify-content-between mb-3">
                         <strong>Tổng cộng</strong>
-                        <strong class="text-danger fs-5">690.000₫</strong>
+                        <strong class="text-danger fs-5" th:text="${#numbers.formatDecimal(orderInfo.totalAmount,0,'COMMA',0,'POINT')} + '₫'">0₫</strong>
                     </div>
-                    <form action="/order/complete" method="get">
-                        <button type="submit">Xác nhận thanh toán</button>
+
+                    <form th:action="@{/order/confirm-payment}" method="post">
+                        <button type="submit" class="btn btn-success btn-lg w-100">Xác nhận thanh toán</button>
                     </form>
                 </div>
             </div>

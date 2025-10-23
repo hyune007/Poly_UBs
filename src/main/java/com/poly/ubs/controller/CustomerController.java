@@ -18,7 +18,7 @@ public class CustomerController {
     public String listCustomers(Model model) {
         model.addAttribute("customers", customerService.findAll());
         model.addAttribute("customer", new Customer());
-        return "customer";
+        return "admin/customer/customer";
     }
 
     @PostMapping("/save")
@@ -28,14 +28,14 @@ public class CustomerController {
     }
 
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("customer", customerService.findById(id).orElse(new Customer()));
+    public String edit(@PathVariable("id") String id, Model model) {
+        model.addAttribute("customer", customerService.findById(id));
         model.addAttribute("customers", customerService.findAll());
-        return "customer";
+        return "admin/customer/customer";
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") Long id) {
+    public String delete(@PathVariable("id") String id) {
         customerService.deleteById(id);
         return "redirect:/customer";
     }
