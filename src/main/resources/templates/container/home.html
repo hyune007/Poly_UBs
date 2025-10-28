@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -7,7 +6,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/general.css">
     <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/body.css">
 
 </head>
 <style>
@@ -21,40 +22,37 @@
         height: 480px;
         object-fit: cover;
     }
+    .owl-dots {
+        display: none !important;
+    }
 </style>
 <body>
 
 <!--header -->
 <div th:replace="main-frame/header :: header"></div>
 
-
 <!-- Banner-->
 <div class="banner" id="bigImage">
     <div class="owl-carousel owl-theme">
         <div class="item">
-            <a href="#"><img src="/photos/banner1.jpg" alt="Banner 1"></a>
+            <a href="https://youtu.be/0RS8KFwVXQo" target="_blank"><img src="/photos/banner1.jpg" alt="Banner 1"></a>
         </div>
         <div class="item">
-            <a href="#"><img src="/photos/banner2.jpg" alt="Banner 2"></a>
+            <a href="https://youtu.be/NgNkCvvF4KA" target="_blank"><img src="/photos/banner2.jpg" alt="Banner 2"></a>
         </div>
         <div class="item">
-            <a href="#"><img src="/photos/banner3.jpg" alt="Banner 3"></a>
+            <a href="https://youtu.be/R4TG4evvLuY" target="_blank"><img src="/photos/banner3.jpg" alt="Banner 3"></a>
         </div>
         <div class="item">
-            <a href="#"><img src="/photos/banner4.jpg" alt="Banner 4"></a>
+            <a href="https://youtu.be/dQw4w9WgXcQ" target="_blank"><img src="/photos/banner4.jpg" alt="Banner 4"></a>
         </div>
         <div class="item">
-            <a href="#"><img src="/photos/banner5.jpg" alt="Banner 5"></a>
+            <a href="https://youtu.be/dQw4w9WgXcQ" target="_blank"><img src="/photos/banner5.jpg" alt="Banner 5"></a>
         </div>
     </div>
 </div>
-
-
 <!--body-->
-<main class="container py-5">
-    <h1>Chào mừng đến với UBrainTech!</h1>
-    <p>Trang chủ</p>
-</main>
+<div th:replace="main-frame/body :: Content"></div>
 
 <!--footer -->
 <div th:replace="main-frame/footer :: footer"></div>
@@ -69,12 +67,51 @@
             autoplay: true,
             autoplayTimeout: 4000,
             smartSpeed: 1000,
-            dots: true,
+            dots: false,
             nav: false
+
+        });
+    });
+
+
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const steps = document.querySelectorAll(".checkout-step");
+        const savedStep = localStorage.getItem("activeStep");
+
+        // Nếu có bước đã lưu, tô lại
+        if (savedStep) {
+            steps.forEach(step => {
+                if (step.innerText.trim() === savedStep) {
+                    step.classList.add("active");
+                } else {
+                    step.classList.remove("active");
+                }
+            });
+        } else {
+            // Nếu chưa lưu, mặc định bước đầu tiên
+            steps.forEach(step => step.classList.remove("active"));
+            if (steps.length > 0) {
+                steps[0].classList.add("active");
+            }
+        }
+
+        // Khi click vào bước, lưu lại tên bước
+        steps.forEach(step => {
+            const link = step.querySelector("a");
+            if (link) {
+                link.addEventListener("click", function () {
+                    localStorage.setItem("activeStep", step.innerText.trim());
+                    // Không chặn chuyển trang, để form load bình thường
+                });
+            }
         });
     });
 </script>
+
+
 </body>
-</html>
-</body>
+
 </html>

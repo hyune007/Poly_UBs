@@ -3,4 +3,16 @@
     padding: 0;
     box-sizing: border-box;
     text-decoration: none;
+    font-weight: normal;
+    font-family: 'Roboto', sans-serif;
+    box-shadow: none;
+    border: none;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu {
+    margin-top: 0;
 }

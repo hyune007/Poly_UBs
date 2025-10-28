@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thanh điều hướng đặt hàng</title>
+    <link rel="stylesheet" href="/css/order-process.css">
+</head>
+<body>
+<div class="checkout-nav">
+    <div class="checkout-step"
+         th:classappend="${currentURI.contains('/shopping-cart')} ? ' active'">
+        <a href="/order/shopping-cart">Giỏ hàng</a>
+    </div>
+
+    <div class="checkout-step"
+         th:classappend="${currentURI.contains('/infor-order')} ? ' active'">
+        <a href="/order/infor-order">Thông tin đặt hàng</a>
+    </div>
+    <div class="checkout-step"
+         th:classappend="${currentURI.contains('/payment')} ? ' active'">
+        <a href="/order/payment">Thanh toán</a>
+    </div>
+    <div class="checkout-step"
+         th:classappend="${currentURI.contains('/complete')} ? ' active'">
+        <a href="/order/complete">Hoàn tất</a>
+    </div>
+</div>
+
+</body>
+</html>
