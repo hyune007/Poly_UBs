@@ -50,4 +50,3 @@ public class AddressServiceImpl extends GenericServiceImpl<Address, String, Addr
         return "DC" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
     }
 }
-
