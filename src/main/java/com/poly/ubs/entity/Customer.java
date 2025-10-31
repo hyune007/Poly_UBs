@@ -51,7 +51,4 @@ public class Customer {
      */
     @Column(name = "kh_mail", length = 50)
     private String email;
-
-    @OneToMany(mappedBy = "customer")
-    private List<Address> addresses;
 }
