@@ -1,66 +1,86 @@
-package com.poly.ubs.service.impl;
+package com.poly.ubs.service;
 
 import com.poly.ubs.entity.Product;
 import com.poly.ubs.repository.ProductRepository;
-import com.poly.ubs.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+/**
+ * Cài đặt dịch vụ cho thực thể Product sử dụng dịch vụ chung
+ */
 @Service
-public class ProductServiceImpl implements ProductService {
+public class ProductServiceImpl extends GenericServiceImpl<Product, String, ProductRepository> {
 
     @Autowired
-    private ProductRepository repo;
+    private ProductRepository productRepository;
 
     @Override
-    public Product save(Product entity) {
-        return repo.save(entity);
+    protected ProductRepository getRepository() {
+        return productRepository;
     }
 
-    @Override
-    public Product update(Product entity) {
-        return repo.save(entity);
+    /**
+     * Tìm sản phẩm theo ID danh mục với phân trang
+     *
+     * @param categoryId ID danh mục
+     * @param pageable   thông tin phân trang
+     * @return Page chứa danh sách sản phẩm
+     */
+    public Page<Product> findByCategoryId(String categoryId, Pageable pageable) {
+        return productRepository.findByCategoryId (categoryId, pageable);
     }
 
-    @Override
-    public Product findById(Long id) {
-        return repo.findById(id).orElse(null);
-    }
-
-    @Override
-    public java.util.List<Product> findAll() {
-        return repo.findAll();
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        repo.deleteById(id);
-    }
-
-    @Override
-    public boolean existsById(Long id) {
-        return repo.existsById(id);
-    }
-
-    @Override
-    public long count() {
-        return repo.count();
-    }
-
-    @Override
-    public Page<Product> findByCategory(String categoryName, Pageable pageable) {
-        return repo.findByCategory_Name(categoryName, pageable);
-    }
-
-    @Override
+    /**
+     * Tìm tất cả sản phẩm với phân trang
+     *
+     * @param pageable thông tin phân trang
+     * @return Page chứa danh sách sản phẩm
+     */
     public Page<Product> findAll(Pageable pageable) {
-        return repo.findAll(pageable);
+        return productRepository.findAll (pageable);
     }
 
-    @Override
-    public long countByCategory(String categoryName) {
-        return repo.countByCategory_Name(categoryName);
+    /**
+     * Tìm sản phẩm theo tên danh mục với phân trang
+     *
+     * @param categoryName tên danh mục
+     * @param pageable     thông tin phân trang
+     * @return Page chứa danh sách sản phẩm
+     */
+    public Page<Product> findByCategoryName(String categoryName, Pageable pageable) {
+        return productRepository.findByCategoryName (categoryName, pageable);
     }
+
+    /**
+     * Đếm số lượng sản phẩm theo tên danh mục
+     *
+     * @param categoryName tên danh mục
+     * @return số lượng sản phẩm
+     */
+    public long countByCategoryName(String categoryName) {
+        return productRepository.countByCategory_Name (categoryName);
+    }
+    public Page<Product> findByCategoryAndName(String categoryId, String keyword, Pageable pageable) {
+        return productRepository.findByCategory_IdAndNameContainingIgnoreCase(categoryId, keyword, pageable);
+    }
+
+    public Page<Product> findByNameContaining(String keyword, Pageable pageable) {
+        return productRepository.findByNameContainingIgnoreCase(keyword, pageable);
+    }
+
+    // Method tìm theo khoảng giá với phân trang
+    public Page<Product> findByPrice(double min, double max, Pageable pageable) {
+        return productRepository.findByPriceBetween(min, max, pageable);
+    }
+
+    public Page<Product> findByPriceAndBrand(double min, double max, String brandId, Pageable pageable) {
+        if (brandId != null && !brandId.isEmpty()) {
+            return productRepository.findByPriceBetweenAndBrandId(min, max, brandId, pageable);
+        } else {
+            return productRepository.findByPriceBetween(min, max, pageable);
+        }
+
+}
 }

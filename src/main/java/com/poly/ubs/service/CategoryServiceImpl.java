@@ -5,12 +5,13 @@ import com.poly.ubs.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
- * Cài đặt dịch vụ cho Category sử dụng GenericServiceImpl
+ * Cài đặt dịch vụ cho thực thể Category sử dụng dịch vụ chung
  */
 @Service
-public class CategoryServiceImpl extends GenericServiceImpl<Category, String, CategoryRepository>
-        implements CategoryService {
+public class CategoryServiceImpl extends GenericServiceImpl<Category, String, CategoryRepository> {
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -18,5 +19,14 @@ public class CategoryServiceImpl extends GenericServiceImpl<Category, String, Ca
     @Override
     protected CategoryRepository getRepository() {
         return categoryRepository;
+    }
+
+    /**
+     * Lấy tất cả danh mục
+     *
+     * @return danh sách tất cả các danh mục
+     */
+    public List<Category> getCategories() {
+        return categoryRepository.findAll ();
     }
 }

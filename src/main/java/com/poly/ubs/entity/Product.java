@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.Serializable;
-
 /**
  * Thực thể sản phẩm
  */
@@ -18,7 +16,7 @@ import java.io.Serializable;
 @Entity
 
 @Table(name = "sanpham")
-public class Product  {
+public class Product {
     /**
      * ID của sản phẩm
      */

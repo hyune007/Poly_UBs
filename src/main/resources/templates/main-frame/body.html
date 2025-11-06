@@ -3,130 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <title>Danh sách Laptop</title>
-    <style>
 
-    </style>
 </head>
 <body>
 <div th:fragment="Content">
 
-
-<h2 style="text-align:center; color:#001476; margin-bottom:30px;">Danh sách Laptop</h2>
-
-<div class="product-grid">
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 1">
-        <h4>Laptop Dell Inspiron</h4>
-        <p>Giá: 17.000.000₫</p>
-        <button>Mua ngay</button>
+    <div class="category-header" >
+        <h4 th:text="${selectedCategoryName}"></h4>
     </div>
 
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 2">
-        <h4>Laptop HP Pavilion</h4>
-        <p>Giá: 15.500.000₫</p>
-        <button>Mua ngay</button>
-    </div>
+    <div id="products" class="product-grid">
+        <div class="product-card" th:each="item : ${items}">
 
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 3">
-        <h4>Laptop Asus VivoBook</h4>
-        <p>Giá: 14.200.000₫</p>
-        <button>Mua ngay</button>
-    </div>
+            <a th:href="@{|/product/detail/${item.id}|}">
+                <img th:src="@{|/photos/${item.image}|}" alt="Sản phẩm">
+            </a>
 
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 4">
-        <h4>Laptop Lenovo IdeaPad</h4>
-        <p>Giá: 13.800.000₫</p>
-        <button>Mua ngay</button>
-    </div>
 
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 5">
-        <h4>Laptop MacBook Air M1</h4>
-        <p>Giá: 21.000.000₫</p>
-        <button>Mua ngay</button>
-    </div>
 
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 6">
-        <h4>Laptop Acer Aspire</h4>
-        <p>Giá: 12.900.000₫</p>
-        <button>Mua ngay</button>
+            <h4 th:text="${item.name}"></h4>
+            <p>Giá: <span th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')}"></span>₫</p>
+            <a th:href="@{|/product/detail/${item.id}|}">
+                <button>Mua ngay</button>
+            </a>
+        </div>
     </div>
+    <br>
+    <div class="pagination-container">
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center flex-wrap">
 
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 7">
-        <h4>Laptop MSI Modern</h4>
-        <p>Giá: 16.400.000₫</p>
-        <button>Mua ngay</button>
+                <!-- Nút về trang đầu -->
+                <li class="page-item" th:classappend="${items.first} ? 'disabled' : ''">
+                    <a class="page-link" th:href="@{|/home?p=0${selectedCategoryId != null ? '&categoryId=' + selectedCategoryId : ''}#products|}">«</a>
+                </li>
+
+                <!-- Nút trước -->
+                <li class="page-item" th:classappend="${items.first} ? 'disabled' : ''">
+                    <a class="page-link" th:href="@{|/home?p=${items.number - 1}${selectedCategoryId != null ? '&categoryId=' + selectedCategoryId : ''}#products|}">‹</a>
+                </li>
+
+                <!-- Danh sách số trang -->
+                <li th:each="i : ${#numbers.sequence(0, items.totalPages - 1)}"
+                    class="page-item"
+                    th:classappend="${i == items.number} ? 'active' : ''">
+                    <a class="page-link" th:href="@{|/home?p=${i}${selectedCategoryId != null ? '&categoryId=' + selectedCategoryId : ''}#products|}" th:text="${i + 1}"></a>
+                </li>
+
+                <!-- Nút sau -->
+                <li class="page-item" th:classappend="${items.last} ? 'disabled' : ''">
+                    <a class="page-link" th:href="@{|/home?p=${items.number + 1}${selectedCategoryId != null ? '&categoryId=' + selectedCategoryId : ''}#products|}">›</a>
+                </li>
+
+                <!-- Nút cuối -->
+                <li class="page-item" th:classappend="${items.last} ? 'disabled' : ''">
+                    <a class="page-link" th:href="@{|/home?p=${items.totalPages - 1}${selectedCategoryId != null ? '&categoryId=' + selectedCategoryId : ''}#products|}">»</a>
+                </li>
+
+            </ul>
+        </nav>
     </div>
-
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 8">
-        <h4>Laptop Gigabyte G5</h4>
-        <p>Giá: 18.300.000₫</p>
-        <button>Mua ngay</button>
-    </div>
-
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 9">
-        <h4>Laptop Huawei MateBook</h4>
-        <p>Giá: 14.900.000₫</p>
-        <button>Mua ngay</button>
-    </div>
-
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 10">
-        <h4>Laptop LG Gram</h4>
-        <p>Giá: 22.500.000₫</p>
-        <button>Mua ngay</button>
-    </div>
-
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 10">
-        <h4>Laptop LG Gram</h4>
-        <p>Giá: 22.500.000₫</p>
-        <button>Mua ngay</button>
-    </div>
-
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 10">
-        <h4>Laptop LG Gram</h4>
-        <p>Giá: 22.500.000₫</p>
-        <button>Mua ngay</button>
-    </div>
-
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 10">
-        <h4>Laptop LG Gram</h4>
-        <p>Giá: 22.500.000₫</p>
-        <button>Mua ngay</button>
-    </div>
-
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 10">
-        <h4>Laptop LG Gram</h4>
-        <p>Giá: 22.500.000₫</p>
-        <button>Mua ngay</button>
-    </div>
-
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 10">
-        <h4>Laptop LG Gram</h4>
-        <p>Giá: 22.500.000₫</p>
-        <button>Mua ngay</button>
-    </div>
-
-    <div class="product-card">
-        <img src="/photos/laptop.png" alt="Laptop 10">
-        <h4>Laptop LG Gram</h4>
-        <p>Giá: 22.500.000₫</p>
-        <button>Mua ngay</button>
-    </div>
-
-</div>
 </div>
 
 </body>

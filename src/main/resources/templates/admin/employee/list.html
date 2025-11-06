@@ -12,11 +12,11 @@
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold fs-3 text-dark">👨‍💼 Quản lý nhân viên</h2>
-        <a href="/admin/employees/create" class="btn btn-primary shadow">+ Thêm nhân viên</a>
+        <a href="/admin/employee/create" class="btn btn-primary shadow">+ Thêm nhân viên</a>
     </div>
 
     <!-- Thanh tìm kiếm -->
-    <form class="d-flex mb-4" method="get" action="/admin/employees">
+    <form class="d-flex mb-4" method="get" action="/admin/employee">
         <input type="text" name="keyword" th:value="${keyword}" class="form-control me-2" placeholder="Tìm theo tên nhân viên...">
         <button type="submit" class="btn btn-secondary">Tìm kiếm</button>
     </form>
@@ -41,19 +41,19 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="e : ${employees}">
+            <tr th:each="e : ${employee}">
                 <td th:text="${e.id}"></td>
                 <td th:text="${e.name}" class="fw-semibold"></td>
                 <td th:text="${e.phone}"></td>
-                <td th:text="${e.mail}"></td>
+                <td th:text="${e.email}"></td>
                 <td>
-                    <span th:text="${e.role} ? 'Admin' : 'Nhân viên'"
-                          th:classappend="${e.role} ? 'badge bg-danger' : 'badge bg-secondary'"></span>
+                    <span th:text="${e.role} ? 'Nhân viên' : 'Admin'"
+                          th:classappend="${e.role} ? 'badge bg-secondary' : 'badge bg-danger'"></span>
                 </td>
                 <td th:text="${#dates.format(e.birth, 'dd/MM/yyyy')}"></td>
                 <td class="text-center">
-                    <a th:href="@{'/admin/employees/edit/' + ${e.id}}" class="btn btn-sm btn-warning me-1">✏️</a>
-                    <a th:href="@{'/admin/employees/delete/' + ${e.id}}" class="btn btn-sm btn-danger"
+                    <a th:href="@{'/admin/employee/edit/' + ${e.id}}" class="btn btn-sm btn-warning me-1">✏️</a>
+                    <a th:href="@{'/admin/employee/delete/' + ${e.id}}" class="btn btn-sm btn-danger"
                        onclick="return confirm('Xóa nhân viên này?')">🗑️</a>
                 </td>
             </tr>
@@ -67,18 +67,18 @@
 
             <!-- Trang đầu -->
             <li th:classappend="${currentPage == 0} ? 'disabled'" class="page-item">
-                <a class="page-link" th:href="@{/admin/employees(page=0, keyword=${keyword})}">&laquo;</a>
+                <a class="page-link" th:href="@{/admin/employee(page=0, keyword=${keyword})}">&laquo;</a>
             </li>
 
             <!-- Các trang -->
             <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
                 th:classappend="${i == currentPage} ? 'active'" class="page-item">
-                <a class="page-link" th:href="@{/admin/employees(page=${i}, keyword=${keyword})}" th:text="${i+1}"></a>
+                <a class="page-link" th:href="@{/admin/employee(page=${i}, keyword=${keyword})}" th:text="${i+1}"></a>
             </li>
 
             <!-- Trang cuối -->
             <li th:classappend="${currentPage == totalPages - 1} ? 'disabled'" class="page-item">
-                <a class="page-link" th:href="@{/admin/employees(page=${totalPages - 1}, keyword=${keyword})}">&raquo;</a>
+                <a class="page-link" th:href="@{/admin/employee(page=${totalPages - 1}, keyword=${keyword})}">&raquo;</a>
             </li>
         </ul>
     </nav>

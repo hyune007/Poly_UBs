@@ -11,6 +11,17 @@ create table KhachHang
     PRIMARY KEY (kh_id)
 );
 
+CREATE TABLE GioHang
+(
+    gh_id       VARCHAR(8) NOT NULL,
+    sp_quantity INT        NOT NULL,
+    kh_id       VARCHAR(8) NOT NULL,
+    sp_id       VARCHAR(8) NOT NULL,
+    PRIMARY KEY (gh_id),
+    FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id),
+    FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id),
+    UNIQUE KEY unique_customer_product (kh_id, sp_id)
+);
 create table NhanVien
 (
     nv_id       VARCHAR(8)   NOT NULL,
@@ -55,6 +66,7 @@ create table DiaChi
     kh_id   VARCHAR(8)  NOT NULL,
     dc_city VARCHAR(50) NOT NULL,
     dc_ward VARCHAR(50) NOT NULL,
+    dc_detailaddress VARCHAR(255) NOT NULL,
     PRIMARY KEY (dc_id),
     FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id)
 );
@@ -77,19 +89,21 @@ create table ChiTietHoaDon
     hd_id    VARCHAR(8) NOT NULL,
     sp_id    VARCHAR(8) NOT NULL,
     quantity INT        NOT NULL,
+    hdct_total INT        NOT NULL,
     PRIMARY KEY (hdct_id),
     FOREIGN KEY (hd_id) REFERENCES HoaDon (hd_id),
     FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id)
 );
-create table GioHang
+CREATE TABLE GioHang
 (
     gh_id       VARCHAR(8) NOT NULL,
     sp_quantity INT        NOT NULL,
-    kh_id       VARCHAR(8) NOT NULL unique,
+    kh_id       VARCHAR(8) NOT NULL,
     sp_id       VARCHAR(8) NOT NULL,
     PRIMARY KEY (gh_id),
     FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id),
-    FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id)
+    FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id),
+    UNIQUE KEY unique_customer_product (kh_id, sp_id)
 );
 create table KhuyenMai
 (
@@ -132,8 +146,8 @@ CREATE TABLE IF NOT EXISTS password_reset_tokens
 );
 
 -- Index để tăng tốc độ tìm kiếm theo token
-CREATE INDEX idx_token ON password_reset_tokens(token);
-CREATE INDEX idx_expiry_date ON password_reset_tokens(expiry_date);
+CREATE INDEX idx_token ON password_reset_tokens (token);
+CREATE INDEX idx_expiry_date ON password_reset_tokens (expiry_date);
 
 -- Drop tables in correct order (children first, then parents)
 drop table DanhGia; -- Child of SanPham and KhachHang
@@ -525,16 +539,4 @@ VALUES ('KH001', 'Nguyễn Văn A', 'password123', '0912345678', 'nguyenvana@ema
 
 -- NhanVien (1 employee)
 INSERT INTO NhanVien (nv_id, nv_name, nv_password, nv_phone, nv_mail, nv_address, nv_role, nv_birth)
-VALUES
-('NV0001', N'Nguyễn Văn A', '123456', '0912345678', 'a.nguyen@example.com', N'Hà Nội', 1, '1990-01-15'),
-('NV0002', N'Trần Thị B', '123456', '0987654321', 'b.tran@example.com', N'Hồ Chí Minh', 0, '1992-03-20'),
-('NV0003', N'Lê Văn C', '123456', '0978123456', 'c.le@example.com', N'Đà Nẵng', 0, '1995-05-12'),
-('NV0004', N'Phạm Thị D', '123456', '0909123456', 'd.pham@example.com', N'Hải Phòng', 1, '1988-07-08'),
-('NV0005', N'Hoàng Văn E', '123456', '0911222333', 'e.hoang@example.com', N'Cần Thơ', 0, '1993-09-25'),
-('NV0006', N'Đỗ Thị F', '123456', '0903344556', 'f.do@example.com', N'Huế', 0, '1996-11-03'),
-('NV0007', N'Bùi Văn G', '123456', '0988776655', 'g.bui@example.com', N'Bình Dương', 1, '1991-02-14'),
-('NV0008', N'Vũ Thị H', '123456', '0905566778', 'h.vu@example.com', N'Nha Trang', 0, '1994-04-30'),
-('NV0009', N'Ngô Văn I', '123456', '0911888999', 'i.ngo@example.com', N'Hà Nam', 0, '1997-06-22'),
-('NV0010', N'Phan Thị J', '123456', '0933444555', 'j.phan@example.com', N'Quảng Ninh', 1, '1989-12-18');
-
-SELECT * FROM NhanVien;
+VALUES ('NV001', 'Admin', 'adminpass', '0123456789', 'admin@polyubs.com', '123 FPT Polytechnic', 0, '1990-01-01');

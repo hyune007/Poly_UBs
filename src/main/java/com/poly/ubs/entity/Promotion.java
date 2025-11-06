@@ -24,32 +24,32 @@ public class Promotion {
     @Id
     @Column(name = "km_id")
     private String id;
-    
+
     /**
      * Tên khuyến mãi
      */
     @Column(name = "km_name")
     private String name;
-    
+
     /**
      * Mô tả khuyến mãi
      */
     @Column(name = "km_description")
     private String description;
-    
+
     /**
      * Phần trăm giảm giá
      */
     @Column(name = "km_percent")
     private Integer percent;
-    
+
     /**
      * Ngày bắt đầu khuyến mãi
      */
     @Column(name = "km_start_date")
     @Temporal(TemporalType.DATE)
     private Date startDate;
-    
+
     /**
      * Ngày kết thúc khuyến mãi
      */
