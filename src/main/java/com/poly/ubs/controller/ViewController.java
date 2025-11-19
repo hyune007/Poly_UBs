@@ -28,6 +28,7 @@ public class ViewController {
     private CategoryServiceImpl categoryService;
     /**
      * Hiển thị phần header
+     * @param model đối tượng model để truyền dữ liệu đến view
      * @return đường dẫn đến template header
      */
     @ModelAttribute("categories")
