@@ -74,10 +74,10 @@ create table SanPham
 );
 create table DiaChi
 (
-    dc_id   VARCHAR(8)  NOT NULL,
-    kh_id   VARCHAR(8)  NOT NULL,
-    dc_city VARCHAR(50) NOT NULL,
-    dc_ward VARCHAR(50) NOT NULL,
+    dc_id            VARCHAR(8)   NOT NULL,
+    kh_id            VARCHAR(8)   NOT NULL,
+    dc_city          VARCHAR(50)  NOT NULL,
+    dc_ward          VARCHAR(50)  NOT NULL,
     dc_detailaddress VARCHAR(255) NOT NULL,
     PRIMARY KEY (dc_id),
     FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id)
@@ -97,10 +97,10 @@ create table HoaDon
 );
 create table ChiTietHoaDon
 (
-    hdct_id  VARCHAR(8) NOT NULL,
-    hd_id    VARCHAR(8) NOT NULL,
-    sp_id    VARCHAR(8) NOT NULL,
-    quantity INT        NOT NULL,
+    hdct_id    VARCHAR(8) NOT NULL,
+    hd_id      VARCHAR(8) NOT NULL,
+    sp_id      VARCHAR(8) NOT NULL,
+    quantity   INT        NOT NULL,
     hdct_total INT        NOT NULL,
     PRIMARY KEY (hdct_id),
     FOREIGN KEY (hd_id) REFERENCES HoaDon (hd_id),
@@ -552,4 +552,5 @@ VALUES ('KH001', 'Nguyễn Văn A', 'password123', '0912345678', 'nguyenvana@ema
 
 -- NhanVien (1 employee)
 INSERT INTO NhanVien (nv_id, nv_name, nv_password, nv_phone, nv_mail, nv_address, nv_role, nv_birth)
-VALUES ('NV001', 'Admin', 'adminpass', '0123456789', 'admin@polyubs.com', '123 FPT Polytechnic', "ROLE_ADMIN", '1990-01-01');
+VALUES ('NV001', 'Admin', 'adminpass', '0123456789', 'admin@polyubs.com', '123 FPT Polytechnic', "ROLE_ADMIN",
+        '1990-01-01');

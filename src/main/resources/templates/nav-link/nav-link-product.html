@@ -12,14 +12,16 @@
     </div>
 
 
-    <div id="products" class="product-grid">
+    <div class="product-grid" id="products">
         <div class="product-card" th:each="item : ${items}">
             <a th:href="@{|/product/detail/${item.id}|}">
-                <img th:src="@{|/photos/${item.image}|}" alt="Sản phẩm">
+                <img alt="Sản phẩm" th:src="@{|/photos/${item.image}|}">
             </a>
             <h4 th:text="${item.name}"></h4>
             <p>Giá: <span th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')}"></span>₫</p>
-            <a th:href="@{|/product/detail/${item.id}|}"><button>Mua ngay</button></a>
+            <a th:href="@{|/product/detail/${item.id}|}">
+                <button>Mua ngay</button>
+            </a>
         </div>
     </div>
 
@@ -42,8 +44,8 @@
                 </li>
 
                 <!-- Danh sách trang -->
-                <li th:each="i : ${#numbers.sequence(0, items.totalPages - 1)}"
-                    class="page-item" th:classappend="${i == items.number} ? 'active'">
+                <li class="page-item"
+                    th:classappend="${i == items.number} ? 'active'" th:each="i : ${#numbers.sequence(0, items.totalPages - 1)}">
                     <a class="page-link"
                        th:href="@{/product/filter(p=${i}, min=${min}, max=${max}, sort=${sort})}"
                        th:text="${i + 1}"></a>

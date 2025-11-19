@@ -67,17 +67,25 @@ public class AuthController {
      */
     @PostMapping("/login-post")
     public String loginPost(HttpServletRequest req) {
-        String email = req.getParameter ("email");
-        String password = req.getParameter ("password");
+        String email = req.getParameter("email");
+        String password = req.getParameter("password");
 
         // Kiểm tra thông tin đăng nhập
-        Employee employee = employeeService.findByEmailAndPassword (email, password);
-        Customer customer = customerService.findByEmailAndPassword (email, password);
+        Employee employee = employeeService.findByEmailAndPassword(email, password);
+        Customer customer = customerService.findByEmailAndPassword(email, password);
 
         if (customer != null || employee != null) {
             // Đăng nhập thành công, lưu thông tin người dùng vào session
-            HttpSession session = req.getSession ();
-            session.setAttribute ("loggedInUser", customer != null ? customer : employee);
+            HttpSession session = req.getSession();
+            Object loggedInUser = customer != null ? customer : employee;
+            session.setAttribute("loggedInUser", loggedInUser);
+
+            // Kiểm tra role và chuyển hướng tương ứng
+            String role = employee != null ? employee.getRole() : customer.getRole();
+            if ("ROLE_ADMIN".equals(role)) {
+                return "redirect:/admin/dashboard";
+            }
+
             return "redirect:/home";
         } else {
             // Đăng nhập thất bại, quay lại trang đăng nhập với thông báo lỗi
@@ -93,9 +101,9 @@ public class AuthController {
      */
     @GetMapping("/logout")
     public String logout(HttpServletRequest req) {
-        HttpSession session = req.getSession (false);
+        HttpSession session = req.getSession(false);
         if (session != null) {
-            session.invalidate ();
+            session.invalidate();
         }
         return "redirect:/home";
     }
@@ -118,36 +126,36 @@ public class AuthController {
      */
     @PostMapping("/register-post")
     public String registerPost(HttpServletRequest req, RedirectAttributes redirectAttributes) {
-        String name = req.getParameter ("name");
-        String email = req.getParameter ("email");
-        String phone = req.getParameter ("phone");
-        String password = req.getParameter ("password");
-        String confirmPassword = req.getParameter ("confirmPassword");
+        String name = req.getParameter("name");
+        String email = req.getParameter("email");
+        String phone = req.getParameter("phone");
+        String password = req.getParameter("password");
+        String confirmPassword = req.getParameter("confirmPassword");
 
         // Kiểm tra xem email đã tồn tại chưa
-        if (customerService.findByEmail (email) != null) {
-            redirectAttributes.addFlashAttribute ("error", "Email đã được sử dụng!");
+        if (customerService.findByEmail(email) != null) {
+            redirectAttributes.addFlashAttribute("error", "Email đã được sử dụng!");
             return "redirect:/register";
         }
 
         // Kiểm tra mật khẩu và xác nhận mật khẩu có khớp nhau không
-        if (!password.equals (confirmPassword)) {
-            redirectAttributes.addFlashAttribute ("error", "Mật khẩu xác nhận không khớp!");
+        if (!password.equals(confirmPassword)) {
+            redirectAttributes.addFlashAttribute("error", "Mật khẩu xác nhận không khớp!");
             return "redirect:/register";
         }
 
         // Tạo khách hàng mới
-        Customer customer = new Customer ();
-        customer.setId (generateCustomerId ());
-        customer.setName (name);
-        customer.setEmail (email);
-        customer.setPhone (phone);
-        customer.setPassword (password);
-        customer.setRole ("ROLE_CUSTOMER");
+        Customer customer = new Customer();
+        customer.setId(generateCustomerId());
+        customer.setName(name);
+        customer.setEmail(email);
+        customer.setPhone(phone);
+        customer.setPassword(password);
+        customer.setRole("ROLE_CUSTOMER");
 
         // Lưu khách hàng vào cơ sở dữ liệu
-        customerService.save (customer);
-        MailSender.send (customer.getEmail (), "Xác nhận đăng ký tài khoản Poly_UBs", "Xin chào " + customer.getName () + ", tài khoản của bạn đã được tạo thành công!");
+        customerService.save(customer);
+        MailSender.send(customer.getEmail(), "Xác nhận đăng ký tài khoản Poly_UBs", "Xin chào " + customer.getName() + ", tài khoản của bạn đã được tạo thành công!");
 //        redirectAttributes.addFlashAttribute("success", "Đăng ký thành công! Vui lòng đăng nhập.");
         return "redirect:/login?message=true";
     }
@@ -163,10 +171,10 @@ public class AuthController {
         int maxId = 0;
 
         // Duyệt qua tất cả khách hàng để tìm số ID lớn nhất
-        for (Customer customer : customerService.findAll ()) {
-            if (customer.getId ().startsWith (prefix)) {
+        for (Customer customer : customerService.findAll()) {
+            if (customer.getId().startsWith(prefix)) {
                 try {
-                    int idNum = Integer.parseInt (customer.getId ().substring (prefix.length ()));
+                    int idNum = Integer.parseInt(customer.getId().substring(prefix.length()));
                     if (idNum > maxId) {
                         maxId = idNum;
                     }
@@ -177,7 +185,7 @@ public class AuthController {
         }
 
         // Tạo ID mới bằng cách tăng số ID lớn nhất lên 1
-        return prefix + String.format ("%03d", maxId + 1);
+        return prefix + String.format("%03d", maxId + 1);
     }
 
     /**
@@ -201,13 +209,13 @@ public class AuthController {
     public String forgotPasswordPost(@RequestParam("email") String email,
                                      RedirectAttributes redirectAttributes) {
         try {
-            passwordResetService.createPasswordResetToken (email);
-            redirectAttributes.addFlashAttribute (
+            passwordResetService.createPasswordResetToken(email);
+            redirectAttributes.addFlashAttribute(
                     "success",
                     "Link đặt lại mật khẩu đã được gửi đến email của bạn. Vui lòng kiểm tra hộp thư!");
             return "redirect:/forgot-password?success=true";
         } catch (RuntimeException e) {
-            redirectAttributes.addFlashAttribute ("error", e.getMessage ());
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:/forgot-password?error=true";
         }
     }
@@ -223,18 +231,18 @@ public class AuthController {
     public String resetPassword(@RequestParam(value = "token", required = false) String token,
                                 Model model,
                                 RedirectAttributes redirectAttributes) {
-        if (token == null || token.isEmpty ()) {
-            redirectAttributes.addFlashAttribute ("error", "Link không hợp lệ");
+        if (token == null || token.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Link không hợp lệ");
             return "redirect:/forgot-password";
         }
 
         // Kiểm tra token có hợp lệ không
-        if (!passwordResetService.validateToken (token)) {
-            redirectAttributes.addFlashAttribute ("error", "Link đã hết hạn hoặc không hợp lệ");
+        if (!passwordResetService.validateToken(token)) {
+            redirectAttributes.addFlashAttribute("error", "Link đã hết hạn hoặc không hợp lệ");
             return "redirect:/forgot-password";
         }
 
-        model.addAttribute ("token", token);
+        model.addAttribute("token", token);
         return "auth/reset-password";
     }
 
@@ -254,23 +262,23 @@ public class AuthController {
                                     RedirectAttributes redirectAttributes) {
         try {
             // Kiểm tra mật khẩu và xác nhận mật khẩu có khớp không
-            if (!newPassword.equals (confirmPassword)) {
-                redirectAttributes.addFlashAttribute ("error", "Mật khẩu xác nhận không khớp!");
+            if (!newPassword.equals(confirmPassword)) {
+                redirectAttributes.addFlashAttribute("error", "Mật khẩu xác nhận không khớp!");
                 return "redirect:/reset-password?token=" + token;
             }
 
             // Kiểm tra mật khẩu có đủ độ dài không
-            if (newPassword.length () < 6) {
-                redirectAttributes.addFlashAttribute ("error", "Mật khẩu phải có ít nhất 6 ký tự!");
+            if (newPassword.length() < 6) {
+                redirectAttributes.addFlashAttribute("error", "Mật khẩu phải có ít nhất 6 ký tự!");
                 return "redirect:/reset-password?token=" + token;
             }
 
             // Đặt lại mật khẩu
-            passwordResetService.resetPassword (token, newPassword);
-            redirectAttributes.addFlashAttribute ("success", "Đặt lại mật khẩu thành công! Vui lòng đăng nhập.");
+            passwordResetService.resetPassword(token, newPassword);
+            redirectAttributes.addFlashAttribute("success", "Đặt lại mật khẩu thành công! Vui lòng đăng nhập.");
             return "redirect:/login?resetSuccess=true";
         } catch (RuntimeException e) {
-            redirectAttributes.addFlashAttribute ("error", e.getMessage ());
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:/forgot-password";
         }
     }
@@ -287,59 +295,59 @@ public class AuthController {
     @PostMapping("/api/auth/firebase-login")
     public ResponseEntity<?> firebaseLogin(@RequestBody Map<String, String> request, HttpSession session) {
         try {
-            String idToken = request.get ("idToken");
+            String idToken = request.get("idToken");
             // Xác thực token với Firebase Admin SDK
-            FirebaseToken decodedToken = FirebaseAuth.getInstance ().verifyIdToken (idToken);
+            FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
 
             // Lấy thông tin user từ token
-            String email = decodedToken.getEmail ();
-            String name = decodedToken.getName ();
+            String email = decodedToken.getEmail();
+            String name = decodedToken.getName();
 
             // Tìm hoặc tạo customer
-            Customer customer = customerService.findByEmail (email);
+            Customer customer = customerService.findByEmail(email);
 
             if (customer == null) {
                 // Tạo customer mới từ Google account
-                customer = new Customer ();
-                customer.setId (generateCustomerId ());
-                customer.setName (name != null ? name : "Google User");
-                customer.setEmail (email);
+                customer = new Customer();
+                customer.setId(generateCustomerId());
+                customer.setName(name != null ? name : "Google User");
+                customer.setEmail(email);
 
                 // Tạo password mặc định: [các ký tự trước @]pass
                 String username = email.substring(0, email.indexOf('@'));
-                customer.setPassword (username + "pass");
+                customer.setPassword(username + "pass");
 
-                customer.setPhone ("");
-                customer.setRole ("ROLE_CUSTOMER"); // Set role mặc định cho customer
+                customer.setPhone("");
+                customer.setRole("ROLE_CUSTOMER"); // Set role mặc định cho customer
 
-                customerService.save (customer);
+                customerService.save(customer);
             }
 
             // Lưu thông tin vào session
-            session.setAttribute ("loggedInUser", customer);
+            session.setAttribute("loggedInUser", customer);
 
             // Trả về thông tin customer
-            Map<String, Object> response = new HashMap<> ();
-            response.put ("success", true);
-            response.put (
-                    "customer", Map.of (
-                            "id", customer.getId (),
-                            "name", customer.getName (),
-                            "email", customer.getEmail ()
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put(
+                    "customer", Map.of(
+                            "id", customer.getId(),
+                            "name", customer.getName(),
+                            "email", customer.getEmail()
                     ));
 
-            return ResponseEntity.ok (response);
+            return ResponseEntity.ok(response);
 
         } catch (FirebaseAuthException e) {
-            Map<String, Object> errorResponse = new HashMap<> ();
-            errorResponse.put ("success", false);
-            errorResponse.put ("message", "Firebase authentication failed: " + e.getMessage ());
-            return ResponseEntity.status (HttpStatus.UNAUTHORIZED).body (errorResponse);
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("success", false);
+            errorResponse.put("message", "Firebase authentication failed: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
         } catch (Exception e) {
-            Map<String, Object> errorResponse = new HashMap<> ();
-            errorResponse.put ("success", false);
-            errorResponse.put ("message", "Error: " + e.getMessage ());
-            return ResponseEntity.status (HttpStatus.INTERNAL_SERVER_ERROR).body (errorResponse);
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("success", false);
+            errorResponse.put("message", "Error: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 }

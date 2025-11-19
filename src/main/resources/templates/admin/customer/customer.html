@@ -6,12 +6,12 @@
 <body>
 <h2>Customer Management</h2>
 
-<form th:action="@{/customer/save}" method="post" th:object="${customer}">
-    <input type="hidden" th:field="*{id}">
+<form method="post" th:action="@{/customer/save}" th:object="${customer}">
+    <input th:field="*{id}" type="hidden">
     <label>Name:</label>
-    <input type="text" th:field="*{name}" placeholder="Customer name" required>
+    <input placeholder="Customer name" required th:field="*{name}" type="text">
     <label>Email:</label>
-    <input type="email" th:field="*{email}" placeholder="Email" required>
+    <input placeholder="Email" required th:field="*{email}" type="email">
     <button type="submit">Save</button>
 </form>
 
@@ -32,8 +32,8 @@
         <td th:text="${c.email}">Email</td>
         <td>
             <a th:href="@{|/customer/edit/${c.id}|}">Edit</a> |
-            <a th:href="@{|/customer/delete/${c.id}|}"
-               onclick="return confirm('Are you sure?')">Delete</a>
+            <a onclick="return confirm('Are you sure?')"
+               th:href="@{|/customer/delete/${c.id}|}">Delete</a>
         </td>
     </tr>
     </tbody>

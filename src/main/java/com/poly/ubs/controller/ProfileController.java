@@ -1,7 +1,6 @@
 package com.poly.ubs.controller;
 
 import com.poly.ubs.entity.Customer;
-import com.poly.ubs.repository.CustomerRepository;
 import com.poly.ubs.service.CustomerServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;

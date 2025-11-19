@@ -1,7 +1,10 @@
 package com.poly.ubs.controller;
 
 import com.poly.ubs.dto.OrderInfoDTO;
-import com.poly.ubs.entity.*;
+import com.poly.ubs.entity.Address;
+import com.poly.ubs.entity.Bill;
+import com.poly.ubs.entity.Customer;
+import com.poly.ubs.entity.ShoppingCart;
 import com.poly.ubs.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
