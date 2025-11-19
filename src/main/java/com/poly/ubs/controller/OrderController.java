@@ -52,7 +52,7 @@ public class OrderController {
         Object loggedInUser = session.getAttribute("loggedInUser");
         if (loggedInUser == null || !(loggedInUser instanceof Customer)) {
             // Nếu chưa đăng nhập, chuyển về trang đăng nhập
-            return "redirect:/auth/login";
+            return "redirect:/login";
         }
 
         Customer customer = (Customer) loggedInUser;

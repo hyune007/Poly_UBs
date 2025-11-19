@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/customer")
+@RequestMapping("admin/customer")
 public class CustomerController {
 
     @Autowired
