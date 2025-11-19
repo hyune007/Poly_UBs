@@ -71,7 +71,6 @@ public class ProfileController {
             return "redirect:/login";
         }
 
-
         // Sai mật khẩu hiện tại
         if (!loggedInUser.getPassword().equals(currentPass)) {
             redirectAttributes.addFlashAttribute("errorChangePass", "Mật khẩu hiện tại không đúng!");

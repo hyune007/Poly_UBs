@@ -54,7 +54,6 @@
             </form>
         </section>
 
-
         <!-- MK -->
         <section id="changePassword" class="hidden">
             <h3>Thay đổi mật khẩu</h3>
@@ -163,16 +162,5 @@
     });
 </script>
 <div th:replace="main-frame/footer :: footer"></div>
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    const shouldOpenModal = /*[[${openChangePassModal}]]*/ false;
-    if (shouldOpenModal) {
-        document.addEventListener("DOMContentLoaded", function() {
-            openPasswordModal();
-        });
-    }
-    /*]]>*/
-</script>
-
 </body>
 </html>
