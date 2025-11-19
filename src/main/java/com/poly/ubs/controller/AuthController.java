@@ -277,7 +277,6 @@ public class AuthController {
     public ResponseEntity<?> firebaseLogin(@RequestBody Map<String, String> request, HttpSession session) {
         try {
             String idToken = request.get ("idToken");
-
             // Xác thực token với Firebase Admin SDK
             FirebaseToken decodedToken = FirebaseAuth.getInstance ().verifyIdToken (idToken);
 
