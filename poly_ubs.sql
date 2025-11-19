@@ -11,17 +11,6 @@ create table KhachHang
     PRIMARY KEY (kh_id)
 );
 
-CREATE TABLE GioHang
-(
-    gh_id       VARCHAR(8) NOT NULL,
-    sp_quantity INT        NOT NULL,
-    kh_id       VARCHAR(8) NOT NULL,
-    sp_id       VARCHAR(8) NOT NULL,
-    PRIMARY KEY (gh_id),
-    FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id),
-    FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id),
-    UNIQUE KEY unique_customer_product (kh_id, sp_id)
-);
 create table NhanVien
 (
     nv_id       VARCHAR(8)   NOT NULL,
@@ -76,16 +65,17 @@ create table HoaDon
     hd_date   DATE        NOT NULL,
     hd_status VARCHAR(20) NOT NULL,
     kh_id     VARCHAR(8)  NOT NULL,
-    nv_id     VARCHAR(8)  NOT NULL,
+    nv_id     VARCHAR(8)  NULL,
     dc_id     VARCHAR(8)  NOT NULL,
     PRIMARY KEY (hd_id),
     FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id),
     FOREIGN KEY (nv_id) REFERENCES NhanVien (nv_id),
     FOREIGN KEY (dc_id) REFERENCES DiaChi (dc_id)
 );
+
 create table ChiTietHoaDon
 (
-    hdct_id  VARCHAR(8) NOT NULL,
+    hdct_id  VARCHAR(8)  NOT NULL,
     hd_id    VARCHAR(8) NOT NULL,
     sp_id    VARCHAR(8) NOT NULL,
     quantity INT        NOT NULL,

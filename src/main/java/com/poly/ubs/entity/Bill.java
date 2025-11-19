@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Thực thể hóa đơn
@@ -59,4 +60,9 @@ public class Bill {
     @ManyToOne
     @JoinColumn(name = "dc_id")
     private Address address;
+
+
+    @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<DetailBill> billDetails;
+
 }
