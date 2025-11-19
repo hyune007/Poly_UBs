@@ -45,8 +45,14 @@ public class FilterController {
      */
     @GetMapping("/home/product/list")
     public String home(Model model, HttpSession session, @RequestParam("p") Optional<Integer> p, @RequestParam(value = "categoryId", required = false) String categoryId) {
-        Customer loggedInUser = (Customer) session.getAttribute("loggedInUser");
-        model.addAttribute("loggedInUser", loggedInUser);
+        Object loggedInUser = session.getAttribute("loggedInUser");
+
+        // Chỉ set loggedInUser vào model nếu là Customer
+        if (loggedInUser instanceof Customer) {
+            model.addAttribute("loggedInUser", (Customer) loggedInUser);
+        } else {
+            model.addAttribute("loggedInUser", null);
+        }
         Pageable pageable = PageRequest.of(p.orElse(0), 18);
         Page<Product> items;
 

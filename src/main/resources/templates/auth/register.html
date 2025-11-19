@@ -16,48 +16,6 @@
 <a href="/login" class="back-btn">
     ← <span>Quay lại đăng nhập</span>
 </a>
-<script>
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-    const firebaseConfig = {
-        apiKey: "AIzaSyBrXjvjPcoFM2yw39yfmgjwksohhhs3eDk",
-        authDomain: "poly-ubs-java5.firebaseapp.com",
-        projectId: "poly-ubs-java5",
-        storageBucket: "poly-ubs-java5.firebasestorage.app",
-        messagingSenderId: "809642356997",
-        appId: "1:809642356997:web:7bbb502520efb38bae076c",
-        measurementId: "G-H4VY6C3DE2"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    document.getElementById('googleSignIn').addEventListener('click', async () => {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        try {
-            const result = await auth.signInWithPopup(provider);
-            const user = result.user;
-            const idToken = await user.getIdToken();
-
-            // POST idToken to backend to create session
-            const res = await fetch('/sessionLogin', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ idToken })
-            });
-
-            if (res.ok) {
-                // Redirect to home page where Thymeleaf will show info from session
-                window.location.href = '/';
-            } else {
-                const txt = await res.text();
-                alert('Login failed: ' + txt);
-            }
-        } catch (err) {
-            console.error(err);
-            alert('Sign-in error: ' + err.message);
-        }
-    });
-</script>
 <!-- ☁️ Sinh nhiều mây -->
 <script>
     function createCloud(top, size, duration, opacity) {
@@ -154,16 +112,9 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-    // Firebase configuration
-    const firebaseConfig = {
-        apiKey: "AIzaSyBrXjvjPcoFM2yw39yfmgjwksohhhs3eDk",
-        authDomain: "poly-ubs-java5.firebaseapp.com",
-        projectId: "poly-ubs-java5",
-        storageBucket: "poly-ubs-java5.firebasestorage.app",
-        messagingSenderId: "809642356997",
-        appId: "1:809642356997:web:7bbb502520efb38bae076c",
-        measurementId: "G-H4VY6C3DE2"
-    };
+    // Load Firebase configuration từ backend
+    const configResponse = await fetch('/api/config/firebase');
+    const firebaseConfig = await configResponse.json();
 
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);

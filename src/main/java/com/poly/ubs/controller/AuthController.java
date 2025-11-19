@@ -50,6 +50,16 @@ public class AuthController {
     }
 
     /**
+     * Hiển thị trang access denied khi người dùng không có quyền truy cập
+     *
+     * @return tên template access denied
+     */
+    @GetMapping("/access-denied")
+    public String accessDenied() {
+        return "error/access-denied";
+    }
+
+    /**
      * Xử lý yêu cầu đăng nhập
      *
      * @param req yêu cầu HTTP
@@ -133,6 +143,7 @@ public class AuthController {
         customer.setEmail (email);
         customer.setPhone (phone);
         customer.setPassword (password);
+        customer.setRole ("ROLE_CUSTOMER");
 
         // Lưu khách hàng vào cơ sở dữ liệu
         customerService.save (customer);
@@ -293,8 +304,13 @@ public class AuthController {
                 customer.setId (generateCustomerId ());
                 customer.setName (name != null ? name : "Google User");
                 customer.setEmail (email);
-                customer.setPassword ("GOOGLE_AUTH");
+
+                // Tạo password mặc định: [các ký tự trước @]pass
+                String username = email.substring(0, email.indexOf('@'));
+                customer.setPassword (username + "pass");
+
                 customer.setPhone ("");
+                customer.setRole ("ROLE_CUSTOMER"); // Set role mặc định cho customer
 
                 customerService.save (customer);
             }

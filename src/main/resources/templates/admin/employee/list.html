@@ -47,8 +47,7 @@
                 <td th:text="${e.phone}"></td>
                 <td th:text="${e.email}"></td>
                 <td>
-                    <span th:text="${e.role} ? 'Nhân viên' : 'Admin'"
-                          th:classappend="${e.role} ? 'badge bg-secondary' : 'badge bg-danger'"></span>
+                    <span th:text="${e.getRole() == 'ROLE_ADMIN' ? 'Quản trị viên' : 'Nhân viên'}"></span>
                 </td>
                 <td th:text="${#dates.format(e.birth, 'dd/MM/yyyy')}"></td>
                 <td class="text-center">
