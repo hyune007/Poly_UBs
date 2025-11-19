@@ -130,4 +130,9 @@ public class BillServiceImpl extends GenericServiceImpl<Bill, String, BillReposi
     private String generateDetailBillId() {
         return "CT" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
     }
+    public Bill findById(String id) {
+        return billRepository.findById(id).orElse(null);
+    }
+
+
 }

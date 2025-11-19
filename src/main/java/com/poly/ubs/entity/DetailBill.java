@@ -48,4 +48,5 @@ public class DetailBill {
      */
     @Column(name = "hdct_total")
     private int total;
+
 }
