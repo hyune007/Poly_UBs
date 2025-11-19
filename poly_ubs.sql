@@ -94,6 +94,7 @@ create table ChiTietHoaDon
     FOREIGN KEY (hd_id) REFERENCES HoaDon (hd_id),
     FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id)
 );
+
 CREATE TABLE GioHang
 (
     gh_id       VARCHAR(8) NOT NULL,
