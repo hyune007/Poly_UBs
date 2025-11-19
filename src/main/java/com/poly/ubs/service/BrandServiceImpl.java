@@ -20,9 +20,7 @@ public class BrandServiceImpl extends GenericServiceImpl<Brand, String, BrandRep
     protected BrandRepository getRepository() {
         return brandRepository;
     }
-
     public List<Brand> getBrands() {
         return brandRepository.findAll();
     }
-
 }
