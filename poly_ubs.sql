@@ -10,7 +10,16 @@ create table KhachHang
     kh_mail     VARCHAR(50)  NOT NULL,
     PRIMARY KEY (kh_id)
 );
-
+create table Role
+(
+    role_id   VARCHAR(20)  NOT NULL,
+    role_name VARCHAR(100) NOT NULL,
+    PRIMARY KEY (role_id)
+);
+insert into Role (role_id, role_name)
+values ('ROLE_ADMIN', 'Quản trị viên'),
+       ('ROLE_EMPLOYEE', 'Nhân viên'),
+       ('ROLE_USER', 'Người dùng');
 CREATE TABLE GioHang
 (
     gh_id       VARCHAR(8) NOT NULL,
@@ -30,9 +39,10 @@ create table NhanVien
     nv_phone    VARCHAR(15)  NOT NULL,
     nv_mail     VARCHAR(50)  NOT NULL,
     nv_address  VARCHAR(100) NOT NULL,
-    nv_role     BIT          NOT NULL,
+    nv_role     VARCHAR(20)  NOT NULL,
     nv_birth    DATE         NOT NULL,
-    PRIMARY KEY (nv_id)
+    PRIMARY KEY (nv_id),
+    FOREIGN KEY (nv_role) REFERENCES Role (role_id)
 );
 create table LoaiSanPham
 (
