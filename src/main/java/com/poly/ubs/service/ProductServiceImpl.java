@@ -82,5 +82,5 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, String, Prod
             return productRepository.findByPriceBetween(min, max, pageable);
         }
 
-    }
+}
 }

@@ -69,6 +69,9 @@
             <div class="modal-overlay" onclick="closePasswordModal()"></div>
             <div class="modal-content">
                 <h4>Đổi mật khẩu</h4>
+                <!-- Hiển thị thông báo lỗi nếu có -->
+                <div th:if="${errorChangePass}" class="alert alert-danger mb-3" th:text="${errorChangePass}"></div>
+
 
                 <form id="passwordForm" action="/change-password" method="post">
                     <div class="form-group">
@@ -160,5 +163,16 @@
     });
 </script>
 <div th:replace="main-frame/footer :: footer"></div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const shouldOpenModal = /*[[${openChangePassModal}]]*/ false;
+    if (shouldOpenModal) {
+        document.addEventListener("DOMContentLoaded", function() {
+            openPasswordModal();
+        });
+    }
+    /*]]>*/
+</script>
+
 </body>
 </html>
