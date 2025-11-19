@@ -24,6 +24,7 @@ public class ConfigController {
 
     /**
      * Endpoint để lấy Firebase Web Config
+     *
      * @return Map chứa Firebase configuration
      */
     @GetMapping("/firebase")
