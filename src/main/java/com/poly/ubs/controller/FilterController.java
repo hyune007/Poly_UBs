@@ -126,7 +126,6 @@ public class FilterController {
             items = productService.findByPrice(minPrice, maxPrice, pageable);
         }
 
-        // Gán đường dẫn hình ảnh tương ứng với category
         for (Product item : items) {
             String folder = "other/";
             if (item.getCategory() != null && item.getCategory().getId() != null) {
@@ -145,10 +144,8 @@ public class FilterController {
             item.setImage("products/" + folder + item.getImage());
         }
 
-        // Lấy danh sách brand để hiển thị combobox
         model.addAttribute("brands", brandService.getBrands());
 
-        // Truyền dữ liệu về view
         model.addAttribute("items", items);
         model.addAttribute("min", min);
         model.addAttribute("max", max);
