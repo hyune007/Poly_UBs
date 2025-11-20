@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Hóa đơn của khách</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body class="p-4">
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>Hóa đơn của: <span th:text="${customer != null ? customer.name : '---'}"></span></h4>
+    <a href="/admin/manage-user-bill" class="btn btn-secondary btn-sm">Quay lại</a>
+  </div>
+
+  <div th:if="${bills == null or #lists.isEmpty(bills)}">
+    <div class="alert alert-info">Người dùng chưa có hóa đơn.</div>
+  </div>
+
+  <div th:if="${bills != null and !#lists.isEmpty(bills)}">
+    <table class="table table-bordered align-middle">
+      <thead>
+      <tr>
+        <th>Mã HĐ</th>
+        <th>Ngày</th>
+        <th>Địa chỉ giao</th>
+        <th>Trạng thái</th>
+        <th>Chi tiết</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="bill : ${bills}">
+        <td th:text="${bill.id}"></td>
+        <td th:text="${#dates.format(bill.date, 'dd/MM/yyyy')}"></td>
+        <td>
+          <div th:if="${bill.address != null}">
+            <!-- giả sử Address có các trường, nếu khác bạn sửa lại -->
+            <span th:text="${bill.address.street != null ? bill.address.street : ''}"></span>
+            <span th:text="${bill.address.ward != null ? (', ' + bill.address.ward) : ''}"></span>
+            <span th:text="${bill.address.city != null ? (', ' + bill.address.city) : ''}"></span>
+          </div>
+          <div th:if="${bill.address == null}">—</div>
+        </td>
+
+        <td>
+          <form th:action="@{/admin/user-bills/update-status}" method="post" class="d-flex gap-2 align-items-center">
+            <input type="hidden" name="billId" th:value="${bill.id}"/>
+            <input type="hidden" name="customerId" th:value="${customer != null ? customer.id : ''}"/>
+
+            <select name="status" class="form-select form-select-sm" style="width: 220px;">
+              <option th:value="'Chờ xác nhận'" th:selected="${bill.status == null or bill.status == 'Chờ xác nhận'}">Chờ xác nhận</option>
+              <option th:value="'Đã xác nhận'" th:selected="${bill.status == 'Đã xác nhận'}">Đã xác nhận</option>
+              <option th:value="'Đang giao hàng'" th:selected="${bill.status == 'Đang giao hàng'}">Đang giao hàng</option>
+              <option th:value="'Giao hàng thành công'" th:selected="${bill.status == 'Giao hàng thành công'}">Giao hàng thành công</option>
+            </select>
+
+            <button type="submit" class="btn btn-sm btn-success">Lưu</button>
+          </form>
+        </td>
+
+        <td>
+          <details>
+            <summary>Xem sản phẩm</summary>
+            <table class="table table-sm mt-2">
+              <thead>
+              <tr><th>Sản phẩm</th><th>Số lượng</th><th>Tổng</th></tr>
+              </thead>
+              <tbody>
+              <tr th:each="d : ${bill.billDetails}">
+                <td th:text="${d.product != null ? d.product.name : '—'}"></td>
+                <td th:text="${d.quantity}"></td>
+                <td th:text="${d.total}"></td>
+              </tr>
+              </tbody>
+            </table>
+          </details>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</body>
+</html>
