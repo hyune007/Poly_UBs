@@ -8,9 +8,20 @@ create table KhachHang
     kh_password VARCHAR(40)  NOT NULL,
     kh_phone    VARCHAR(15)  NOT NULL,
     kh_mail     VARCHAR(50)  NOT NULL,
-    PRIMARY KEY (kh_id)
+    kh_role     varchar(20)  NOT NULL,
+    PRIMARY KEY (kh_id),
+    FOREIGN KEY (kh_role) REFERENCES Role (role_id)
 );
-
+create table Role
+(
+    role_id   VARCHAR(20)  NOT NULL,
+    role_name VARCHAR(100) NOT NULL,
+    PRIMARY KEY (role_id)
+);
+insert into Role (role_id, role_name)
+values ('ROLE_ADMIN', 'Quản trị viên'),
+       ('ROLE_EMPLOYEE', 'Nhân viên'),
+       ('ROLE_USER', 'Người dùng');
 CREATE TABLE GioHang
 (
     gh_id       VARCHAR(8) NOT NULL,
@@ -30,9 +41,10 @@ create table NhanVien
     nv_phone    VARCHAR(15)  NOT NULL,
     nv_mail     VARCHAR(50)  NOT NULL,
     nv_address  VARCHAR(100) NOT NULL,
-    nv_role     BIT          NOT NULL,
+    nv_role     VARCHAR(20)  NOT NULL,
     nv_birth    DATE         NOT NULL,
-    PRIMARY KEY (nv_id)
+    PRIMARY KEY (nv_id),
+    FOREIGN KEY (nv_role) REFERENCES Role (role_id)
 );
 create table LoaiSanPham
 (
@@ -62,10 +74,10 @@ create table SanPham
 );
 create table DiaChi
 (
-    dc_id   VARCHAR(8)  NOT NULL,
-    kh_id   VARCHAR(8)  NOT NULL,
-    dc_city VARCHAR(50) NOT NULL,
-    dc_ward VARCHAR(50) NOT NULL,
+    dc_id            VARCHAR(8)   NOT NULL,
+    kh_id            VARCHAR(8)   NOT NULL,
+    dc_city          VARCHAR(50)  NOT NULL,
+    dc_ward          VARCHAR(50)  NOT NULL,
     dc_detailaddress VARCHAR(255) NOT NULL,
     PRIMARY KEY (dc_id),
     FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id)
@@ -85,10 +97,10 @@ create table HoaDon
 );
 create table ChiTietHoaDon
 (
-    hdct_id  VARCHAR(8) NOT NULL,
-    hd_id    VARCHAR(8) NOT NULL,
-    sp_id    VARCHAR(8) NOT NULL,
-    quantity INT        NOT NULL,
+    hdct_id    VARCHAR(8) NOT NULL,
+    hd_id      VARCHAR(8) NOT NULL,
+    sp_id      VARCHAR(8) NOT NULL,
+    quantity   INT        NOT NULL,
     hdct_total INT        NOT NULL,
     PRIMARY KEY (hdct_id),
     FOREIGN KEY (hd_id) REFERENCES HoaDon (hd_id),
@@ -162,6 +174,7 @@ drop table NhanVien; -- Independent
 drop table KhachHang; -- Independent
 drop table LoaiSanPham; -- Independent
 drop table Hang; -- Independent
+drop table password_reset_tokens;
 
 select *
 from Hang;
@@ -530,13 +543,14 @@ VALUES ('SP181', 'Anker 737 Power Bank', 3500000, 'Sạc dự phòng 140W', 'SP1
        ('SP200', 'Seagate BarraCuda 4TB', 2200000, 'Ổ cứng HDD lưu trữ', 'SP200.jpg', 'LSP10', 130, 'H81');
 
 -- KhachHang (5 customers)
-INSERT INTO KhachHang (kh_id, kh_name, kh_password, kh_phone, kh_mail)
-VALUES ('KH001', 'Nguyễn Văn A', 'password123', '0912345678', 'nguyenvana@email.com'),
-       ('KH002', 'Trần Thị B', 'password123', '0987654321', 'tranthib@email.com'),
-       ('KH003', 'Lê Văn C', 'password123', '0905123456', 'levanc@email.com'),
-       ('KH004', 'Phạm Thị D', 'password123', '0333444555', 'phamthid@email.com'),
-       ('KH005', 'Hoàng Văn E', 'password123', '0777888999', 'hoangvane@email.com');
+INSERT INTO KhachHang (kh_id, kh_name, kh_password, kh_phone, kh_mail, kh_role)
+VALUES ('KH001', 'Nguyễn Văn A', 'password123', '0912345678', 'nguyenvana@email.com', 'ROLE_CUSTOMER'),
+       ('KH002', 'Trần Thị B', 'password123', '0987654321', 'tranthib@email.com', 'ROLE_CUSTOMER'),
+       ('KH003', 'Lê Văn C', 'password123', '0905123456', 'levanc@email.com', 'ROLE_CUSTOMER'),
+       ('KH004', 'Phạm Thị D', 'password123', '0333444555', 'phamthid@email.com', 'ROLE_CUSTOMER'),
+       ('KH005', 'Hoàng Văn E', 'password123', '0777888999', 'hoangvane@email.com', 'ROLE_CUSTOMER');
 
 -- NhanVien (1 employee)
 INSERT INTO NhanVien (nv_id, nv_name, nv_password, nv_phone, nv_mail, nv_address, nv_role, nv_birth)
-VALUES ('NV001', 'Admin', 'adminpass', '0123456789', 'admin@polyubs.com', '123 FPT Polytechnic', 0, '1990-01-01');
+VALUES ('NV001', 'Admin', 'adminpass', '0123456789', 'admin@polyubs.com', '123 FPT Polytechnic', "ROLE_ADMIN",
+        '1990-01-01');

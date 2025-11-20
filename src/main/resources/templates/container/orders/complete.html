@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{container/orders/order::view(~{::title}, ~{::article})}">
+<html th:replace="~{container/orders/order::view(~{::title}, ~{::article})}"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Đặt hàng thành công</title>
-    <link rel="stylesheet" href="/css/general.css">
+    <link href="/css/general.css" rel="stylesheet">
 </head>
 <body>
 <div th:replace="container/orders/order-process :: *"></div>
@@ -13,12 +13,15 @@
         <h1>🎉 Đặt hàng thành công!</h1>
         <h3>Cảm ơn bạn đã tin tưởng và đặt hàng tại cửa hàng chúng tôi.</h3>
 
-        <div th:if="${bill != null}" class="order-info mt-4" style="max-width: 600px; margin: 0 auto; text-align: left;">
+        <div class="order-info mt-4" style="max-width: 600px; margin: 0 auto; text-align: left;"
+             th:if="${bill != null}">
             <div class="card p-4">
                 <h5 class="mb-3">Thông tin đơn hàng</h5>
                 <p><strong>Mã đơn hàng:</strong> <span th:text="${bill.id}">HD123456</span></p>
-                <p><strong>Ngày đặt:</strong> <span th:text="${#dates.format(bill.date, 'dd/MM/yyyy')}">01/01/2025</span></p>
-                <p><strong>Trạng thái:</strong> <span class="badge bg-warning" th:text="${bill.status}">Chờ xác nhận</span></p>
+                <p><strong>Ngày đặt:</strong> <span
+                        th:text="${#dates.format(bill.date, 'dd/MM/yyyy')}">01/01/2025</span></p>
+                <p><strong>Trạng thái:</strong> <span class="badge bg-warning"
+                                                      th:text="${bill.status}">Chờ xác nhận</span></p>
                 <p><strong>Khách hàng:</strong> <span th:text="${bill.customer.name}">Tên khách hàng</span></p>
                 <p><strong>Số điện thoại:</strong> <span th:text="${bill.customer.phone}">0123456789</span></p>
                 <p><strong>Địa chỉ giao hàng:</strong>

@@ -4,12 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Trang chủ</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+          rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/general.css">
-    <link rel="stylesheet" href="/css/header.css">
-    <link rel="stylesheet" href="/css/body.css">
+    <link href="/css/general.css" rel="stylesheet">
+    <link href="/css/header.css" rel="stylesheet">
+    <link href="/css/body.css" rel="stylesheet">
 
 </head>
 <style>
@@ -62,23 +63,23 @@
 <div class="filter">
     <form action="/product/filter" method="get">
         Nhập giá thấp nhất:
-        <input name="min" th:value="${param.min}" placeholder="Nhập giá thấp nhất">
+        <input name="min" placeholder="Nhập giá thấp nhất" th:value="${param.min}">
         Nhập giá cao nhất:
-        <input name="max" th:value="${param.max}" placeholder="Nhập giá cao nhất">Chọn hãng:
+        <input name="max" placeholder="Nhập giá cao nhất" th:value="${param.max}">Chọn hãng:
 
         <select name="brandId">
             <option value="">-- Tất cả hãng --</option>
             <option th:each="b : ${brands}"
-                    th:value="${b.id}"
+                    th:selected="${b.id == selectedBrandId}"
                     th:text="${b.name}"
-                    th:selected="${b.id == selectedBrandId}">
+                    th:value="${b.id}">
             </option>
         </select>
 
 
         <select name="sort">
-            <option value="asc" th:selected="${sort == 'asc'}">Giá: Tăng dần</option>
-            <option value="desc" th:selected="${sort == 'desc'}">Giá: Giảm dần</option>
+            <option th:selected="${sort == 'asc'}" value="asc">Giá: Tăng dần</option>
+            <option th:selected="${sort == 'desc'}" value="desc">Giá: Giảm dần</option>
         </select>
         <button type="submit">Search</button>
     </form>

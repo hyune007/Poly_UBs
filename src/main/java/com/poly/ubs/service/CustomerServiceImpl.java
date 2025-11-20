@@ -27,7 +27,7 @@ public class CustomerServiceImpl extends GenericServiceImpl<Customer, String, Cu
      * @return khách hàng nếu tìm thấy, null nếu không tìm thấy
      */
     public Customer findByEmailAndPassword(String email, String password) {
-        return customerRepository.findByEmailAndPassword (email, password);
+        return customerRepository.findByEmailAndPassword(email, password);
     }
 
     /**
@@ -37,6 +37,6 @@ public class CustomerServiceImpl extends GenericServiceImpl<Customer, String, Cu
      * @return khách hàng nếu tìm thấy, null nếu không tìm thấy
      */
     public Customer findByEmail(String email) {
-        return customerRepository.findByEmail (email);
+        return customerRepository.findByEmail(email);
     }
 }
