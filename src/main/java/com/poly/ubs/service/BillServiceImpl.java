@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Service xử lý nghiệp vụ hóa đơn
@@ -134,5 +135,20 @@ public class BillServiceImpl extends GenericServiceImpl<Bill, String, BillReposi
         return billRepository.findById(id).orElse(null);
     }
 
+    /** Lấy danh sách khách hàng có hóa đơn */
+    public List<Customer> findCustomersWithBills() {
+        return billRepository.findAll().stream()
+                .map(Bill::getCustomer)
+                .distinct()
+                .collect(Collectors.toList());
+    }
 
+    /** Lấy tất cả hóa đơn */
+    public List<Bill> findAllBills() {
+        return billRepository.findAll();
+    }
+
+    public List<Bill> findByCustomerId(String customerId) {
+        return billRepository.findByCustomerId(customerId);
+    }
 }
