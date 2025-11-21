@@ -3,7 +3,6 @@ package com.poly.ubs.controller;
 import com.poly.ubs.entity.Bill;
 import com.poly.ubs.entity.Customer;
 import com.poly.ubs.service.BillServiceImpl;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,19 +11,18 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
-
 @Controller
-@RequestMapping("/shipper")
-public class ShipperController {
+@RequestMapping("/admin/bills")
+public class BillAdminController {
 
     @Autowired
     private BillServiceImpl billService;
 
     @GetMapping("/manage")
     public String manageUserBill(Model model) {
-        List<Customer> confirmedCustomers = billService.findCustomersWithConfirmedBills();
-        model.addAttribute("customers", confirmedCustomers);
-        return "admin/employee/shipper-customer-bill";
+        List<Customer> customers = billService.findCustomersWithBills();
+        model.addAttribute("customers", customers);
+        return "admin/TotalUserBill/manage-user-bill";
     }
 
     @GetMapping("/customer/{customerId}")
@@ -40,7 +38,7 @@ public class ShipperController {
         model.addAttribute("customerId", customerId);
         model.addAttribute("customer", customer);
 
-        return "admin/employee/shipper";
+        return "admin/TotalUserBill/total-user-bill-list";
     }
 
     @PostMapping("/updateStatus")
@@ -49,15 +47,8 @@ public class ShipperController {
                                    @RequestParam("customerId") String customerId,
                                    RedirectAttributes redirectAttributes) {
         billService.updateStatus(billId, status);
-        if ("Đã giao thành công".equals(status)) {
-            redirectAttributes.addFlashAttribute("successMessage", "Đơn hàng giao thành công!");
-        } else {
-            redirectAttributes.addFlashAttribute("successMessage", "Cập nhật trạng thái thành công!");
-        }
+        redirectAttributes.addFlashAttribute("successMessage", "Cập nhật trạng thái thành công!");
 
-
-
-        return "redirect:/shipper/customer/" + customerId;
-
+        return "redirect:/admin/bills/customer/" + customerId;
     }
 }
