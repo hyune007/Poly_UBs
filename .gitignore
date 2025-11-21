@@ -38,5 +38,5 @@ build/
 .env.*.local
 
 ### Firebase Service Account ###
-serviceAccountKey.json
+src/main/resources/firebase/serviceAccountKey.json
 
