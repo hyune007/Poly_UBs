@@ -2,6 +2,7 @@ package com.poly.ubs.service;
 
 import com.poly.ubs.entity.*;
 import com.poly.ubs.repository.BillRepository;
+import com.poly.ubs.repository.CustomerRepository;
 import com.poly.ubs.repository.DetailBillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,9 @@ public class BillServiceImpl extends GenericServiceImpl<Bill, String, BillReposi
 
     @Autowired
     private ProductServiceImpl productService;
+
+    @Autowired
+    private CustomerRepository customerRepository;
 
     @Override
     protected BillRepository getRepository() {
@@ -150,5 +154,21 @@ public class BillServiceImpl extends GenericServiceImpl<Bill, String, BillReposi
 
     public List<Bill> findByCustomerId(String customerId) {
         return billRepository.findByCustomerId(customerId);
+    }
+
+//    public List<Customer> findCustomersWithActiveBills() {
+//        List<Customer> customers = customerRepository.findAll(); // hoặc cách bạn đang lấy
+//        return customers.stream()
+//                .filter(c -> c.getBills().stream()
+//                        .anyMatch(b -> !"Đã giao thành công".equals(b.getStatus())))
+//                .collect(Collectors.toList());
+//    }
+
+    public List<Customer> findCustomersWithConfirmedBills() {
+        List<Customer> customers = customerRepository.findAll();
+        return customers.stream()
+                .filter(c -> c.getBills().stream()
+                        .anyMatch(b -> "Đã xác nhận".equals(b.getStatus())))
+                .collect(Collectors.toList());
     }
 }
