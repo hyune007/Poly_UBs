@@ -2,6 +2,7 @@ package com.poly.ubs.service;
 
 import com.poly.ubs.entity.*;
 import com.poly.ubs.repository.BillRepository;
+import com.poly.ubs.repository.CustomerRepository;
 import com.poly.ubs.repository.DetailBillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Service xử lý nghiệp vụ hóa đơn
@@ -28,6 +30,9 @@ public class BillServiceImpl extends GenericServiceImpl<Bill, String, BillReposi
 
     @Autowired
     private ProductServiceImpl productService;
+
+    @Autowired
+    private CustomerRepository customerRepository;
 
     @Override
     protected BillRepository getRepository() {
@@ -130,5 +135,40 @@ public class BillServiceImpl extends GenericServiceImpl<Bill, String, BillReposi
     private String generateDetailBillId() {
         return "CT" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
     }
-}
+    public Bill findById(String id) {
+        return billRepository.findById(id).orElse(null);
+    }
 
+    /** Lấy danh sách khách hàng có hóa đơn */
+    public List<Customer> findCustomersWithBills() {
+        return billRepository.findAll().stream()
+                .map(Bill::getCustomer)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    /** Lấy tất cả hóa đơn */
+    public List<Bill> findAllBills() {
+        return billRepository.findAll();
+    }
+
+    public List<Bill> findByCustomerId(String customerId) {
+        return billRepository.findByCustomerId(customerId);
+    }
+
+//    public List<Customer> findCustomersWithActiveBills() {
+//        List<Customer> customers = customerRepository.findAll(); // hoặc cách bạn đang lấy
+//        return customers.stream()
+//                .filter(c -> c.getBills().stream()
+//                        .anyMatch(b -> !"Đã giao thành công".equals(b.getStatus())))
+//                .collect(Collectors.toList());
+//    }
+
+    public List<Customer> findCustomersWithConfirmedBills() {
+        List<Customer> customers = customerRepository.findAll();
+        return customers.stream()
+                .filter(c -> c.getBills().stream()
+                        .anyMatch(b -> "Đã xác nhận".equals(b.getStatus())))
+                .collect(Collectors.toList());
+    }
+}
