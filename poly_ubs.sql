@@ -21,7 +21,7 @@ create table Role
 insert into Role (role_id, role_name)
 values ('ROLE_ADMIN', 'Quản trị viên'),
        ('ROLE_EMPLOYEE', 'Nhân viên'),
-       ('ROLE_USER', 'Người dùng');
+       ('ROLE_CUSTOMER', 'Khách hàng');
 CREATE TABLE GioHang
 (
     gh_id       VARCHAR(8) NOT NULL,
