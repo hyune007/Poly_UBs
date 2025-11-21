@@ -36,11 +36,11 @@ public interface ProductRepository extends JpaRepository<Product, String> {
      * @return số lượng sản phẩm
      */
     long countByCategory_Name(String categoryName);
-
-    //    Page<Product> findByCategory(String categoryName, Pageable pageable);
+//    Page<Product> findByCategory(String categoryName, Pageable pageable);
 //    Page<Product> findAll(Pageable pageable);
 //    long countByCategory(String categoryName);
-// Tìm theo tên sản phẩm
+
+    // Tìm theo tên sản phẩm
     Page<Product> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
     // Tìm theo category + tên sản phẩm
@@ -49,4 +49,5 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     Page<Product> findByPriceBetween(double min, double max, Pageable pageable);
 
     Page<Product> findByPriceBetweenAndBrandId(double min, double max, String brandId, Pageable pageable);
+
 }

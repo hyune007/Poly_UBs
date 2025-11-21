@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Danh sách khách hàng có hóa đơn</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="/css/admin/shipper-bill-list.css"/>
+  <style>
+
+  </style>
+</head>
+<body class="p-4">
+  <div class="container">
+    <div class="page-card">
+      <div class="page-header">
+        <div class="d-flex align-items-center gap-3">
+          <div class="brand-badge">KH</div>
+          <div>
+            <h5 class="mb-0">Khách hàng có hóa đơn</h5>
+            <div class="muted">Danh sách khách hàng đã tạo hóa đơn</div>
+          </div>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <input id="search" type="search" class="form-control form-control-sm search-input" placeholder="Tìm theo tên / id / điện thoại / email" oninput="filterTable()" />
+          <a th:href="@{/admin/dashboard}" class="btn back-link btn-sm btn-outline-secondary">Quay lại</a>
+        </div>
+      </div>
+
+      <div th:if="${customers == null or #lists.isEmpty(customers)}" class="py-4">
+        <div class="alert alert-info mb-0">Không có khách hàng có hóa đơn.</div>
+      </div>
+
+      <div th:if="${customers != null and !#lists.isEmpty(customers)}" class="table-card mt-3">
+        <div class="table-responsive">
+          <table id="customersTable" class="table table-custom mb-0 align-middle">
+            <thead>
+              <tr>
+                <th>KH ID</th>
+                <th>Tên</th>
+                <th>Điện thoại</th>
+                <th>Email</th>
+                <th class="text-end pe-4">Hành động</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr th:each="c : ${customers}">
+              <td data-label="KH ID" th:text="${c.id}"></td>
+              <td data-label="Tên" th:text="${c.name}"></td>
+              <td data-label="Điện thoại" th:text="${c.phone}"></td>
+              <td data-label="Email" th:text="${c.email}"></td>
+              <td data-label="Hành động">
+                <a th:href="@{/shipper/customer/{id}(id=${c.id})}" class="btn btn-primary btn-sm w-100 text-center">
+                  Xem hóa đơn
+                </a>
+              </td>
+            </tr>
+            <tr th:if="${customers == null or #lists.isEmpty(customers)}">
+              <td colspan="5" class="text-center">Không có khách hàng có hóa đơn</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function filterTable() {
+      const q = document.getElementById('search').value.trim().toLowerCase();
+      const tbody = document.querySelector('#customersTable tbody');
+      if (!tbody) return;
+      Array.from(tbody.rows).forEach(row => {
+        const cells = Array.from(row.cells).slice(0,4).map(td => td.textContent.trim().toLowerCase());
+        const match = cells.some(text => text.includes(q));
+        row.style.display = q === '' ? '' : (match ? '' : 'none');
+      });
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

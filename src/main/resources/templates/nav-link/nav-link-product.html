@@ -11,7 +11,6 @@
         <h4 th:text="${selectedCategoryName}"></h4>
     </div>
 
-    <div th:if="${items.totalElements == 0}" style="text-align: center; font-size: 30px">Không có sản phẩm</div>
 
     <div class="product-grid" id="products">
         <div class="product-card" th:each="item : ${items}">
@@ -27,7 +26,7 @@
     </div>
     <!-- Pagination -->
     <br>
-    <div class="pagination-container" th:if="${items.totalElements > 0}">
+    <div class="pagination-container">
         <nav aria-label="Page navigation">
             <ul class="pagination justify-content-center flex-wrap">
 

@@ -36,7 +36,7 @@
     margin-bottom: 6px;
 }
 
-.menu-item:hover {
+.menu-item:hover{
     background: #1c5698;
     color: white;
 }
@@ -135,14 +135,8 @@ button:hover {
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .modal-content h4 {
@@ -177,20 +171,17 @@ button:hover {
     transition: 0.2s;
 }
 
-.cancel-btn:hover {
-    background: #d1d5db;
-}
-
-.submit-btn:hover {
-    background: #1d4ed8;
-}
+.cancel-btn:hover { background: #d1d5db; }
+.submit-btn:hover { background: #1d4ed8; }
 
 .forgot-link {
     color: #2563eb;
     font-size: 14px;
     text-decoration: none;
 }
+<<<<<<< HEAD
+.forgot-link:hover { text-decoration: underline; }
 
-.forgot-link:hover {
-    text-decoration: underline;
-}
+=======
+.forgot-link:hover { text-decoration: underline; }
+>>>>>>> 1ed6dae9614600e2f95dcd966407e4e2f89acd6d

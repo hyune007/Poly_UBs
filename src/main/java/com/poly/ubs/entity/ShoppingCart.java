@@ -20,7 +20,7 @@ public class ShoppingCart {
      * ID của mục trong giỏ hàng
      */
     @Id
-    @Column(name = "gh_id", length = 36)
+    @Column(name = "gh_id")
     private String id;
 
     /**

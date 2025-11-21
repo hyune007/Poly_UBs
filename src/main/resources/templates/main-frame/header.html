@@ -30,30 +30,30 @@
     <!--Header Mid -->
     <div class="header-mid py-3" style="background-color: #fff">
         <div class="container-fluid px-5 d-flex justify-content-between align-items-center">
-            <a class="navbar-brand fs-3 fw-bold d-flex align-items-center" href="/home">
-                <img alt="UBrainTech Logo" src="/photos/logo-ubraintech.png" style="height: 55px;">
+            <a href="/home" class="navbar-brand fs-3 fw-bold d-flex align-items-center">
+                <img src="/photos/logo-ubraintech.png" alt="UBrainTech Logo" style="height: 55px;">
             </a>
             <div class="search-wrapper d-flex align-items-center flex-grow-1 mx-3" style="max-width: 700px; gap: 8px;">
                 <!-- Form chọn danh mục -->
-                <form action="/home" class="d-flex align-items-center" method="get">
-                    <select class="form-select w-auto" name="categoryId" onchange="this.form.submit()">
+                <form action="/home" method="get" class="d-flex align-items-center">
+                    <select name="categoryId" class="form-select w-auto" onchange="this.form.submit()">
                         <option value="">Tất cả danh mục</option>
                         <option th:each="c : ${categories}"
-                                th:selected="${selectedCategoryId != null and c.id == selectedCategoryId}"
+                                th:value="${c.id}"
                                 th:text="${c.name}"
-                                th:value="${c.id}">
+                                th:selected="${selectedCategoryId != null and c.id == selectedCategoryId}">
                         </option>
                     </select>
                 </form>
 
                 <!-- Form tìm kiếm -->
-                <form action="/product/search" class="d-flex flex-grow-1" method="get" role="search">
-                    <input aria-label="Search"
-                           class="form-control flex-grow-1"
+                <form action="/product/search" method="get" class="d-flex flex-grow-1" role="search">
+                    <input class="form-control flex-grow-1"
+                           type="search"
                            name="keyword"
                            placeholder="Nhập sản phẩm cần tìm..."
-                           th:value="${keyword}"
-                           type="search">
+                           aria-label="Search"
+                           th:value="${keyword}">
                     <button class="btn btn-primary w-auto" style="min-width: 100px;" type="submit">Tìm kiếm</button>
                 </form>
             </div>
@@ -61,25 +61,25 @@
 
             <div class="d-flex align-items-center gap-3 position-relative">
                 <div class="nav-button position-relative">
-                    <a class="text-dark text-decoration-none d-block" href="/order/shopping-cart" id="cart-icon">
+                    <a href="/order/shopping-cart" class="text-dark text-decoration-none d-block" id="cart-icon">
                         🛒 Giỏ hàng
                         <span class="cart-badge">0</span>
                     </a>
                 </div>
                 <div class="nav-button" th:if="${session.loggedInUser == null}">
-                    <a class="text-dark text-decoration-none" href="/login">👤Đăng nhập</a>
+                    <a href="/login" class="text-dark text-decoration-none">👤Đăng nhập</a>
                 </div>
                 <div class="nav-button dropdown" th:if="${session.loggedInUser != null}">
-                    <a class="text-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" href="#"
-                       role="button">
+                    <a class="text-dark text-decoration-none dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                         👤<span th:text="${session.loggedInUser.name}"></span>
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="/profile">Thông tin cá nhân</a></li>
-                        <li><a class="dropdown-item" href="/orders">Đơn hàng của tôi</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
+                        <li><a class="dropdown-item" th:href="@{/orders}">
+                            Đơn hàng của tôi
+                        </a>
                         </li>
+                        <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
                     </ul>
                 </div>
@@ -90,23 +90,22 @@
     <!--Header Bottom -->
     <div class="header-bottom py-1">
         <div class="container-fluid px-5 d-flex flex-wrap justify-content-start">
-            <form action="/home" class="d-flex" method="get">
-                <select class="form-select w-auto me-2" name="categoryId" onchange="this.form.submit()"
-                        style="padding-right: 4.5rem;">
+            <form action="/home" method="get" class="d-flex">
+                <select name="categoryId" class="form-select w-auto me-2" onchange="this.form.submit()" style="padding-right: 4.5rem;">
                     <option value="">Danh mục sản phẩm</option>
                     <option th:each="c : ${categories}"
-                            th:selected="${c.id == selectedCategoryId}"
+                            th:value="${c.id}"
                             th:text="${c.name}"
-                            th:value="${c.id}">
+                            th:selected="${c.id == selectedCategoryId}">
                     </option>
                 </select>
             </form>
             <div class="d-flex">
-                <a class="nav-link px-3" href="/home">Trang chủ</a>
-                <a class="nav-link px-3" href="/home/nav-link/introduction">Giới thiệu</a>
-                <a class="nav-link px-3" href="/home/product/list">Sản phẩm</a>
-                <a class="nav-link px-3" href="/home/nav-link/news">Tin tức</a>
-                <a class="nav-link px-3" href="/home/nav-link/contact">Liên hệ</a>
+                <a href="/home" class="nav-link px-3">Trang chủ</a>
+                <a href="/home/nav-link/introduction" class="nav-link px-3">Giới thiệu</a>
+                <a href="/home/product/list" class="nav-link px-3">Sản phẩm</a>
+                <a href="/home/nav-link/news" class="nav-link px-3">Tin tức</a>
+                <a href="/home/nav-link/contact" class="nav-link px-3">Liên hệ</a>
             </div>
         </div>
     </div>

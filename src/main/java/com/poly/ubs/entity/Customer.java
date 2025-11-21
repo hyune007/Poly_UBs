@@ -1,14 +1,12 @@
 package com.poly.ubs.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -52,9 +50,10 @@ public class Customer {
     @Column(name = "kh_mail", length = 50)
     private String email;
 
-    /**
-     * Vai trò của khách hàng
-     */
-    @Column(name = "kh_role")
-    private String role;
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    private List<Address> addresses;
+
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Bill> bills = new ArrayList<>();
+
 }
