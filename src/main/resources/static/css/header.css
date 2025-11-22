@@ -2,6 +2,7 @@
 header {
     font-size: 14px; /* hoặc 13px nếu bạn muốn nhỏ hơn nữa */
 }
+
 .header-top {
     background-color: #f8f9fa;
     font-size: 14px;
@@ -40,8 +41,12 @@ header {
 }
 
 @keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
 }
 
 p {
@@ -56,7 +61,7 @@ p {
 }
 
 
-.header-bottom select option{
+.header-bottom select option {
     padding: 5px 10px;
 }
 
@@ -76,6 +81,7 @@ p {
 .header-bottom {
     background-color: #001476;
 }
+
 .header-bottom a {
     color: white;
     text-decoration: none;
@@ -85,6 +91,7 @@ p {
     margin-right: 10px;
 
 }
+
 .nav-button {
     padding: 8px 16px;
     background-color: #f0f0f0;
@@ -98,12 +105,13 @@ p {
     background-color: #e0e0e0;
 
 }
-.nav-link:hover{
+
+.nav-link:hover {
     color: #fff;
 }
 
-.nav-link:focus{
-    color: #fff!important;
+.nav-link:focus {
+    color: #fff !important;
 }
 
 .cart-badge {
@@ -156,3 +164,36 @@ p {
     width: 100%;
     background-color: white;
 }
+
+#search-suggest {
+    max-height: 250px;
+    overflow-y: auto;
+    cursor: pointer;
+}
+#search-suggest li:hover {
+    background-color: #007bff;
+    color: white;
+}
+#search-suggest {
+    max-height: 250px;
+    overflow-y: auto;
+    cursor: pointer;
+}
+#search-suggest li:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+#search-popup {
+    animation: fadeIn 0.15s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-3px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.popup-item {
+    transition: background 0.2s;
+}
+

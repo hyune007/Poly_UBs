@@ -31,10 +31,10 @@ public class ProductController {
     /**
      * Hiển thị danh sách sản phẩm với phân trang và bộ lọc
      *
-     * @param page số trang (mặc định 0)
-     * @param size kích thước trang (mặc định 10)
+     * @param page     số trang (mặc định 0)
+     * @param size     kích thước trang (mặc định 10)
      * @param category tên danh mục để lọc (tùy chọn)
-     * @param model đối tượng model để truyền dữ liệu đến view
+     * @param model    đối tượng model để truyền dữ liệu đến view
      * @return đường dẫn đến template danh sách sản phẩm
      */
     @GetMapping
@@ -119,7 +119,7 @@ public class ProductController {
     /**
      * Hiển thị form sửa sản phẩm
      *
-     * @param id ID của sản phẩm cần sửa
+     * @param id    ID của sản phẩm cần sửa
      * @param model đối tượng model để truyền dữ liệu đến view
      * @return đường dẫn đến template form hoặc redirect nếu không tìm thấy
      */
@@ -175,4 +175,3 @@ public class ProductController {
         return "redirect:/admin/products";
     }
 }
-

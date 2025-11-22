@@ -168,4 +168,3 @@ public class ShoppingCartService extends GenericServiceImpl<ShoppingCart, String
         return "GH" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
     }
 }
-

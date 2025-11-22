@@ -30,8 +30,9 @@ public class EmployeeServiceImpl extends GenericServiceImpl<Employee, String, Em
      * @return nhân viên nếu tìm thấy, null nếu không tìm thấy
      */
     public Employee findByEmailAndPassword(String email, String password) {
-        return employeeRepository.findByEmailAndPassword (email, password);
+        return employeeRepository.findByEmailAndPassword(email, password);
     }
+
     /**
      * Tìm nhân viên theo từ khóa với phân trang
      *
@@ -41,10 +42,10 @@ public class EmployeeServiceImpl extends GenericServiceImpl<Employee, String, Em
      * @return Page chứa danh sách nhân viên
      */
     public Page<Employee> findByKeyword(String keyword, int page, int size) {
-        Pageable pageable = PageRequest.of (page, size);
-        if (keyword == null || keyword.trim ().isEmpty ()) {
-            return employeeRepository.findAll (pageable);
+        Pageable pageable = PageRequest.of(page, size);
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return employeeRepository.findAll(pageable);
         }
-        return employeeRepository.findByNameContainingIgnoreCase (keyword, pageable);
+        return employeeRepository.findByNameContainingIgnoreCase(keyword, pageable);
     }
 }

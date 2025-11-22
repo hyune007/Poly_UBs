@@ -49,4 +49,10 @@ public class Customer {
      */
     @Column(name = "kh_mail", length = 50)
     private String email;
+
+    /**
+     * Vai trò của khách hàng
+     */
+    @Column(name = "kh_role")
+    private String role;
 }
