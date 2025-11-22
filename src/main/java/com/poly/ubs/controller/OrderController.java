@@ -1,7 +1,10 @@
 package com.poly.ubs.controller;
 
 import com.poly.ubs.dto.OrderInfoDTO;
-import com.poly.ubs.entity.*;
+import com.poly.ubs.entity.Address;
+import com.poly.ubs.entity.Bill;
+import com.poly.ubs.entity.Customer;
+import com.poly.ubs.entity.ShoppingCart;
 import com.poly.ubs.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -52,7 +55,7 @@ public class OrderController {
         Object loggedInUser = session.getAttribute("loggedInUser");
         if (loggedInUser == null || !(loggedInUser instanceof Customer)) {
             // Nếu chưa đăng nhập, chuyển về trang đăng nhập
-            return "redirect:/auth/login";
+            return "redirect:/login";
         }
 
         Customer customer = (Customer) loggedInUser;

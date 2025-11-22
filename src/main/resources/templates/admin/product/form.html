@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
 
     <!-- jQuery + Select2 JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -20,52 +20,52 @@
     <h2 class="fw-bold fs-3 mb-4"
         th:text="${product.id == null ? 'Thêm sản phẩm mới' : 'Cập nhật sản phẩm'}"></h2>
 
-    <form th:action="@{/admin/products/save}" th:object="${product}" method="post">
+    <form method="post" th:action="@{/admin/products/save}" th:object="${product}">
         <!-- ID -->
         <div class="mb-3">
             <label class="form-label">ID</label>
-            <input type="text" class="form-control" th:field="*{id}" placeholder="Nhập ID sản phẩm" required>
+            <input class="form-control" placeholder="Nhập ID sản phẩm" required th:field="*{id}" type="text">
         </div>
 
         <!-- Tên -->
         <div class="mb-3">
             <label class="form-label">Tên sản phẩm</label>
-            <input type="text" class="form-control" th:field="*{name}" placeholder="Nhập tên sản phẩm" required>
+            <input class="form-control" placeholder="Nhập tên sản phẩm" required th:field="*{name}" type="text">
         </div>
 
         <!-- Giá -->
         <div class="mb-3">
             <label class="form-label">Giá</label>
-            <input type="number" class="form-control" th:field="*{price}" placeholder="Nhập giá" required>
+            <input class="form-control" placeholder="Nhập giá" required th:field="*{price}" type="number">
         </div>
 
         <!-- Stock -->
         <div class="mb-3">
             <label class="form-label">Số lượng tồn kho</label>
-            <input type="number" class="form-control" th:field="*{stock}" placeholder="Nhập số lượng" required>
+            <input class="form-control" placeholder="Nhập số lượng" required th:field="*{stock}" type="number">
         </div>
 
         <!-- Mô tả -->
         <div class="mb-3">
             <label class="form-label">Mô tả</label>
-            <textarea class="form-control" th:field="*{description}" rows="3" placeholder="Mô tả sản phẩm"></textarea>
+            <textarea class="form-control" placeholder="Mô tả sản phẩm" rows="3" th:field="*{description}"></textarea>
         </div>
 
         <!-- Hình ảnh -->
         <div class="mb-3">
             <label class="form-label">Hình ảnh (URL)</label>
-            <input type="text" class="form-control" th:field="*{image}" placeholder="Nhập đường dẫn hình ảnh">
+            <input class="form-control" placeholder="Nhập đường dẫn hình ảnh" th:field="*{image}" type="text">
         </div>
 
         <!-- Thương hiệu -->
         <div class="mb-3">
             <label class="form-label">Thương hiệu</label>
-            <select class="form-select brand-select" th:field="*{brand.id}" required>
+            <select class="form-select brand-select" required th:field="*{brand.id}">
                 <option value="">-- Chọn thương hiệu --</option>
                 <option th:each="b : ${brands}"
-                        th:value="${b.id}"
+                        th:selected="${product.brand != null} ? ${b.id} == ${product.brand.id} : false"
                         th:text="${b.name}"
-                        th:selected="${product.brand != null} ? ${b.id} == ${product.brand.id} : false">
+                        th:value="${b.id}">
                 </option>
             </select>
         </div>
@@ -73,20 +73,20 @@
         <!-- Danh mục -->
         <div class="mb-3">
             <label class="form-label">Danh mục</label>
-            <select class="form-select category-select" th:field="*{category.id}" required>
+            <select class="form-select category-select" required th:field="*{category.id}">
                 <option value="">-- Chọn danh mục --</option>
                 <option th:each="c : ${categories}"
-                        th:value="${c.id}"
+                        th:selected="${product.category != null} ? ${c.id} == ${product.category.id} : false"
                         th:text="${c.name}"
-                        th:selected="${product.category != null} ? ${c.id} == ${product.category.id} : false">
+                        th:value="${c.id}">
                 </option>
             </select>
         </div>
 
 
         <div class="d-flex justify-content-between">
-            <a href="/admin/products" class="btn btn-secondary">← Quay lại</a>
-            <button type="submit" class="btn btn-success">Lưu sản phẩm</button>
+            <a class="btn btn-secondary" href="/admin/products">← Quay lại</a>
+            <button class="btn btn-success" type="submit">Lưu sản phẩm</button>
         </div>
     </form>
 </div>

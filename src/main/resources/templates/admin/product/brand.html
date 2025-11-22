@@ -6,10 +6,10 @@
 <body>
 <h2>Brand Management</h2>
 
-<form th:action="@{/brand/save}" method="post" th:object="${brand}">
-    <input type="hidden" th:field="*{id}">
+<form method="post" th:action="@{/brand/save}" th:object="${brand}">
+    <input th:field="*{id}" type="hidden">
     <label>Name:</label>
-    <input type="text" th:field="*{name}" placeholder="Brand name" required>
+    <input placeholder="Brand name" required th:field="*{name}" type="text">
     <button type="submit">Save</button>
 </form>
 
@@ -117,8 +117,8 @@
         <td th:text="${b.name}">BrandName</td>
         <td>
             <a th:href="@{|/brand/edit/${b.id}|}">Edit</a> |
-            <a th:href="@{|/brand/delete/${b.id}|}"
-               onclick="return confirm('Are you sure?')">Delete</a>
+            <a onclick="return confirm('Are you sure?')"
+               th:href="@{|/brand/delete/${b.id}|}">Delete</a>
         </td>
     </tr>
     </tbody>

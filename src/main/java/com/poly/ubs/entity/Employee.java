@@ -57,11 +57,10 @@ public class Employee {
     private String address;
 
     /**
-     * Vai trò của nhân viên (true: admin, false: staff)
+     * Vai trò của nhân viên
      */
     @Column(name = "nv_role")
     private String role;
-
 
     /**
      * Ngày sinh của nhân viên

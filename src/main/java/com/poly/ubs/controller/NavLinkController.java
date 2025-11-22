@@ -12,16 +12,19 @@ public class NavLinkController {
         model.addAttribute("currentURI", request.getRequestURI());
         return "/nav-link/nav-link-news";
     }
+
     @GetMapping("home/nav-link/introduction")
     public String intro(HttpServletRequest request, Model model) {
         model.addAttribute("currentURI", request.getRequestURI());
         return "/nav-link/nav-link-introduction";
     }
+
     @GetMapping("/home/nav-link/contact")
     public String contact(HttpServletRequest request, Model model) {
         model.addAttribute("currentURI", request.getRequestURI());
         return "/nav-link/nav-link-contact";
     }
+
     @GetMapping("/home/nav-link/product")
     public String product(HttpServletRequest request, Model model) {
         model.addAttribute("currentURI", request.getRequestURI());

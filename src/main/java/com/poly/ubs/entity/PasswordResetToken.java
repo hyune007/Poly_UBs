@@ -51,7 +51,7 @@ public class PasswordResetToken {
      * @return true nếu token đã hết hạn
      */
     public boolean isExpired() {
-        return LocalDateTime.now ().isAfter (expiryDate);
+        return LocalDateTime.now().isAfter(expiryDate);
     }
 }
 

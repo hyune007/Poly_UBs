@@ -11,6 +11,7 @@ Gói này cung cấp một triển khai dịch vụ chung có thể được s�
 ## Giải thích các tham số generic
 
 Trong `GenericServiceImpl<T, ID, R>`:
+
 - `T` là kiểu của Entity (thực thể), ví dụ: Product, Brand, Category
 - `ID` là kiểu của khóa chính của Entity, ví dụ: String, Long, Integer
 - `R` là kiểu của Repository tương ứng với Entity
@@ -20,6 +21,7 @@ Trong `GenericServiceImpl<T, ID, R>`:
 Để sử dụng dịch vụ chung trong các triển khai dịch vụ của bạn:
 
 1. Tạo lớp dịch vụ của bạn kế thừa `GenericServiceImpl`:
+
 ```java
 @Service
 public class ProductServiceImpl extends GenericServiceImpl<Product, String, ProductRepository> {
@@ -35,6 +37,7 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, String, Prod
 ```
 
 2. Đảm bảo kho chứa của bạn kế thừa `JpaRepository`:
+
 ```java
 @Repository
 public interface ProductRepository extends JpaRepository<Product, String> {
@@ -45,6 +48,7 @@ public interface ProductRepository extends JpaRepository<Product, String> {
 ## Ví dụ cụ thể trong dự án
 
 ### Với thực thể Brand:
+
 ```java
 @Service
 public class BrandServiceImpl extends GenericServiceImpl<Brand, String, BrandRepository> {
@@ -60,6 +64,7 @@ public class BrandServiceImpl extends GenericServiceImpl<Brand, String, BrandRep
 ```
 
 ### Với thực thể Category:
+
 ```java
 @Service
 public class CategoryServiceImpl extends GenericServiceImpl<Category, String, CategoryRepository> {
@@ -77,6 +82,7 @@ public class CategoryServiceImpl extends GenericServiceImpl<Category, String, Ca
 ## Các phương thức có sẵn
 
 Dịch vụ chung cung cấp các phương thức sau:
+
 - `save(T entity)` - Lưu một thực thể
 - `update(T entity)` - Cập nhật một thực thể
 - `findById(ID id)` - Tìm một thực thể theo ID

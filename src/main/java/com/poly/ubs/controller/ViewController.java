@@ -26,8 +26,10 @@ public class ViewController {
     private ProductServiceImpl productService;
     @Autowired
     private CategoryServiceImpl categoryService;
+
     /**
      * Hiển thị phần header
+     *
      * @param model đối tượng model để truyền dữ liệu đến view
      * @return đường dẫn đến template header
      */
@@ -35,6 +37,7 @@ public class ViewController {
     public List<Category> getCategories() {
         return categoryService.getCategories();
     }
+
     @RequestMapping("header")
     public String header(Model model) {
         return "/main-frame/header";
@@ -42,14 +45,21 @@ public class ViewController {
 
     /**
      * Hiển thị trang chủ
-     * @param model đối tượng model để truyền dữ liệu đến view
+     *
+     * @param model   đối tượng model để truyền dữ liệu đến view
      * @param session đối tượng session để lấy thông tin người dùng
      * @return đường dẫn đến template trang chủ
      */
     @GetMapping("home")
     public String home(Model model, HttpSession session, @RequestParam("p") Optional<Integer> p, @RequestParam(value = "categoryId", required = false) String categoryId) {
-        Customer loggedInUser = (Customer) session.getAttribute("loggedInUser");
-        model.addAttribute("loggedInUser", loggedInUser);
+        Object loggedInUser = session.getAttribute("loggedInUser");
+
+        // Chỉ set loggedInUser vào model nếu là Customer
+        if (loggedInUser instanceof Customer) {
+            model.addAttribute("loggedInUser", loggedInUser);
+        } else {
+            model.addAttribute("loggedInUser", null);
+        }
         Pageable pageable = PageRequest.of(p.orElse(0), 18);
         Page<Product> items;
 
@@ -71,16 +81,35 @@ public class ViewController {
         for (Product item : items) {
             String folder = "";
             switch (item.getCategory().getId()) {
-                case "LSP01": folder = "phone/"; break;
-                case "LSP02": folder = "laptop/"; break;
-                case "LSP03": folder = "pad/"; break;
-                case "LSP04": folder = "smartwatch/"; break;
-                case "LSP05": folder = "headphone/"; break;
-                case "LSP06": folder = "keyboard/"; break;
-                case "LSP07": folder = "mouse/"; break;
-                case "LSP08": folder = "screen/"; break;
-                case "LSP09": folder = "speaker/"; break;
-                default: folder = "other/";
+                case "LSP01":
+                    folder = "phone/";
+                    break;
+                case "LSP02":
+                    folder = "laptop/";
+                    break;
+                case "LSP03":
+                    folder = "pad/";
+                    break;
+                case "LSP04":
+                    folder = "smartwatch/";
+                    break;
+                case "LSP05":
+                    folder = "headphone/";
+                    break;
+                case "LSP06":
+                    folder = "keyboard/";
+                    break;
+                case "LSP07":
+                    folder = "mouse/";
+                    break;
+                case "LSP08":
+                    folder = "screen/";
+                    break;
+                case "LSP09":
+                    folder = "speaker/";
+                    break;
+                default:
+                    folder = "other/";
             }
             item.setImage("products/" + folder + item.getImage());
         }
@@ -94,16 +123,35 @@ public class ViewController {
         Product item = productService.findById(id);
         String folder = "";
         switch (item.getCategory().getId()) {
-            case "LSP01": folder = "phone/"; break;
-            case "LSP02": folder = "laptop/"; break;
-            case "LSP03": folder = "pad/"; break;
-            case "LSP04": folder = "smartwatch/"; break;
-            case "LSP05": folder = "headphone/"; break;
-            case "LSP06": folder = "keyboard/"; break;
-            case "LSP07": folder = "mouse/"; break;
-            case "LSP08": folder = "screen/"; break;
-            case "LSP09": folder = "speaker/"; break;
-            default: folder = "other/";
+            case "LSP01":
+                folder = "phone/";
+                break;
+            case "LSP02":
+                folder = "laptop/";
+                break;
+            case "LSP03":
+                folder = "pad/";
+                break;
+            case "LSP04":
+                folder = "smartwatch/";
+                break;
+            case "LSP05":
+                folder = "headphone/";
+                break;
+            case "LSP06":
+                folder = "keyboard/";
+                break;
+            case "LSP07":
+                folder = "mouse/";
+                break;
+            case "LSP08":
+                folder = "screen/";
+                break;
+            case "LSP09":
+                folder = "speaker/";
+                break;
+            default:
+                folder = "other/";
         }
         item.setImage("products/" + folder + item.getImage());
         model.addAttribute("item", item);
@@ -112,11 +160,12 @@ public class ViewController {
         }
         return "/container/products/product-detail";
     }
+
     @GetMapping("/product/search")
     public String searchProducts(
-            @RequestParam(value="keyword", required=false) String keyword,
-            @RequestParam(value="categoryId", required=false) String categoryId,
-            @RequestParam(value="p", required=false) Optional<Integer> p,
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "categoryId", required = false) String categoryId,
+            @RequestParam(value = "p", required = false) Optional<Integer> p,
             Model model
     ) {
         Pageable pageable = PageRequest.of(p.orElse(0), 18);
@@ -148,16 +197,35 @@ public class ViewController {
         for (Product item : items) {
             String folder = "";
             switch (item.getCategory().getId()) {
-                case "LSP01": folder = "phone/"; break;
-                case "LSP02": folder = "laptop/"; break;
-                case "LSP03": folder = "pad/"; break;
-                case "LSP04": folder = "smartwatch/"; break;
-                case "LSP05": folder = "headphone/"; break;
-                case "LSP06": folder = "keyboard/"; break;
-                case "LSP07": folder = "mouse/"; break;
-                case "LSP08": folder = "screen/"; break;
-                case "LSP09": folder = "speaker/"; break;
-                default: folder = "other/";
+                case "LSP01":
+                    folder = "phone/";
+                    break;
+                case "LSP02":
+                    folder = "laptop/";
+                    break;
+                case "LSP03":
+                    folder = "pad/";
+                    break;
+                case "LSP04":
+                    folder = "smartwatch/";
+                    break;
+                case "LSP05":
+                    folder = "headphone/";
+                    break;
+                case "LSP06":
+                    folder = "keyboard/";
+                    break;
+                case "LSP07":
+                    folder = "mouse/";
+                    break;
+                case "LSP08":
+                    folder = "screen/";
+                    break;
+                case "LSP09":
+                    folder = "speaker/";
+                    break;
+                default:
+                    folder = "other/";
             }
             item.setImage("products/" + folder + item.getImage());
         }
