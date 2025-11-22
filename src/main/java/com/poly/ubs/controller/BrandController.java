@@ -8,13 +8,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/brand")
+@RequestMapping("/admin")
 public class BrandController {
 
     @Autowired
     private BrandServiceImpl brandService;
 
-    @GetMapping
+    @GetMapping("/brand")
     public String listBrands(Model model) {
         model.addAttribute("brands", brandService.findAll());
         model.addAttribute("brand", new Brand());
