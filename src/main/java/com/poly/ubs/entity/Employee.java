@@ -60,7 +60,8 @@ public class Employee {
      * Vai trò của nhân viên (true: admin, false: staff)
      */
     @Column(name = "nv_role")
-    private Boolean role;
+    private String role;
+
 
     /**
      * Ngày sinh của nhân viên

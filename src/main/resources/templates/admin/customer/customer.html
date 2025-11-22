@@ -1,42 +1,80 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Customer Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<h2>Customer Management</h2>
+<div class="sidebar" style="height: 100vh; background: #2f3640; color: white; position: fixed; width: 240px; padding-top: 20px;">
+    <h4 class="text-center mb-4">Poly_UBs Admin</h4>
+    <a th:href="@{/admin/dashboard}" style="color:#dcdde1; text-decoration:none; display:block; padding:12px 20px; margin:5px 10px; border-radius:8px;">🏠 Trang chủ</a>
+    <a th:href="@{/admin/customer}" style="color:#dcdde1; text-decoration:none; display:block; padding:12px 20px; margin:5px 10px; border-radius:8px;">👤 Quản lý khách hàng</a>
+    <a th:href="@{/admin/employee}" style="color:#dcdde1; text-decoration:none; display:block; padding:12px 20px; margin:5px 10px; border-radius:8px;">🧑‍💼 Quản lý nhân viên</a>
+    <a th:href="@{/admin/products}" style="color:#dcdde1; text-decoration:none; display:block; padding:12px 20px; margin:5px 10px; border-radius:8px;">📦 Quản lý sản phẩm</a>
+    <a th:href="@{/admin/bills/manage}" style="color:#dcdde1; text-decoration:none; display:block; padding:12px 20px; margin:5px 10px; border-radius:8px;">📦 Quản lý đơn hàng</a>
+    <hr class="text-secondary">
+    <a th:href="@{/logout}" style="color:#dcdde1; text-decoration:none; display:block; padding:12px 20px; margin:5px 10px; border-radius:8px;">🚪 Đăng xuất</a>
+</div>
+<div class="main-content" style="margin-left:260px; padding:20px; background:#f5f6fa; min-height:100vh;">
 
-<form th:action="@{/customer/save}" method="post" th:object="${customer}">
-    <input type="hidden" th:field="*{id}">
-    <label>Name:</label>
-    <input type="text" th:field="*{name}" placeholder="Customer name" required>
-    <label>Email:</label>
-    <input type="email" th:field="*{email}" placeholder="Email" required>
-    <button type="submit">Save</button>
-</form>
+    <!-- Main Content -->
+    <div class="flex-grow-1">
+        <div class="container py-4 main-content-wrapper">
+            <h2 class="mb-4 text-primary fw-bold">Customer Management</h2>
 
-<hr>
-<table border="1" cellpadding="5">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="c : ${customers}">
-        <td th:text="${c.id}">1</td>
-        <td th:text="${c.name}">Customer Name</td>
-        <td th:text="${c.email}">Email</td>
-        <td>
-            <a th:href="@{|/customer/edit/${c.id}|}">Edit</a> |
-            <a th:href="@{|/customer/delete/${c.id}|}"
-               onclick="return confirm('Are you sure?')">Delete</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <form method="post" th:action="@{/customer/save}" th:object="${customer}" class="row g-3">
+                        <input th:field="*{id}" type="hidden">
+
+                        <div class="col-md-6">
+                            <label class="form-label">Name:</label>
+                            <input placeholder="Customer name" required th:field="*{name}" type="text" class="form-control">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Email:</label>
+                            <input placeholder="Email" required th:field="*{email}" type="email" class="form-control">
+                        </div>
+
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-primary px-4">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-secondary">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th style="width: 150px;">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="c : ${customers}">
+                            <td th:text="${c.id}"></td>
+                            <td th:text="${c.name}"></td>
+                            <td th:text="${c.email}"></td>
+                            <td>
+                                <a th:href="@{|/customer/edit/${c.id}|}" class="btn btn-sm btn-warning">Edit</a>
+                                <a th:href="@{|/customer/delete/${c.id}|}"
+                                   onclick="return confirm('Are you sure?')"
+                                   class="btn btn-sm btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </div>
+</div>
 </body>
 </html>
