@@ -8,6 +8,7 @@
         body {
             background-color: #f5f6fa;
         }
+
         .sidebar {
             height: 100vh;
             background: #2f3640;
@@ -16,6 +17,7 @@
             width: 240px;
             padding-top: 20px;
         }
+
         .sidebar a {
             color: #dcdde1;
             text-decoration: none;
@@ -25,14 +27,17 @@
             border-radius: 8px;
             transition: 0.3s;
         }
+
         .sidebar a:hover {
             background: #353b48;
             color: #00a8ff;
         }
+
         .main-content {
             margin-left: 260px;
             padding: 20px;
         }
+
         .card:hover {
             transform: translateY(-3px);
             transition: 0.3s;
@@ -63,7 +68,7 @@
                     <div class="card-body text-center">
                         <h5 class="card-title">Khách hàng</h5>
                         <p class="card-text text-muted">Xem và quản lý danh sách khách hàng</p>
-                        <a th:href="@{/admin/customer}" class="btn btn-primary">Quản lý</a>
+                        <a class="btn btn-primary" th:href="@{/admin/customer}">Quản lý</a>
                     </div>
                 </div>
             </div>
@@ -73,7 +78,7 @@
                     <div class="card-body text-center">
                         <h5 class="card-title">Nhân viên</h5>
                         <p class="card-text text-muted">Quản lý thông tin và quyền của nhân viên</p>
-                        <a th:href="@{/admin/employee}" class="btn btn-primary">Quản lý</a>
+                        <a class="btn btn-primary" th:href="@{/admin/employee}">Quản lý</a>
                     </div>
                 </div>
             </div>
@@ -83,7 +88,7 @@
                     <div class="card-body text-center">
                         <h5 class="card-title">Sản phẩm</h5>
                         <p class="card-text text-muted">Thêm, sửa, xóa và xem sản phẩm</p>
-                        <a th:href="@{/admin/products}" class="btn btn-primary">Quản lý</a>
+                        <a class="btn btn-primary" th:href="@{/admin/products}">Quản lý</a>
                     </div>
                 </div>
             </div>

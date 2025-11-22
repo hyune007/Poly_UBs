@@ -27,7 +27,7 @@ public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Stri
      * Tìm sản phẩm cụ thể trong giỏ hàng của khách hàng
      *
      * @param customerId ID khách hàng
-     * @param productId ID sản phẩm
+     * @param productId  ID sản phẩm
      * @return giỏ hàng nếu tìm thấy, null nếu không
      */
     @Query("SELECT sc FROM ShoppingCart sc WHERE sc.customer.id = :customerId AND sc.product.id = :productId")

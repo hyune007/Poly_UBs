@@ -1,22 +1,15 @@
 package com.poly.ubs.controller;
 
-import com.poly.ubs.entity.Bill;
 import com.poly.ubs.entity.Customer;
-import com.poly.ubs.repository.CustomerRepository;
-import com.poly.ubs.service.BillServiceImpl;
 import com.poly.ubs.service.CustomerServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class ProfileController {
@@ -26,13 +19,15 @@ public class ProfileController {
 
     @GetMapping("/profile")
     public String profile(HttpSession session, Model model) {
-        Customer loggedInUser = (Customer) session.getAttribute("loggedInUser");
+        Object loggedInUser = session.getAttribute("loggedInUser");
 
-        if (loggedInUser == null) {
-            return "redirect:/login";
+        // Kiểm tra xem người dùng đã đăng nhập và là Customer
+        if (loggedInUser == null || !(loggedInUser instanceof Customer)) {
+            return "redirect:/login?error=needLogin";
         }
 
-        model.addAttribute("customer", loggedInUser);
+        Customer customer = (Customer) loggedInUser;
+        model.addAttribute("customer", customer);
         return "/container/user/profile";
     }
 
@@ -44,19 +39,21 @@ public class ProfileController {
             HttpSession session,
             RedirectAttributes redirectAttributes
     ) {
-        Customer loggedInUser = (Customer) session.getAttribute("loggedInUser");
+        Object loggedInUser = session.getAttribute("loggedInUser");
 
-        if (loggedInUser == null) {
-            return "redirect:/login";
+        // Kiểm tra xem người dùng đã đăng nhập và là Customer
+        if (loggedInUser == null || !(loggedInUser instanceof Customer)) {
+            return "redirect:/login?error=needLogin";
         }
 
-        loggedInUser.setName(name);
-        loggedInUser.setPhone(phone);
-        loggedInUser.setEmail(email);
+        Customer customer = (Customer) loggedInUser;
+        customer.setName(name);
+        customer.setPhone(phone);
+        customer.setEmail(email);
 
-        customerService.save(loggedInUser);
+        customerService.save(customer);
 
-        session.setAttribute("loggedInUser", loggedInUser);
+        session.setAttribute("loggedInUser", customer);
 
         redirectAttributes.addFlashAttribute("success", "Cập nhật thông tin thành công!");
         return "redirect:/profile";
@@ -71,53 +68,34 @@ public class ProfileController {
             RedirectAttributes redirectAttributes
     ) {
         // Lấy user từ session
-        Customer loggedInUser = (Customer) session.getAttribute("loggedInUser");
+        Object loggedInUser = session.getAttribute("loggedInUser");
 
-        if (loggedInUser == null) {
-            return "redirect:/login";
+        // Kiểm tra xem người dùng đã đăng nhập và là Customer
+        if (loggedInUser == null || !(loggedInUser instanceof Customer)) {
+            return "redirect:/login?error=needLogin";
         }
 
-        // Sai mật khẩu hiện tại
-        if (!loggedInUser.getPassword().equals(currentPass)) {
-            redirectAttributes.addFlashAttribute("errorChangePass", "Mật khẩu hiện tại không đúng!");
-            redirectAttributes.addFlashAttribute("openChangePassModal", true);
+        Customer customer = (Customer) loggedInUser;
+
+        if (!customer.getPassword().equals(currentPass)) {
+            redirectAttributes.addFlashAttribute("error", "Mật khẩu hiện tại không đúng!");
             return "redirect:/profile";
         }
 
-        // Mật khẩu xác nhận không khớp
+
         if (!newPass.equals(confirmPass)) {
-            redirectAttributes.addFlashAttribute("errorChangePass", "Mật khẩu mới và xác nhận không khớp!");
-            redirectAttributes.addFlashAttribute("openChangePassModal", true);
+            redirectAttributes.addFlashAttribute("error", "Mật khẩu mới và xác nhận không khớp!");
             return "redirect:/profile";
         }
 
-        loggedInUser.setPassword(newPass);
+        customer.setPassword(newPass);
 
-        customerService.save(loggedInUser);
+        customerService.save(customer);
 
-        session.setAttribute("loggedInUser", loggedInUser);
+        session.setAttribute("loggedInUser", customer);
 
         redirectAttributes.addFlashAttribute("success", "Cập nhật mật khẩu thành công!");
         return "redirect:/profile";
-    }
-
-    @Autowired
-    private BillServiceImpl billService;
-
-    @GetMapping("/orders")
-    public String userOrders(HttpSession session, Model model) {
-        Customer loggedInUser = (Customer) session.getAttribute("loggedInUser");
-        if (loggedInUser == null) {
-            return "redirect:/login";
-        }
-
-        // Lấy tất cả đơn hàng của user
-        List<Bill> bills = billService.findAll().stream()
-                .filter(b -> b.getCustomer() != null && loggedInUser.getId().equals(b.getCustomer().getId()))
-                .collect(Collectors.toList());
-
-        model.addAttribute("bills", bills);
-        return "container/user/infor-order";
     }
 
 }
