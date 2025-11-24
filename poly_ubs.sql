@@ -12,6 +12,20 @@ create table KhachHang
     PRIMARY KEY (kh_id),
     FOREIGN KEY (kh_role) REFERENCES Role (role_id)
 );
+
+create table NhanVien
+(
+    nv_id       VARCHAR(8)   NOT NULL,
+    nv_name     VARCHAR(100) NOT NULL,
+    nv_password VARCHAR(40)  NOT NULL,
+    nv_phone    VARCHAR(15)  NOT NULL,
+    nv_mail     VARCHAR(50)  NOT NULL,
+    nv_address  VARCHAR(100) NOT NULL,
+    nv_role     VARCHAR(20)  NOT NULL,
+    nv_birth    DATE         NOT NULL,
+    PRIMARY KEY (nv_id),
+    FOREIGN KEY (nv_role) REFERENCES Role (role_id)
+);
 create table Role
 (
     role_id   VARCHAR(20)  NOT NULL,
@@ -32,19 +46,6 @@ CREATE TABLE GioHang
     FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id),
     FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id),
     UNIQUE KEY unique_customer_product (kh_id, sp_id)
-);
-create table NhanVien
-(
-    nv_id       VARCHAR(8)   NOT NULL,
-    nv_name     VARCHAR(100) NOT NULL,
-    nv_password VARCHAR(40)  NOT NULL,
-    nv_phone    VARCHAR(15)  NOT NULL,
-    nv_mail     VARCHAR(50)  NOT NULL,
-    nv_address  VARCHAR(100) NOT NULL,
-    nv_role     VARCHAR(20)  NOT NULL,
-    nv_birth    DATE         NOT NULL,
-    PRIMARY KEY (nv_id),
-    FOREIGN KEY (nv_role) REFERENCES Role (role_id)
 );
 create table LoaiSanPham
 (
