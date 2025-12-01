@@ -12,27 +12,7 @@ create table KhachHang
     PRIMARY KEY (kh_id),
     FOREIGN KEY (kh_role) REFERENCES Role (role_id)
 );
-create table Role
-(
-    role_id   VARCHAR(20)  NOT NULL,
-    role_name VARCHAR(100) NOT NULL,
-    PRIMARY KEY (role_id)
-);
-insert into Role (role_id, role_name)
-values ('ROLE_ADMIN', 'Quản trị viên'),
-       ('ROLE_EMPLOYEE', 'Nhân viên'),
-       ('ROLE_USER', 'Người dùng');
-CREATE TABLE GioHang
-(
-    gh_id       VARCHAR(8) NOT NULL,
-    sp_quantity INT        NOT NULL,
-    kh_id       VARCHAR(8) NOT NULL,
-    sp_id       VARCHAR(8) NOT NULL,
-    PRIMARY KEY (gh_id),
-    FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id),
-    FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id),
-    UNIQUE KEY unique_customer_product (kh_id, sp_id)
-);
+
 create table NhanVien
 (
     nv_id       VARCHAR(8)   NOT NULL,
@@ -45,6 +25,27 @@ create table NhanVien
     nv_birth    DATE         NOT NULL,
     PRIMARY KEY (nv_id),
     FOREIGN KEY (nv_role) REFERENCES Role (role_id)
+);
+create table Role
+(
+    role_id   VARCHAR(20)  NOT NULL,
+    role_name VARCHAR(100) NOT NULL,
+    PRIMARY KEY (role_id)
+);
+insert into Role (role_id, role_name)
+values ('ROLE_ADMIN', 'Quản trị viên'),
+       ('ROLE_EMPLOYEE', 'Nhân viên'),
+       ('ROLE_CUSTOMER', 'Khách hàng');
+CREATE TABLE GioHang
+(
+    gh_id       VARCHAR(8) NOT NULL,
+    sp_quantity INT        NOT NULL,
+    kh_id       VARCHAR(8) NOT NULL,
+    sp_id       VARCHAR(8) NOT NULL,
+    PRIMARY KEY (gh_id),
+    FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id),
+    FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id),
+    UNIQUE KEY unique_customer_product (kh_id, sp_id)
 );
 create table LoaiSanPham
 (
