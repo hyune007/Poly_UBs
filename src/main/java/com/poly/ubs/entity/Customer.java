@@ -50,6 +50,9 @@ public class Customer {
     @Column(name = "kh_mail", length = 50)
     private String email;
 
+    @Column(name = "kh_role")
+    private String role;
+
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
     private List<Address> addresses;
 
