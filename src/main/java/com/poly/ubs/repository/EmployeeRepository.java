@@ -21,4 +21,12 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
     Page<Employee> findByNameContainingIgnoreCase(String keyword, Pageable pageable);
 
     Employee findByEmailAndPassword(String email, String password);
+
+    /**
+     * Tìm nhân viên theo email
+     *
+     * @param email email của nhân viên
+     * @return Employee nếu tìm thấy, null nếu không
+     */
+    Employee findByEmail(String email);
 }

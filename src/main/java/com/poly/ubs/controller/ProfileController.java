@@ -1,6 +1,8 @@
 package com.poly.ubs.controller;
 
+import com.poly.ubs.entity.Bill;
 import com.poly.ubs.entity.Customer;
+import com.poly.ubs.service.BillServiceImpl;
 import com.poly.ubs.service.CustomerServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,15 +10,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Controller
+@RequestMapping("/user")
 public class ProfileController {
 
     @Autowired
     private CustomerServiceImpl customerService;
-
+    @Autowired
+    private BillServiceImpl billService;
     @GetMapping("/profile")
     public String profile(HttpSession session, Model model) {
         Object loggedInUser = session.getAttribute("loggedInUser");
@@ -96,6 +104,21 @@ public class ProfileController {
 
         redirectAttributes.addFlashAttribute("success", "Cập nhật mật khẩu thành công!");
         return "redirect:/profile";
+    }
+    @GetMapping("/orders")
+    public String userOrders(HttpSession session, Model model) {
+        Customer loggedInUser = (Customer) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/login";
+        }
+
+        // Lấy tất cả đơn hàng của user
+        List<Bill> bills = billService.findAll().stream()
+                .filter(b -> b.getCustomer() != null && loggedInUser.getId().equals(b.getCustomer().getId()))
+                .collect(Collectors.toList());
+
+        model.addAttribute("bills", bills);
+        return "container/user/infor-order";
     }
 
 }
