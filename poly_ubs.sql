@@ -83,6 +83,8 @@ create table DiaChi
     PRIMARY KEY (dc_id),
     FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id)
 );
+ALTER TABLE DiaChi
+    ADD dc_is_default TINYINT(1) NOT NULL DEFAULT 0;
 create table HoaDon
 (
     hd_id     VARCHAR(8)  NOT NULL,
@@ -107,17 +109,7 @@ create table ChiTietHoaDon
     FOREIGN KEY (hd_id) REFERENCES HoaDon (hd_id),
     FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id)
 );
-CREATE TABLE GioHang
-(
-    gh_id       VARCHAR(8) NOT NULL,
-    sp_quantity INT        NOT NULL,
-    kh_id       VARCHAR(8) NOT NULL,
-    sp_id       VARCHAR(8) NOT NULL,
-    PRIMARY KEY (gh_id),
-    FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id),
-    FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id),
-    UNIQUE KEY unique_customer_product (kh_id, sp_id)
-);
+
 create table KhuyenMai
 (
     km_id          VARCHAR(8)   NOT NULL,
