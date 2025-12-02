@@ -91,7 +91,7 @@ create table HoaDon
     hd_date   DATE        NOT NULL,
     hd_status VARCHAR(20) NOT NULL,
     kh_id     VARCHAR(8)  NOT NULL,
-    nv_id     VARCHAR(8)  NOT NULL,
+    nv_id     VARCHAR(8)  NULL,
     dc_id     VARCHAR(8)  NOT NULL,
     PRIMARY KEY (hd_id),
     FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id),
