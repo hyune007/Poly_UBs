@@ -15,10 +15,10 @@
 
             <div class="row g-3">
                 <div class="col-md-6">
-                    <input class="form-control" name="name" readonly required th:value="${customer.name}" type="text"/>
+                    <input class="form-control" name="fullName" readonly required th:value="${orderInfo.fullName != null ? orderInfo.fullName : customer.name}" type="text"/>
                 </div>
                 <div class="col-md-6">
-                    <input class="form-control" name="phone" readonly required th:value="${customer.phone}" type="tel"/>
+                    <input class="form-control" name="phone" readonly required th:value="${orderInfo.phone != null ? orderInfo.phone : customer.phone}" type="tel"/>
                 </div>
             </div>
 
