@@ -38,7 +38,27 @@ public class AddressServiceImpl extends GenericServiceImpl<Address, String, Addr
         address.setCity(city);
         address.setWard(ward);
         address.setDetailAddress(detailAddress);
+        // Nếu chưa có địa chỉ mặc định nào thì gán địa chỉ đầu tiên là mặc định
+        boolean hasDefault = customer.getAddresses() != null && customer.getAddresses().stream().anyMatch(a -> Boolean.TRUE.equals(a.getIsDefault()));
+        if (!hasDefault) {
+            address.setIsDefault(true);
+        }
         return addressRepository.save(address);
+    }
+
+    /**
+     * Đặt địa chỉ mặc định cho khách hàng
+     */
+    public void setDefaultAddress(Customer customer, String addressId) {
+        if (customer.getAddresses() == null) return;
+        customer.getAddresses().forEach(a -> {
+            if (a.getId().equals(addressId)) {
+                a.setIsDefault(true);
+            } else {
+                a.setIsDefault(false);
+            }
+            addressRepository.save(a);
+        });
     }
 
     /**

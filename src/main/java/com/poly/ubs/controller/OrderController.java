@@ -114,7 +114,10 @@ public class OrderController {
      * @return redirect sang trang thanh toán
      */
     @PostMapping("/order/submit-info")
-    public String submitOrderInfo(@ModelAttribute OrderInfoDTO orderInfo, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String submitOrderInfo(@ModelAttribute OrderInfoDTO orderInfo,
+                                  HttpSession session,
+                                  RedirectAttributes redirectAttributes,
+                                  HttpServletRequest request) {
         // Lấy thông tin khách hàng từ session
         Object loggedInUser = session.getAttribute("loggedInUser");
         if (loggedInUser == null || !(loggedInUser instanceof Customer)) {
@@ -122,6 +125,25 @@ public class OrderController {
         }
 
         Customer customer = (Customer) loggedInUser;
+
+        // Lấy địa chỉ được chọn từ form (hidden input name="addressId") và điền vào orderInfo
+        String addressIdParam = request.getParameter("addressId");
+        if (addressIdParam != null && !addressIdParam.isBlank()) {
+            Address selected = addressService.findById(addressIdParam);
+            if (selected != null) {
+                orderInfo.setCity(selected.getCity());
+                orderInfo.setWard(selected.getWard());
+                orderInfo.setDetailAddress(selected.getDetailAddress());
+            }
+        }
+
+        // Nếu thiếu tên/điện thoại thì lấy từ khách hàng đăng nhập
+        if (orderInfo.getFullName() == null || orderInfo.getFullName().isEmpty()) {
+            orderInfo.setFullName(customer.getName());
+        }
+        if (orderInfo.getPhone() == null || orderInfo.getPhone().isEmpty()) {
+            orderInfo.setPhone(customer.getPhone());
+        }
 
         // Tính tổng tiền
         int subtotal = shoppingCartService.calculateTotal(customer.getId());
