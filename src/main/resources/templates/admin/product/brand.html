@@ -20,7 +20,7 @@
 
         <div class="card shadow-sm mb-4">
             <div class="card-body">
-                <form method="post" th:action="@{/brand/save}" th:object="${brand}" class="row g-3">
+                <form method="post" th:action="@{/admin/save}" th:object="${brand}" class="row g-3">
                     <input th:field="*{id}" type="hidden">
 
                     <div class="col-md-6">
@@ -50,8 +50,8 @@
                         <td th:text="${b.id}"></td>
                         <td th:text="${b.name}"></td>
                         <td>
-                            <a th:href="@{|/brand/edit/${b.id}|}" class="btn btn-sm btn-warning">Edit</a>
-                            <a th:href="@{|/brand/delete/${b.id}|}" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-danger">Delete</a>
+                            <a th:href="@{|/admin/edit/${b.id}|}" class="btn btn-sm btn-warning">Edit</a>
+                            <a th:href="@{|/admin/delete/${b.id}|}" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-danger">Delete</a>
                         </td>
                     </tr>
                     </tbody>

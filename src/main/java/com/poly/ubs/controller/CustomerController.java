@@ -31,7 +31,7 @@ public class CustomerController {
     public String edit(@PathVariable("id") String id, Model model) {
         model.addAttribute("customer", customerService.findById(id));
         model.addAttribute("customers", customerService.findAll());
-        return "admin/customer/customer";
+        return "admin/customer";
     }
 
     @GetMapping("/delete/{id}")

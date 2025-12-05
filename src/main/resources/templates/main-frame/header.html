@@ -67,7 +67,7 @@
                     </a>
                 </div>
                 <div class="nav-button" th:if="${session.loggedInUser == null}">
-                    <a class="text-dark text-decoration-none" href="/login">👤Đăng nhập</a>
+                    <a class="text-dark text-decoration-none" href="/auth/login">👤Đăng nhập</a>
                 </div>
                 <div class="nav-button dropdown" th:if="${session.loggedInUser != null}">
                     <a class="text-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" href="#"
@@ -80,7 +80,7 @@
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
+                        <li><a class="dropdown-item" href="/auth/logout">Đăng xuất</a></li>
                     </ul>
                 </div>
             </div>
