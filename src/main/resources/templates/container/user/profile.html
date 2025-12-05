@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+          rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/general.css">
-    <link rel="stylesheet" href="/css/header.css">
-    <link rel="stylesheet" href="/css/user/profile.css">
+    <link href="/css/general.css" rel="stylesheet">
+    <link href="/css/header.css" rel="stylesheet">
+    <link href="/css/user/profile.css" rel="stylesheet">
 </head>
 <style>
 </style>
@@ -31,36 +32,35 @@
             <h3>Thông tin cá nhân</h3>
             <p>Quản lý thông tin cá nhân của bạn ngay bên dưới</p>
 
-            <form action="/update-profile" method="post" id="profileForm">
+            <form action="/update-profile" id="profileForm" method="post">
                 <div class="form-group">
                     <label>Họ và tên</label>
-                    <input type="text" name="name" th:value="${customer.name}" readonly required />
+                    <input name="name" readonly required th:value="${customer.name}" type="text"/>
                 </div>
                 <div class="form-group">
                     <label>Số điện thoại</label>
-                    <input type="tel" name="phone" th:value="${customer.phone}" readonly required />
+                    <input name="phone" readonly required th:value="${customer.phone}" type="tel"/>
                 </div>
                 <div class="form-group">
                     <label>Email</label>
-                    <input type="email" name="email" th:value="${customer.email}" readonly required />
+                    <input name="email" readonly required th:value="${customer.email}" type="email"/>
                 </div>
                 <div class="form-group">
                     <label>Mật khẩu</label>
-                    <input type="password" th:value="${customer.password}" readonly required />
+                    <input readonly required th:value="${customer.password}" type="password"/>
                 </div>
 
-                <button type="button" id="editBtn">Cập nhật thông tin</button>
-                <button type="submit" id="saveBtn" class="hidden">Lưu thay đổi</button>
+                <button id="editBtn" type="button">Cập nhật thông tin</button>
+                <button class="hidden" id="saveBtn" type="submit">Lưu thay đổi</button>
             </form>
         </section>
 
-
         <!-- MK -->
-        <section id="changePassword" class="hidden">
+        <section class="hidden" id="changePassword">
             <h3>Thay đổi mật khẩu</h3>
             <p>Cập nhật mật khẩu của bạn để tăng cường bảo mật</p>
             <form>
-                <button type="button" id="openPasswordModal">Cập nhật mật khẩu</button>
+                <button id="openPasswordModal" type="button">Cập nhật mật khẩu</button>
             </form>
         </section>
 
@@ -70,31 +70,31 @@
             <div class="modal-content">
                 <h4>Đổi mật khẩu</h4>
                 <!-- Hiển thị thông báo lỗi nếu có -->
-                <div th:if="${errorChangePass}" class="alert alert-danger mb-3" th:text="${errorChangePass}"></div>
+                <div class="alert alert-danger mb-3" th:if="${errorChangePass}" th:text="${errorChangePass}"></div>
 
 
-                <form id="passwordForm" action="/change-password" method="post">
+                <form action="/change-password" id="passwordForm" method="post">
                     <div class="form-group">
                         <label>Mật khẩu hiện tại</label>
-                        <input type="password" id="currentPass" name="currentPass"
-                               placeholder="Nhập mật khẩu hiện tại" required />
+                        <input id="currentPass" name="currentPass" placeholder="Nhập mật khẩu hiện tại"
+                               required type="password"/>
                     </div>
                     <div class="form-group">
                         <label>Mật khẩu mới</label>
-                        <input type="password" id="newPass" name="newPass"
-                               placeholder="Nhập mật khẩu mới" required />
+                        <input id="newPass" name="newPass" placeholder="Nhập mật khẩu mới"
+                               required type="password"/>
                     </div>
                     <div class="form-group">
                         <label>Xác nhận mật khẩu mới</label>
-                        <input type="password" id="confirmPass" name="confirmPass"
-                               placeholder="Nhập lại mật khẩu mới" required />
+                        <input id="confirmPass" name="confirmPass" placeholder="Nhập lại mật khẩu mới"
+                               required type="password"/>
                     </div>
                     <div class="text-end mb-3">
-                        <a href="/forgot-password" class="forgot-link">Quên mật khẩu?</a>
+                        <a class="forgot-link" href="/forgot-password">Quên mật khẩu?</a>
                     </div>
                     <div class="modal-actions">
-                        <button type="button" class="cancel-btn" onclick="closePasswordModal()">Hủy</button>
-                        <button type="submit" class="submit-btn">Cập nhật</button>
+                        <button class="cancel-btn" onclick="closePasswordModal()" type="button">Hủy</button>
+                        <button class="submit-btn" type="submit">Cập nhật</button>
                     </div>
                 </form>
             </div>
@@ -131,6 +131,7 @@
             editBtn.classList.remove('hidden');
         });
     });
+
     // ----
     function showSection(sectionId) {
         document.getElementById("personalInfo").classList.add("hidden");
@@ -167,7 +168,7 @@
     /*<![CDATA[*/
     const shouldOpenModal = /*[[${openChangePassModal}]]*/ false;
     if (shouldOpenModal) {
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             openPasswordModal();
         });
     }

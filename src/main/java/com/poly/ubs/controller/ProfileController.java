@@ -1,7 +1,6 @@
 package com.poly.ubs.controller;
 
 import com.poly.ubs.entity.Customer;
-import com.poly.ubs.repository.CustomerRepository;
 import com.poly.ubs.service.CustomerServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +19,15 @@ public class ProfileController {
 
     @GetMapping("/profile")
     public String profile(HttpSession session, Model model) {
-        Customer loggedInUser = (Customer) session.getAttribute("loggedInUser");
+        Object loggedInUser = session.getAttribute("loggedInUser");
 
-        if (loggedInUser == null) {
-            return "redirect:/login";
+        // Kiểm tra xem người dùng đã đăng nhập và là Customer
+        if (loggedInUser == null || !(loggedInUser instanceof Customer)) {
+            return "redirect:/login?error=needLogin";
         }
 
-        model.addAttribute("customer", loggedInUser);
+        Customer customer = (Customer) loggedInUser;
+        model.addAttribute("customer", customer);
         return "/container/user/profile";
     }
 
@@ -38,19 +39,21 @@ public class ProfileController {
             HttpSession session,
             RedirectAttributes redirectAttributes
     ) {
-        Customer loggedInUser = (Customer) session.getAttribute("loggedInUser");
+        Object loggedInUser = session.getAttribute("loggedInUser");
 
-        if (loggedInUser == null) {
-            return "redirect:/login";
+        // Kiểm tra xem người dùng đã đăng nhập và là Customer
+        if (loggedInUser == null || !(loggedInUser instanceof Customer)) {
+            return "redirect:/login?error=needLogin";
         }
 
-        loggedInUser.setName(name);
-        loggedInUser.setPhone(phone);
-        loggedInUser.setEmail(email);
+        Customer customer = (Customer) loggedInUser;
+        customer.setName(name);
+        customer.setPhone(phone);
+        customer.setEmail(email);
 
-        customerService.save(loggedInUser);
+        customerService.save(customer);
 
-        session.setAttribute("loggedInUser", loggedInUser);
+        session.setAttribute("loggedInUser", customer);
 
         redirectAttributes.addFlashAttribute("success", "Cập nhật thông tin thành công!");
         return "redirect:/profile";
@@ -65,14 +68,16 @@ public class ProfileController {
             RedirectAttributes redirectAttributes
     ) {
         // Lấy user từ session
-        Customer loggedInUser = (Customer) session.getAttribute("loggedInUser");
+        Object loggedInUser = session.getAttribute("loggedInUser");
 
-        if (loggedInUser == null) {
-            return "redirect:/login";
+        // Kiểm tra xem người dùng đã đăng nhập và là Customer
+        if (loggedInUser == null || !(loggedInUser instanceof Customer)) {
+            return "redirect:/login?error=needLogin";
         }
 
+        Customer customer = (Customer) loggedInUser;
 
-        if (!loggedInUser.getPassword().equals(currentPass)) {
+        if (!customer.getPassword().equals(currentPass)) {
             redirectAttributes.addFlashAttribute("error", "Mật khẩu hiện tại không đúng!");
             return "redirect:/profile";
         }
@@ -83,11 +88,11 @@ public class ProfileController {
             return "redirect:/profile";
         }
 
-        loggedInUser.setPassword(newPass);
+        customer.setPassword(newPass);
 
-        customerService.save(loggedInUser);
+        customerService.save(customer);
 
-        session.setAttribute("loggedInUser", loggedInUser);
+        session.setAttribute("loggedInUser", customer);
 
         redirectAttributes.addFlashAttribute("success", "Cập nhật mật khẩu thành công!");
         return "redirect:/profile";

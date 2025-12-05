@@ -4,38 +4,97 @@
     <meta charset="UTF-8">
     <title>Admin Dashboard | Poly_UBs</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Thêm Chart.js cho biểu đồ -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
-            background-color: #f5f6fa;
+            background-color: #f0f2f5;
+            font-family: 'Segoe UI', sans-serif;
         }
+
         .sidebar {
             height: 100vh;
-            background: #2f3640;
-            color: white;
+            background: #1e1f29;
+            color: #fff;
             position: fixed;
-            width: 240px;
-            padding-top: 20px;
+            width: 260px;
+            padding-top: 25px;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.2);
         }
+
+        .sidebar h4 {
+            letter-spacing: 1px;
+        }
+
         .sidebar a {
-            color: #dcdde1;
+            color: #d3d3d3;
             text-decoration: none;
             display: block;
-            padding: 12px 20px;
-            margin: 5px 10px;
-            border-radius: 8px;
-            transition: 0.3s;
+            padding: 12px 22px;
+            margin: 6px 12px;
+            border-radius: 10px;
+            transition: .25s;
+            font-size: 15px;
         }
+
         .sidebar a:hover {
-            background: #353b48;
-            color: #00a8ff;
+            background: #2c2d38;
+            color: #4dabff;
         }
+
         .main-content {
-            margin-left: 260px;
-            padding: 20px;
+            margin-left: 280px;
+            padding: 25px;
         }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            transition: .3s;
+        }
+
         .card:hover {
-            transform: translateY(-3px);
-            transition: 0.3s;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .summary-box {
+            background: linear-gradient(135deg, #4dabff, #007bff);
+            color: white;
+            padding: 22px;
+            border-radius: 15px;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+            transition: .3s;
+        }
+
+        .summary-box:hover {
+            transform: translateY(-4px);
+        }
+
+        .summary-icon {
+            font-size: 40px;
+            opacity: 0.8;
+        }
+
+        /* Style cho biểu đồ và bảng */
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .table-responsive {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            border-top: none;
         }
     </style>
 </head>
@@ -46,22 +105,177 @@
     <a th:href="@{/admin/customer}">👤 Quản lý khách hàng</a>
     <a th:href="@{/admin/employee}">🧑‍💼 Quản lý nhân viên</a>
     <a th:href="@{/admin/products}">📦 Quản lý sản phẩm</a>
-    <hr class="text-secondary">
+    <a th:href="@{/admin/bills/manage}">🧾 Quản lý đơn hàng</a>
+
+    <hr class="text-secondary mx-3">
     <a th:href="@{/logout}">🚪 Đăng xuất</a>
 </div>
 
 <div class="main-content">
     <div class="container">
-        <h2 class="mb-4">Bảng điều khiển quản trị</h2>
+        <h2 class="mb-3 fw-bold">Bảng điều khiển quản trị</h2>
         <p>Xin chào, <strong th:text="${adminUser.name}"></strong> 👋</p>
 
+        <!-- SUMMARY PANEL (Đã thêm box Tổng doanh thu) -->
+        <div class="row mt-4 g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="summary-box">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-1">Tổng khách hàng</h5>
+                            <h2 class="fw-bold" th:text="${totalCustomers}">0</h2>
+                        </div>
+                        <div class="summary-icon">👤</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="summary-box" style="background: linear-gradient(135deg, #ff9f43, #ff6f00);">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-1">Tổng nhân viên</h5>
+                            <h2 class="fw-bold" th:text="${totalEmployees}">0</h2>
+                        </div>
+                        <div class="summary-icon">🧑‍💼</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="summary-box" style="background: linear-gradient(135deg, #6c5ce7, #341f97);">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-1">Tổng sản phẩm</h5>
+                            <h2 class="fw-bold" th:text="${totalProducts}">0</h2>
+                        </div>
+                        <div class="summary-icon">📦</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="summary-box" style="background: linear-gradient(135deg, #00b894, #00997a);">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-1">Tổng đơn hàng</h5>
+                            <h2 class="fw-bold" th:text="${totalBills}">0</h2>
+                        </div>
+                        <div class="summary-icon">🧾</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Box mới: Tổng doanh thu -->
+            <div class="col-lg-3 col-md-6">
+                <div class="summary-box" style="background: linear-gradient(135deg, #e17055, #d63031);">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-1">Tổng doanh thu</h5>
+                            <h2 class="fw-bold" th:text="${totalRevenue}">0 VND</h2>
+                        </div>
+                        <div class="summary-icon">💰</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CHARTS SECTION (Biểu đồ mới) -->
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <h5 class="mb-3">Số lượng đơn hàng theo tháng</h5>
+                    <canvas id="ordersChart"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <h5 class="mb-3">Phân loại sản phẩm bán chạy</h5>
+                    <canvas id="productsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABLES SECTION (Bảng mới) -->
         <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="table-responsive">
+                    <h5 class="mb-3">Đơn hàng gần đây</h5>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Khách hàng</th>
+                            <th>Tổng tiền</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="bill : ${recentBills}">
+                            <td th:text="${bill.hdId}">1</td>
+                            <td th:text="${bill.khachHang.khName}">Nguyễn Văn A</td>
+                            <td th:text="${bill.totalAmount}">500.000 VND</td>
+                            <td th:text="${bill.hdStatus}">Đã giao</td>
+                        </tr>
+                        <!-- Dữ liệu mẫu nếu chưa có backend -->
+                        <tr th:if="${recentBills == null or #lists.isEmpty(recentBills)}">
+                            <td>1</td>
+                            <td>Nguyễn Văn A</td>
+                            <td>500.000 VND</td>
+                            <td>Đã giao</td>
+                        </tr>
+                        <tr th:if="${recentBills == null or #lists.isEmpty(recentBills)}">
+                            <td>2</td>
+                            <td>Trần Thị B</td>
+                            <td>750.000 VND</td>
+                            <td>Đang xử lý</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="table-responsive">
+                    <h5 class="mb-3">Sản phẩm bán chạy nhất</h5>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Tên sản phẩm</th>
+                            <th>Số lượng bán</th>
+                            <th>Doanh thu</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="product : ${topProducts}">
+                            <td th:text="${product[0]}">Sản phẩm A</td>
+                            <td th:text="${product[1]}">100</td>
+                            <td th:text="${product[2]}">1.000.000 VND</td>
+                        </tr>
+                        <!-- Dữ liệu mẫu nếu chưa có backend -->
+                        <tr th:if="${topProducts == null or #lists.isEmpty(topProducts)}">
+                            <td>Sản phẩm A</td>
+                            <td>100</td>
+                            <td>1.000.000 VND</td>
+                        </tr>
+                        <tr th:if="${topProducts == null or #lists.isEmpty(topProducts)}">
+                            <td>Sản phẩm B</td>
+                            <td>80</td>
+                            <td>800.000 VND</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- CARDS SECTION (Giữ nguyên) -->
+        <div class="row mt-5 g-4">
             <div class="col-md-4">
                 <div class="card shadow-sm">
                     <div class="card-body text-center">
                         <h5 class="card-title">Khách hàng</h5>
                         <p class="card-text text-muted">Xem và quản lý danh sách khách hàng</p>
-                        <a th:href="@{/admin/customer}" class="btn btn-primary">Quản lý</a>
+                        <a class="btn btn-primary" th:href="@{/admin/customer}">Quản lý</a>
                     </div>
                 </div>
             </div>
@@ -71,7 +285,7 @@
                     <div class="card-body text-center">
                         <h5 class="card-title">Nhân viên</h5>
                         <p class="card-text text-muted">Quản lý thông tin và quyền của nhân viên</p>
-                        <a th:href="@{/admin/employee}" class="btn btn-primary">Quản lý</a>
+                        <a class="btn btn-warning text-white" th:href="@{/admin/employee}">Quản lý</a>
                     </div>
                 </div>
             </div>
@@ -81,7 +295,7 @@
                     <div class="card-body text-center">
                         <h5 class="card-title">Sản phẩm</h5>
                         <p class="card-text text-muted">Thêm, sửa, xóa và xem sản phẩm</p>
-                        <a th:href="@{/admin/products}" class="btn btn-primary">Quản lý</a>
+                        <a class="btn btn-success" th:href="@{/admin/products}">Quản lý</a>
                     </div>
                 </div>
             </div>
@@ -90,5 +304,46 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- JavaScript cho biểu đồ (với dữ liệu động từ backend) -->
+<script>
+    // Biểu đồ cột: Số lượng đơn hàng theo tháng
+    const ordersData = /*[[${ordersByMonth}]]*/ [12, 19, 3, 5, 2, 3];  // Dữ liệu từ backend (mảng số)
+    const ordersCtx = document.getElementById('ordersChart').getContext('2d');
+    new Chart(ordersCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6'],
+            datasets: [{
+                label: 'Số đơn hàng',
+                data: ordersData,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Biểu đồ tròn: Phân loại sản phẩm bán chạy
+    const productsData = /*[[${productsByCategory}]]*/ [300, 50, 100, 80];  // Dữ liệu từ backend (mảng số)
+    const productsCtx = document.getElementById('productsChart').getContext('2d');
+    new Chart(productsCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Điện tử', 'Quần áo', 'Gia dụng', 'Khác'],
+            datasets: [{
+                data: productsData,
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
+            }]
+        }
+    });
+</script>
 </body>
 </html>

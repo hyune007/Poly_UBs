@@ -1,125 +1,42 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Quản lý khách hàng</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Customer Management</title>
 </head>
-<body class="bg-light">
+<body>
+<h2>Customer Management</h2>
 
-<div class="container my-5">
+<form method="post" th:action="@{/customer/save}" th:object="${customer}">
+    <input th:field="*{id}" type="hidden">
+    <label>Name:</label>
+    <input placeholder="Customer name" required th:field="*{name}" type="text">
+    <label>Email:</label>
+    <input placeholder="Email" required th:field="*{email}" type="email">
+    <button type="submit">Save</button>
+</form>
 
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold fs-3 text-dark">👥 Quản lý khách hàng</h2>
-        <a href="/admin/dashboard" class="btn btn-primary shadow">quay về</a>
-    </div>
-
-    <!-- Thanh tìm kiếm -->
-    <form class="d-flex mb-4" method="get" action="/admin/customer">
-        <input type="text" name="keyword" th:value="${keyword}" class="form-control me-2" placeholder="Tìm theo tên hoặc email...">
-        <button type="submit" class="btn btn-secondary">Tìm kiếm</button>
-    </form>
-
-    <!-- Tổng số khách hàng -->
-    <div class="mb-3">
-        <strong>Tổng số khách hàng:</strong> <span th:text="${totalItems}" class="text-primary"></span>
-    </div>
-
-    <!-- Form thêm/sửa -->
-    <div th:if="${customer != null}" class="card shadow-sm mb-4">
-        <div class="card-header bg-dark text-white">📝 Thêm / Cập nhật khách hàng</div>
-        <div class="card-body">
-            <form th:action="@{/admin/customer/save}" method="post" th:object="${customer}">
-                <div class="mb-3">
-                    <label class="form-label">Mã khách hàng</label>
-                    <input type="text" th:field="*{id}" class="form-control" placeholder="VD: KH001" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Họ và tên</label>
-                    <input type="text" th:field="*{name}" class="form-control" placeholder="Nhập họ tên khách hàng" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email" th:field="*{email}" class="form-control" placeholder="example@gmail.com" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Số điện thoại</label>
-                    <input type="text" th:field="*{phone}" class="form-control" placeholder="Số điện thoại khách hàng" required>
-                </div>
-
-                <!-- 👇 Thêm phần này -->
-                <div class="mb-3">
-                    <label class="form-label">Mật khẩu</label>
-                    <input type="password" th:field="*{password}" class="form-control" placeholder="Nhập mật khẩu" required>
-                </div>
-                <!-- 👆 -->
-
-                <div class="text-end">
-                    <button type="submit" class="btn btn-success px-4">💾 Lưu</button>
-                    <a href="/admin/customer" class="btn btn-secondary">Hủy</a>
-                </div>
-            </form>
-
-        </div>
-    </div>
-
-    <!-- Bảng khách hàng -->
-    <div class="table-responsive shadow rounded">
-        <table class="table table-hover align-middle mb-0 bg-white">
-            <thead class="bg-dark text-white">
-            <tr>
-                <th>Mã KH</th>
-                <th>Tên khách hàng</th>
-                <th>Email</th>
-                <th>Số điện thoại</th>
-                <th>password</th>
-                <th class="text-center">Hành động</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="c : ${customers}">
-                <td th:text="${c.id}"></td>
-                <td th:text="${c.name}" class="fw-semibold"></td>
-                <td th:text="${c.email}"></td>
-                <td th:text="${c.phone}"></td>
-                <td th:text="${c.password}"></td>
-                <td class="text-center">
-                    <a th:href="@{'/admin/customer/edit/' + ${c.id}}" class="btn btn-sm btn-warning me-1">✏️</a>
-                    <a th:href="@{'/admin/customer/delete/' + ${c.id}}" class="btn btn-sm btn-danger"
-                       onclick="return confirm('Bạn có chắc muốn xóa khách hàng này?')">🗑️</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Phân trang -->
-    <nav th:if="${totalPages > 1}" class="mt-4">
-        <ul class="pagination justify-content-center">
-
-            <!-- Trang đầu -->
-            <li th:classappend="${currentPage == 0} ? 'disabled'" class="page-item">
-                <a class="page-link" th:href="@{/admin/customer(page=0, keyword=${keyword})}">&laquo;</a>
-            </li>
-
-            <!-- Các trang -->
-            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-                th:classappend="${i == currentPage} ? 'active'" class="page-item">
-                <a class="page-link" th:href="@{/admin/customer(page=${i}, keyword=${keyword})}" th:text="${i+1}"></a>
-            </li>
-
-            <!-- Trang cuối -->
-            <li th:classappend="${currentPage == totalPages - 1} ? 'disabled'" class="page-item">
-                <a class="page-link" th:href="@{/admin/customer(page=${totalPages - 1}, keyword=${keyword})}">&raquo;</a>
-            </li>
-        </ul>
-    </nav>
-
-</div>
-
+<hr>
+<table border="1" cellpadding="5">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="c : ${customers}">
+        <td th:text="${c.id}">1</td>
+        <td th:text="${c.name}">Customer Name</td>
+        <td th:text="${c.email}">Email</td>
+        <td>
+            <a th:href="@{|/customer/edit/${c.id}|}">Edit</a> |
+            <a onclick="return confirm('Are you sure?')"
+               th:href="@{|/customer/delete/${c.id}|}">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>

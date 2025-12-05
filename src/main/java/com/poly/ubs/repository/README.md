@@ -4,15 +4,20 @@
 
 ### 1. Vai trò của Repository
 
-Repository đóng vai trò như một lớp truy xuất dữ liệu, cung cấp một giao diện sạch sẽ và dễ hiểu để làm việc với các thực thể trong cơ sở dữ liệu. Trong kiến trúc Spring, repository nằm giữa tầng service và cơ sở dữ liệu.
+Repository đóng vai trò như một lớp truy xuất dữ liệu, cung cấp một giao diện sạch sẽ và dễ hiểu để làm việc với các
+thực thể trong cơ sở dữ liệu. Trong kiến trúc Spring, repository nằm giữa tầng service và cơ sở dữ liệu.
 
 ### 2. Lợi ích chính
 
 #### a. Trừu tượng hóa truy xuất dữ liệu
-Thay vì phải viết các câu lệnh SQL phức tạp hoặc làm việc trực tiếp với JDBC, repository cung cấp một API đơn giản để thực hiện các thao tác CRUD (Create, Read, Update, Delete).
+
+Thay vì phải viết các câu lệnh SQL phức tạp hoặc làm việc trực tiếp với JDBC, repository cung cấp một API đơn giản để
+thực hiện các thao tác CRUD (Create, Read, Update, Delete).
 
 #### b. Tự động tạo truy vấn
+
 Spring Data JPA tự động tạo các truy vấn dựa trên tên phương thức trong interface repository. Ví dụ:
+
 ```java
 public interface ProductRepository extends JpaRepository<Product, String> {
     List<Product> findByName(String name);
@@ -21,7 +26,9 @@ public interface ProductRepository extends JpaRepository<Product, String> {
 ```
 
 #### c. Các phương thức CRUD được tích hợp sẵn
+
 Khi kế thừa từ JpaRepository, repository tự động có các phương thức:
+
 - save()
 - findById()
 - findAll()
@@ -30,15 +37,19 @@ Khi kế thừa từ JpaRepository, repository tự động có các phương th
 - exists()
 
 #### d. Quản lý giao dịch
+
 Repository xử lý việc quản lý giao dịch tự động, đảm bảo tính nhất quán của dữ liệu.
 
 #### e. Kết nối hiệu quả với cơ sở dữ liệu
+
 Quản lý pool kết nối cơ sở dữ liệu một cách hiệu quả.
 
 ### 3. Cách hoạt động trong dự án của bạn
 
 #### Trong lớp Service
+
 Lớp service sử dụng repository thông qua phương thức getRepository():
+
 ```java
 @Override
 protected ProductRepository getRepository() {
@@ -47,7 +58,9 @@ protected ProductRepository getRepository() {
 ```
 
 #### Trong GenericServiceImpl
+
 Lớp dịch vụ chung sử dụng repository để thực hiện các thao tác:
+
 ```java
 @Override
 public T save(T entity) {
@@ -60,6 +73,7 @@ public T save(T entity) {
 Giả sử chúng ta cần xây dựng chức năng quản lý sản phẩm trong hệ thống bán hàng. Chúng ta sẽ có các thành phần sau:
 
 #### a. Entity - Thực thể Product
+
 ```java
 @Entity
 @Table(name = "products")
@@ -109,6 +123,7 @@ public class Product {
 ```
 
 #### b. Repository - ProductRepository
+
 ```java
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
@@ -127,6 +142,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 ```
 
 #### c. Service - ProductServiceImpl
+
 ```java
 @Service
 public class ProductServiceImpl extends GenericServiceImpl<Product, Integer, ProductRepository> 
@@ -156,6 +172,7 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Integer, Pro
 ```
 
 #### d. Sử dụng trong Controller
+
 ```java
 @RestController
 @RequestMapping("/api/products")
@@ -216,6 +233,7 @@ public class ProductController {
 ```
 
 #### e. Ví dụ sử dụng trong ứng dụng thực tế
+
 ```java
 // Trong một service khác hoặc controller
 @Service
@@ -243,14 +261,20 @@ public class OrderService {
 ```
 
 Với cấu trúc này:
-1. [Product](file:///D:/hyu/FPT/FALL_2025/SOF3022_LapTrinhJava5/Poly_UBs/src/main/java/com/poly/ubs/entity/Product.java) là entity đại diện cho bảng sản phẩm trong cơ sở dữ liệu
-2. [ProductRepository](file:///D:/hyu/FPT/FALL_2025/SOF3022_LapTrinhJava5/Poly_UBs/src/main/java/com/poly/ubs/repository/ProductRepository.java) là interface kế thừa JpaRepository, cung cấp các phương thức CRUD và tùy chỉnh
-3. [ProductServiceImpl](file:///D:/hyu/FPT/FALL_2025/SOF3022_LapTrinhJava5/Poly_UBs/src/main/java/com/poly/ubs/service/ProductServiceImpl.java) là lớp service thực hiện logic nghiệp vụ
-4. [ProductController](file:///D:/hyu/FPT/FALL_2025/SOF3022_LapTrinhJava5/Poly_UBs/src/main/java/com/poly/ubs/DemoProductController.java) là lớp controller xử lý các yêu cầu HTTP
+
+1. [Product](file:///D:/hyu/FPT/FALL_2025/SOF3022_LapTrinhJava5/Poly_UBs/src/main/java/com/poly/ubs/entity/Product.java)
+   là entity đại diện cho bảng sản phẩm trong cơ sở dữ liệu
+2. [ProductRepository](file:///D:/hyu/FPT/FALL_2025/SOF3022_LapTrinhJava5/Poly_UBs/src/main/java/com/poly/ubs/repository/ProductRepository.java)
+   là interface kế thừa JpaRepository, cung cấp các phương thức CRUD và tùy chỉnh
+3. [ProductServiceImpl](file:///D:/hyu/FPT/FALL_2025/SOF3022_LapTrinhJava5/Poly_UBs/src/main/java/com/poly/ubs/service/ProductServiceImpl.java)
+   là lớp service thực hiện logic nghiệp vụ
+4. [ProductController](file:///D:/hyu/FPT/FALL_2025/SOF3022_LapTrinhJava5/Poly_UBs/src/main/java/com/poly/ubs/DemoProductController.java)
+   là lớp controller xử lý các yêu cầu HTTP
 
 ### 5. Kết luận
 
 Repository là thành phần thiết yếu trong kiến trúc Spring Data JPA vì nó:
+
 - Tách biệt logic nghiệp vụ khỏi logic truy xuất dữ liệu
 - Giảm thiểu mã nguồn cần viết
 - Tăng tính bảo trì và kiểm thử của ứng dụng

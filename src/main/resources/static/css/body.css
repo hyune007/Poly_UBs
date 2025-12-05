@@ -23,6 +23,7 @@ h2 {
     font-weight: 700;
     letter-spacing: 0.5px;
 }
+
 .category-header {
     width: fit-content; /* Tự co theo độ dài tên */
     min-width: 300px; /* nhưng vẫn có độ rộng tối thiểu */
@@ -179,7 +180,6 @@ h2 {
     .product-card img {
         height: 160px;
     }
-
 
 
 }

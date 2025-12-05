@@ -29,7 +29,7 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, String, Prod
      * @return Page chứa danh sách sản phẩm
      */
     public Page<Product> findByCategoryId(String categoryId, Pageable pageable) {
-        return productRepository.findByCategoryId (categoryId, pageable);
+        return productRepository.findByCategoryId(categoryId, pageable);
     }
 
     /**
@@ -39,7 +39,7 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, String, Prod
      * @return Page chứa danh sách sản phẩm
      */
     public Page<Product> findAll(Pageable pageable) {
-        return productRepository.findAll (pageable);
+        return productRepository.findAll(pageable);
     }
 
     /**
@@ -50,7 +50,7 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, String, Prod
      * @return Page chứa danh sách sản phẩm
      */
     public Page<Product> findByCategoryName(String categoryName, Pageable pageable) {
-        return productRepository.findByCategoryName (categoryName, pageable);
+        return productRepository.findByCategoryName(categoryName, pageable);
     }
 
     /**
@@ -60,8 +60,9 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, String, Prod
      * @return số lượng sản phẩm
      */
     public long countByCategoryName(String categoryName) {
-        return productRepository.countByCategory_Name (categoryName);
+        return productRepository.countByCategory_Name(categoryName);
     }
+
     public Page<Product> findByCategoryAndName(String categoryId, String keyword, Pageable pageable) {
         return productRepository.findByCategory_IdAndNameContainingIgnoreCase(categoryId, keyword, pageable);
     }
@@ -82,5 +83,5 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, String, Prod
             return productRepository.findByPriceBetween(min, max, pageable);
         }
 
-}
+    }
 }
