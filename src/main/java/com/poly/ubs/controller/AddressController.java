@@ -6,6 +6,7 @@ import com.poly.ubs.service.AddressServiceImpl;
 import com.poly.ubs.service.CustomerServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -80,10 +81,16 @@ public class AddressController {
             return ResponseEntity.status(401).body("Chưa đăng nhập");
         }
         Customer customer = (Customer) loggedInUser;
-        addressService.deleteByIdAndCustomer(id, customer);
-        customer.getAddresses().removeIf(a -> a.getId().equals(id));
-        // reload list từ session object:
-        session.setAttribute("loggedInUser", customer);
-        return ResponseEntity.ok("Xóa địa chỉ thành công");
+        try {
+            addressService.deleteByIdAndCustomer(id, customer);
+            customer.getAddresses().removeIf(a -> a.getId().equals(id));
+            // reload list từ session object:
+            session.setAttribute("loggedInUser", customer);
+            return ResponseEntity.ok("Xóa địa chỉ thành công");
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity
+                    .status(409)    // Conflict
+                    .body("Địa chỉ này đã được sử dụng trong hóa đơn. Không thể xóa!");
+        }
     }
 }
