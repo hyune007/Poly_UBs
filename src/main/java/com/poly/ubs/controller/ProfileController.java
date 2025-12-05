@@ -52,13 +52,15 @@ public class ProfileController {
         }
 
         Customer customer = (Customer) loggedInUser;
-        customer.setName(name);
-        customer.setPhone(phone);
-        customer.setEmail(email);
+        Customer cm = customerService.findById(customer.getId());
 
-        customerService.save(customer);
+        cm.setName(name);
+        cm.setPhone(phone);
+        cm.setEmail(email);
 
-        session.setAttribute("loggedInUser", customer);
+        customerService.save(cm);
+
+        session.setAttribute("loggedInUser", cm);
 
         redirectAttributes.addFlashAttribute("success", "Cập nhật thông tin thành công!");
         return "redirect:/profile";

@@ -72,4 +72,18 @@ public class AddressController {
         session.setAttribute("loggedInUser", customer);
         return ResponseEntity.ok("Đặt địa chỉ mặc định thành công");
     }
+
+    @DeleteMapping("/addresses/{id}")
+    public ResponseEntity<?> removeAddress(@PathVariable("id") String id, HttpSession session) {
+        Object loggedInUser = session.getAttribute("loggedInUser");
+        if (loggedInUser == null || !(loggedInUser instanceof Customer)) {
+            return ResponseEntity.status(401).body("Chưa đăng nhập");
+        }
+        Customer customer = (Customer) loggedInUser;
+        addressService.deleteByIdAndCustomer(id, customer);
+        customer.getAddresses().removeIf(a -> a.getId().equals(id));
+        // reload list từ session object:
+        session.setAttribute("loggedInUser", customer);
+        return ResponseEntity.ok("Xóa địa chỉ thành công");
+    }
 }

@@ -58,6 +58,7 @@
                     </select>
                     <div id="noAddressHint" th:if="${#lists.isEmpty(customer.addresses)}" class="text-muted small">Chưa có địa chỉ nào, hãy thêm bên dưới.</div>
                     <button type="button" id="addAddressToggleBtn" class="btn btn-outline-primary btn-sm mt-2" disabled>+ Thêm địa chỉ</button>
+                    <button type="button" id="removeAddressBtn" class="btn btn-outline-danger btn-sm mt-2" disabled>- Xóa địa chỉ</button>
                 </div>
                 <!-- Collapse thêm địa chỉ -->
                 <div id="addAddressCollapse" class="card p-3 mb-3 d-none">
@@ -194,6 +195,7 @@
         // Địa chỉ
         const addressSelect = document.getElementById('addressSelect');
         const addAddressToggleBtn = document.getElementById('addAddressToggleBtn');
+        const removeAddressBtn = document.getElementById('removeAddressBtn');
         const addAddressCollapse = document.getElementById('addAddressCollapse');
         const saveAddressBtn = document.getElementById('saveAddressBtn');
         const provinceSelect = document.getElementById('provinceSelect');
@@ -210,6 +212,7 @@
             cancelBtn.classList.remove('hidden');
             if (addressSelect) addressSelect.removeAttribute('disabled');
             if (addAddressToggleBtn) addAddressToggleBtn.removeAttribute('disabled');
+            if (removeAddressBtn) removeAddressBtn.removeAttribute('disabled');
         });
 
         cancelBtn.addEventListener('click', function () {
@@ -220,6 +223,7 @@
             editBtn.classList.remove('hidden');
             if (addressSelect) addressSelect.setAttribute('disabled', true);
             if (addAddressToggleBtn) addAddressToggleBtn.setAttribute('disabled', true);
+            if (removeAddressBtn) removeAddressBtn.setAttribute('disabled', true);
         });
 
         // Toggle form thêm địa chỉ
@@ -285,6 +289,16 @@
                 addressMessage.classList.replace('text-success', 'text-danger');
                 addressMessage.textContent = 'Lỗi: ' + e.message;
             }
+        });
+
+        removeAddressBtn?.addEventListener('click', async () => {
+            const addressId = document.getElementById("addressSelect").value;
+            fetch(`/addresses/${addressId}`, { method: "DELETE" })
+                .then(res => res.text())
+                .then(msg => {
+                    alert(msg);
+                    location.reload();
+                });
         });
 
         cancelAddAddressBtn?.addEventListener('click', () => {
