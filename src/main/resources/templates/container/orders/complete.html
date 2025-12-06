@@ -15,13 +15,45 @@
 
         <div class="order-info mt-4" style="max-width: 600px; margin: 0 auto; text-align: left;"
              th:if="${bill != null}">
+            
+            <div th:if="${qrUrl != null}" class="card p-4 mb-3 text-center">
+                <h4>Quét mã để thanh toán</h4>
+                <p>Nội dung chuyển khoản: <strong class="text-danger" th:text="${bill.id}"></strong></p>
+                <div class="d-flex justify-content-center">
+                    <img th:src="${qrUrl}" alt="Mã QR Thanh Toán" class="img-fluid" style="max-width: 300px;">
+                </div>
+                <p class="text-muted mt-2">Vui lòng giữ nguyên nội dung chuyển khoản khi quét mã.</p>
+                <p class="text-muted small">Hệ thống sẽ tự động cập nhật trạng thái sau vài phút.</p>
+                
+                <script th:inline="javascript">
+                    /*<![CDATA[*/
+                    const billId = /*[[${bill.id}]]*/ 'HD000000';
+                    
+                    setInterval(() => {
+                        fetch(`/api/payment/check-status/${billId}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status === 'Đã thanh toán') {
+                                    // Reload page to show success status
+                                    window.location.reload();
+                                }
+                            })
+                            .catch(err => console.error('Error checking status:', err));
+                    }, 3000); // Check every 3 seconds
+                    /*]]>*/
+                </script>
+            </div>
+
             <div class="card p-4">
                 <h5 class="mb-3">Thông tin đơn hàng</h5>
                 <p><strong>Mã đơn hàng:</strong> <span th:text="${bill.id}">HD123456</span></p>
                 <p><strong>Ngày đặt:</strong> <span
                         th:text="${#dates.format(bill.date, 'dd/MM/yyyy')}">01/01/2025</span></p>
-                <p><strong>Trạng thái:</strong> <span class="badge bg-warning"
-                                                      th:text="${bill.status}">Chờ xác nhận</span></p>
+                <p><strong>Trạng thái:</strong> 
+                    <span class="badge" 
+                          th:classappend="${bill.status == 'Chưa thanh toán'} ? 'bg-danger' : (${bill.status == 'Đã thanh toán'} ? 'bg-success' : 'bg-warning')"
+                          th:text="${bill.status}">Chờ xác nhận</span>
+                </p>
                 <p><strong>Khách hàng:</strong> <span th:text="${bill.customer.name}">Tên khách hàng</span></p>
                 <p><strong>Số điện thoại:</strong> <span th:text="${bill.customer.phone}">0123456789</span></p>
                 <p><strong>Địa chỉ giao hàng:</strong>

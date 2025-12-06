@@ -45,10 +45,11 @@ public class BillServiceImpl extends GenericServiceImpl<Bill, String, BillReposi
      * @param customer khách hàng
      * @param employee nhân viên xử lý (có thể null nếu đặt hàng online)
      * @param address  địa chỉ giao hàng
+     * @param paymentMethod phương thức thanh toán
      * @return hóa đơn đã tạo
      */
     @Transactional
-    public Bill createBillFromCart(Customer customer, Employee employee, Address address) {
+    public Bill createBillFromCart(Customer customer, Employee employee, Address address, String paymentMethod) {
         // Lấy giỏ hàng của khách hàng
         List<ShoppingCart> cartItems = shoppingCartService.findByCustomerId(customer.getId());
 
@@ -60,7 +61,17 @@ public class BillServiceImpl extends GenericServiceImpl<Bill, String, BillReposi
         Bill bill = new Bill();
         bill.setId(generateBillId());
         bill.setDate(new Date());
-        bill.setStatus("Chờ xác nhận");
+        
+        // Set phương thức thanh toán
+        bill.setPaymentMethod(paymentMethod);
+
+        // Set trạng thái dựa trên phương thức thanh toán
+        if ("Chuyển khoản ngân hàng".equals(paymentMethod)) {
+            bill.setStatus("Chưa thanh toán");
+        } else {
+            bill.setStatus("Chờ xác nhận");
+        }
+
         bill.setCustomer(customer);
         bill.setEmployee(employee);
         bill.setAddress(address);

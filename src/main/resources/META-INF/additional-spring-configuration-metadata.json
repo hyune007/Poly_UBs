@@ -1,0 +1,19 @@
+{
+  "properties": [
+    {
+      "name": "sepay.bank.account",
+      "type": "java.lang.String",
+      "description": "Description for sepay.bank.account."
+    },
+    {
+      "name": "sepay.bank.code",
+      "type": "java.lang.String",
+      "description": "Description for sepay.bank.code."
+    },
+    {
+      "name": "sepay.template",
+      "type": "java.lang.String",
+      "description": "Description for sepay.template."
+    }
+  ]
+}

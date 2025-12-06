@@ -350,3 +350,5 @@ VALUES ('KH001', 'Nguyễn Văn A', 'password123', '0912345678', 'nguyenvana@ema
 -- NhanVien (1 employee)
 INSERT INTO NhanVien (nv_id, nv_name, nv_password, nv_phone, nv_mail, nv_address, nv_role, nv_birth)
 VALUES ('NV001', 'Admin', 'adminpass', '0123456789', 'admin@polyubs.com', '123 FPT Polytechnic', 0, '1990-01-01');
+
+UPDATE SanPham SET sp_price = 1000;

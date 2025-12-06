@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS password_reset_tokens
     expiry_date DATETIME     NOT NULL,
     FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id) ON DELETE CASCADE
 );
-
+ALTER TABLE hoadon ADD COLUMN payment_method VARCHAR(255);
 -- Index để tăng tốc độ tìm kiếm theo token
 CREATE INDEX idx_token ON password_reset_tokens (token);
 CREATE INDEX idx_expiry_date ON password_reset_tokens (expiry_date);
