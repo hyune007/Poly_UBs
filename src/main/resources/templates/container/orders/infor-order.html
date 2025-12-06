@@ -11,15 +11,14 @@
         <h5 class="mb-3">Thông tin khách mua hàng</h5>
 
         <form method="post" th:action="@{/order/submit-info}" th:object="${orderInfo}">
+            <input type="hidden" id="selectedAddressId" name="addressId" />
 
             <div class="row g-3">
                 <div class="col-md-6">
-                    <input class="form-control" placeholder="Nhập họ tên" required th:field="*{fullName}"
-                           th:value="${customer.name}" type="text">
+                    <input class="form-control" name="fullName" readonly required th:value="${orderInfo.fullName != null ? orderInfo.fullName : customer.name}" type="text"/>
                 </div>
                 <div class="col-md-6">
-                    <input class="form-control" placeholder="Nhập số điện thoại" required th:field="*{phone}"
-                           th:value="${customer.phone}" type="text">
+                    <input class="form-control" name="phone" readonly required th:value="${orderInfo.phone != null ? orderInfo.phone : customer.phone}" type="tel"/>
                 </div>
             </div>
 
@@ -31,53 +30,90 @@
                 <label class="form-check-label">Giao hàng tận nơi</label>
             </div>
 
-            <div class="row g-2 mb-3">
-                <div class="col-md-4">
-                    <select class="form-select" required th:field="*{city}">
-                        <option value="">Tỉnh / Thành phố</option>
-                        <option value="ha-noi">TP Hà Nội</option>
-                        <option value="hue">TP Huế</option>
-                        <option value="quang-ninh">Quảng Ninh</option>
-                        <option value="cao-bang">Cao Bằng</option>
-                        <option value="lang-son">Lạng Sơn</option>
-                        <option value="lai-chau">Lai Châu</option>
-                        <option value="dien-bien">Điện Biên</option>
-                        <option value="son-la">Sơn La</option>
-                        <option value="thanh-hoa">Thanh Hóa</option>
-                        <option value="nghe-an">Nghệ An</option>
-                        <option value="ha-tinh">Hà Tĩnh</option>
-                        <option value="tuyen-quang">Tuyên Quang</option>
-                        <option value="lao-cai">Lào Cai</option>
-                        <option value="thai-nguyen">Thái Nguyên</option>
-                        <option value="phu-tho">Phú Thọ</option>
-                        <option value="bac-ninh">Bắc Ninh</option>
-                        <option value="hung-yen">Hưng Yên</option>
-                        <option value="hai-phong">TP Hải Phòng</option>
-                        <option value="ninh-binh">Ninh Bình</option>
-                        <option value="quang-tri">Quảng Trị</option>
-                        <option value="da-nang">TP Đà Nẵng</option>
-                        <option value="quang-ngai">Quảng Ngãi</option>
-                        <option value="gia-lai">Gia Lai</option>
-                        <option value="khanh-hoa">Khánh Hòa</option>
-                        <option value="lam-dong">Lâm Đồng</option>
-                        <option value="dak-lak">Đắk Lắk</option>
-                        <option value="tphcm">TP Hồ Chí Minh</option>
-                        <option value="dong-nai">Đồng Nai</option>
-                        <option value="tay-ninh"></option>
-                        <option value="can-tho">TP Cần Thơ</option>
-                        <option value="vinh-long">Vĩnh Long</option>
-                        <option value="dong-thap">Đồng Tháp</option>
-                        <option value="ca-mau">Cà Mau</option>
-                        <option value="an-giang">An Giang</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <input class="form-control" placeholder="Quận / Huyện / Phường / Xã" required th:field="*{ward}"
-                           type="text">
-                </div>
-                <div class="col-md-4">
-                    <input class="form-control" placeholder="Số nhà, tên đường" required th:field="*{detailAddress}"
-                           type="text">
+            <!-- Địa chỉ mặc định -->
+            <div class="form-group">
+                <label>Địa chỉ mặc định</label>
+                <select id="addressSelect"
+                        th:if="${customer.addresses}" class="form-select form-select-sm">
+                    <option th:each="addr : ${customer.addresses}"
+                            th:value="${addr.id}"
+                            th:text="${addr.fullAddress}"
+                            th:selected="${addr.isDefault}">
+                    </option>
+                </select>
+                <div id="noAddressHint" th:if="${#lists.isEmpty(customer.addresses)}" class="text-muted small">Chưa có địa chỉ nào, hãy thêm bên dưới.</div>
+                <button type="button" id="addAddressToggleBtn" class="btn btn-outline-primary btn-sm mt-2" >+ Thêm địa chỉ</button>
+            </div>
+            <!-- Modal thêm địa chỉ -->
+            <div class="modal fade" id="addAddressModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Thêm địa chỉ</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row g-2">
+                                <div class="col-md-6">
+                                    <label class="form-label">Tỉnh / Thành phố</label>
+                                    <select class="form-select form-select-sm" id="provinceSelect">
+                                        <option value="">Tỉnh / Thành phố</option>
+                                        <option value="ha-noi">TP Hà Nội</option>
+                                        <option value="hue">TP Huế</option>
+                                        <option value="quang-ninh">Quảng Ninh</option>
+                                        <option value="cao-bang">Cao Bằng</option>
+                                        <option value="lang-son">Lạng Sơn</option>
+                                        <option value="lai-chau">Lai Châu</option>
+                                        <option value="dien-bien">Điện Biên</option>
+                                        <option value="son-la">Sơn La</option>
+                                        <option value="thanh-hoa">Thanh Hóa</option>
+                                        <option value="nghe-an">Nghệ An</option>
+                                        <option value="ha-tinh">Hà Tĩnh</option>
+                                        <option value="tuyen-quang">Tuyên Quang</option>
+                                        <option value="lao-cai">Lào Cai</option>
+                                        <option value="thai-nguyen">Thái Nguyên</option>
+                                        <option value="phu-tho">Phú Thọ</option>
+                                        <option value="bac-ninh">Bắc Ninh</option>
+                                        <option value="hung-yen">Hưng Yên</option>
+                                        <option value="hai-phong">TP Hải Phòng</option>
+                                        <option value="ninh-binh">Ninh Bình</option>
+                                        <option value="quang-tri">Quảng Trị</option>
+                                        <option value="da-nang">TP Đà Nẵng</option>
+                                        <option value="quang-ngai">Quảng Ngãi</option>
+                                        <option value="gia-lai">Gia Lai</option>
+                                        <option value="khanh-hoa">Khánh Hòa</option>
+                                        <option value="lam-dong">Lâm Đồng</option>
+                                        <option value="dak-lak">Đắk Lắk</option>
+                                        <option value="tphcm">TP Hồ Chí Minh</option>
+                                        <option value="dong-nai">Đồng Nai</option>
+                                        <option value="tay-ninh"></option>
+                                        <option value="can-tho">TP Cần Thơ</option>
+                                        <option value="vinh-long">Vĩnh Long</option>
+                                        <option value="dong-thap">Đồng Tháp</option>
+                                        <option value="ca-mau">Cà Mau</option>
+                                        <option value="an-giang">An Giang</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Quận/Huyện/Phường</label>
+                                    <input type="text" class="form-control form-control-sm" id="districtInput" placeholder="Ví dụ: Cầu Giấy">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Số nhà</label>
+                                    <input type="text" class="form-control form-control-sm" id="houseNumberInput" placeholder="Ví dụ: 123">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Tên đường</label>
+                                    <input type="text" class="form-control form-control-sm" id="streetInput" placeholder="Ví dụ: Trần Duy Hưng">
+                                </div>
+                            </div>
+                            <div id="addressMessage" class="small mt-2 text-success d-none">Lưu thành công!</div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="cancelAddAddressBtn" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            <button type="button" id="saveAddressBtn" class="btn btn-primary">Lưu địa chỉ</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -110,6 +146,113 @@
             <p class="note mt-2 text-center">Bạn có thể chọn hình thức thanh toán sau khi đặt hàng</p>
         </form>
     </div>
+    <script>
+        // Script modal thêm địa chỉ
+        document.addEventListener('DOMContentLoaded', function () {
+            const addressSelect = document.getElementById('addressSelect');
+            const addAddressToggleBtn = document.getElementById('addAddressToggleBtn');
+            const addAddressModalEl = document.getElementById('addAddressModal');
+            const addAddressModal = (addAddressModalEl && window.bootstrap && window.bootstrap.Modal)
+                ? new window.bootstrap.Modal(addAddressModalEl)
+                : null;
+            const saveAddressBtn = document.getElementById('saveAddressBtn');
+            const provinceSelect = document.getElementById('provinceSelect');
+            const cancelAddAddressBtn = document.getElementById('cancelAddAddressBtn');
+            const addressMessage = document.getElementById('addressMessage');
+            const hiddenAddress = document.getElementById('selectedAddressId');
+
+            const districtInput = document.getElementById('districtInput');
+            const houseNumberInput = document.getElementById('houseNumberInput');
+            const streetInput = document.getElementById('streetInput');
+
+            function setAddAddressInputsEnabled(enabled) {
+                if (provinceSelect) provinceSelect.disabled = !enabled;
+                if (districtInput) districtInput.disabled = !enabled;
+                if (houseNumberInput) houseNumberInput.disabled = !enabled;
+                if (streetInput) streetInput.disabled = !enabled;
+            }
+
+            // Init: sync hidden address id
+            if (addressSelect && hiddenAddress) hiddenAddress.value = addressSelect.value;
+
+            addAddressToggleBtn?.addEventListener('click', () => {
+                addressMessage.classList.add('d-none');
+                setAddAddressInputsEnabled(true);
+                if (addAddressModal) {
+                    addAddressModal.show();
+                } else if (addAddressModalEl) {
+                    addAddressModalEl.classList.add('show');
+                    addAddressModalEl.style.display = 'block';
+                }
+            });
+
+            // Lưu địa chỉ mới
+            saveAddressBtn?.addEventListener('click', async () => {
+                const province = provinceSelect ? (provinceSelect.options[provinceSelect.selectedIndex]?.text || '').trim() : '';
+                const district = districtInput ? districtInput.value.trim() : '';
+                const houseNumber = houseNumberInput ? houseNumberInput.value.trim() : '';
+                const street = streetInput ? streetInput.value.trim() : '';
+                if (!province || !district || !houseNumber || !street) {
+                    addressMessage.classList.remove('d-none');
+                    addressMessage.classList.replace('text-success', 'text-danger');
+                    addressMessage.textContent = 'Vui lòng điền đầy đủ.';
+                    return;
+                }
+                const detailAddress = houseNumber + ' ' + street;
+                try {
+                    const resp = await fetch('/addresses', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ city: province, ward: district, detailAddress })
+                    });
+                    if (!resp.ok) throw new Error(await resp.text());
+                    const data = await resp.json();
+                    if (addressSelect) {
+                        const opt = document.createElement('option');
+                        opt.value = data.id;
+                        opt.textContent = data.fullAddress;
+                        addressSelect.appendChild(opt);
+                        addressSelect.value = data.id;
+                        if (hiddenAddress) hiddenAddress.value = data.id;
+                    }
+                    addressMessage.classList.remove('d-none');
+                    addressMessage.classList.replace('text-danger', 'text-success');
+                    addressMessage.textContent = 'Lưu thành công!';
+                    if (addAddressModal) {
+                        addAddressModal.hide();
+                    } else if (addAddressModalEl) {
+                        addAddressModalEl.classList.remove('show');
+                        addAddressModalEl.style.display = 'none';
+                    }
+                    setAddAddressInputsEnabled(false);
+                    if (provinceSelect) provinceSelect.selectedIndex = 0;
+                    [districtInput, houseNumberInput, streetInput].forEach(el => { if (el) el.value = ''; });
+                } catch (e) {
+                    addressMessage.classList.remove('d-none');
+                    addressMessage.classList.replace('text-success', 'text-danger');
+                    addressMessage.textContent = 'Lỗi: ' + e.message;
+                }
+            });
+
+            cancelAddAddressBtn?.addEventListener('click', () => {
+                setAddAddressInputsEnabled(false);
+            });
+
+            // Update default & hidden on change
+            addressSelect?.addEventListener('change', async (e) => {
+                const id = e.target.value;
+                if (hiddenAddress) hiddenAddress.value = id;
+                try {
+                    const resp = await fetch(`/addresses/${id}/default`, { method: 'PUT' });
+                    if (!resp.ok) throw new Error(await resp.text());
+                } catch (err) {
+                    console.error('Đổi địa chỉ mặc định lỗi:', err);
+                }
+            });
+        });
+    </script>
+    <!-- Bootstrap JS for modal -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </article>
 </body>
 </html>

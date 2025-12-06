@@ -21,6 +21,7 @@
                             <div class="col-md-6">
                                 <label class="form-label">Họ và tên</label>
                                 <input class="form-control" readonly th:value="${orderInfo.fullName}" type="text">
+
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Số điện thoại</label>
@@ -66,12 +67,6 @@
                             Chuyển khoản ngân hàng
                         </label>
                     </div>
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" id="momo" name="paymentMethod" type="radio">
-                        <label class="form-check-label" for="momo">
-                            Thanh toán qua MoMo / ZaloPay
-                        </label>
-                    </div>
                 </div>
             </div>
 
@@ -98,8 +93,17 @@
                     </div>
 
                     <form method="post" th:action="@{/order/confirm-payment}">
+                        <input type="hidden" name="paymentMethod" id="hiddenPaymentMethod" value="cod">
                         <button class="btn btn-success btn-lg w-100" type="submit">Xác nhận thanh toán</button>
                     </form>
+
+                    <script>
+                        document.querySelectorAll('input[name="paymentMethod"]').forEach((elem) => {
+                            elem.addEventListener("change", function (event) {
+                                document.getElementById('hiddenPaymentMethod').value = event.target.id;
+                            });
+                        });
+                    </script>
                 </div>
             </div>
         </div>

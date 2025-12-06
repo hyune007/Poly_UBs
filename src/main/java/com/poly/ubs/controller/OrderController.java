@@ -8,12 +8,14 @@ import com.poly.ubs.entity.ShoppingCart;
 import com.poly.ubs.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -23,6 +25,15 @@ import java.util.List;
  */
 @Controller
 public class OrderController {
+
+    @Value("${sepay.bank.account}")
+    private String sepayAccount;
+
+    @Value("${sepay.bank.code}")
+    private String sepayBankCode;
+
+    @Value("${sepay.template}")
+    private String sepayTemplate;
 
     @Autowired
     private ShoppingCartService shoppingCartService;
@@ -114,7 +125,10 @@ public class OrderController {
      * @return redirect sang trang thanh toán
      */
     @PostMapping("/order/submit-info")
-    public String submitOrderInfo(@ModelAttribute OrderInfoDTO orderInfo, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String submitOrderInfo(@ModelAttribute OrderInfoDTO orderInfo,
+                                  HttpSession session,
+                                  RedirectAttributes redirectAttributes,
+                                  HttpServletRequest request) {
         // Lấy thông tin khách hàng từ session
         Object loggedInUser = session.getAttribute("loggedInUser");
         if (loggedInUser == null || !(loggedInUser instanceof Customer)) {
@@ -122,6 +136,25 @@ public class OrderController {
         }
 
         Customer customer = (Customer) loggedInUser;
+
+        // Lấy địa chỉ được chọn từ form (hidden input name="addressId") và điền vào orderInfo
+        String addressIdParam = request.getParameter("addressId");
+        if (addressIdParam != null && !addressIdParam.isBlank()) {
+            Address selected = addressService.findById(addressIdParam);
+            if (selected != null) {
+                orderInfo.setCity(selected.getCity());
+                orderInfo.setWard(selected.getWard());
+                orderInfo.setDetailAddress(selected.getDetailAddress());
+            }
+        }
+
+        // Nếu thiếu tên/điện thoại thì lấy từ khách hàng đăng nhập
+        if (orderInfo.getFullName() == null || orderInfo.getFullName().isEmpty()) {
+            orderInfo.setFullName(customer.getName());
+        }
+        if (orderInfo.getPhone() == null || orderInfo.getPhone().isEmpty()) {
+            orderInfo.setPhone(customer.getPhone());
+        }
 
         // Tính tổng tiền
         int subtotal = shoppingCartService.calculateTotal(customer.getId());
@@ -179,7 +212,7 @@ public class OrderController {
      * @return redirect sang trang hoàn thành
      */
     @PostMapping("/order/confirm-payment")
-    public String confirmPayment(HttpSession session, RedirectAttributes redirectAttributes) {
+    public String confirmPayment(@RequestParam("paymentMethod") String paymentMethod, HttpSession session, RedirectAttributes redirectAttributes) {
         try {
             // Lấy thông tin từ session
             Object loggedInUser = session.getAttribute("loggedInUser");
@@ -203,11 +236,23 @@ public class OrderController {
                     orderInfo.getDetailAddress()
             );
 
-            // Tạo hóa đơn từ giỏ hàng (employee có thể null nếu đặt online)
-            Bill bill = billService.createBillFromCart(customer, null, address);
+            // Chuẩn hóa phương thức thanh toán để lưu vào DB
+            String paymentMethodString;
+            if ("bank".equals(paymentMethod)) {
+                paymentMethodString = "Chuyển khoản ngân hàng";
+            } else if ("cod".equals(paymentMethod)) {
+                paymentMethodString = "Thanh toán khi nhận hàng";
+            } else {
+                paymentMethodString = "Khác";
+            }
 
-            // Lưu ID hóa đơn vào session để hiển thị trang complete
+            // Tạo hóa đơn từ giỏ hàng (employee có thể null nếu đặt online)
+            Bill bill = billService.createBillFromCart(customer, null, address, paymentMethodString);
+
+            // Lưu ID hóa đơn và thông tin thanh toán vào session để hiển thị trang complete
             session.setAttribute("completedBillId", bill.getId());
+            session.setAttribute("completedTotalAmount", orderInfo.getTotalAmount());
+            session.setAttribute("completedPaymentMethod", paymentMethod);
 
             // Xóa orderInfo khỏi session
             session.removeAttribute("orderInfo");
@@ -235,12 +280,30 @@ public class OrderController {
 
         // Lấy ID hóa đơn từ session
         String billId = (String) session.getAttribute("completedBillId");
+        Integer totalAmount = (Integer) session.getAttribute("completedTotalAmount");
+        String paymentMethod = (String) session.getAttribute("completedPaymentMethod");
+
         if (billId != null) {
             Bill bill = billService.findById(billId);
             model.addAttribute("bill", bill);
 
-            // Xóa billId khỏi session sau khi đã sử dụng
+            // Nếu thanh toán chuyển khoản ngân hàng, tạo mã QR SePay
+            if ("bank".equals(paymentMethod) && totalAmount != null) {
+                // Format: https://qr.sepay.vn/img?acc={acc}&bank={bank}&amount={amount}&des={des}&template={template}
+                String qrUrl = String.format("https://qr.sepay.vn/img?acc=%s&bank=%s&amount=%d&des=%s&template=%s",
+                        sepayAccount,
+                        sepayBankCode,
+                        totalAmount,
+                        bill.getId(),
+                        sepayTemplate != null ? sepayTemplate : "compact"
+                );
+                model.addAttribute("qrUrl", qrUrl);
+            }
+
+            // Xóa thông tin khỏi session sau khi đã sử dụng
             session.removeAttribute("completedBillId");
+            session.removeAttribute("completedTotalAmount");
+            session.removeAttribute("completedPaymentMethod");
         }
 
         return "container/orders/complete";

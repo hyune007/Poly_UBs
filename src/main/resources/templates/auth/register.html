@@ -13,7 +13,7 @@
 <div class="circuit-background"></div>
 
 <!-- ⬅️ Nút quay lại -->
-<a class="back-btn" href="/login">
+<a class="back-btn" href="/auth/login">
     ← <span>Quay lại đăng nhập</span>
 </a>
 <!-- ☁️ Sinh nhiều mây -->
@@ -58,7 +58,7 @@
 
     <div class="divider">hoặc</div>
 
-    <form action="/register-post" method="post">
+    <form action="/auth/register-post" method="post">
         <input name="name" placeholder="Họ và tên" required type="text">
         <input name="email" placeholder="Email" required type="email">
         <input name="phone" placeholder="Số điện thoại" required type="text">
@@ -79,7 +79,7 @@
 
 
     <div class="options">
-        <p>Đã có tài khoản? <a href="/login">Đăng nhập ngay</a></p>
+        <p>Đã có tài khoản? <a href="/auth/login">Đăng nhập ngay</a></p>
     </div>
 </div>
 
@@ -135,7 +135,7 @@
             const idToken = await user.getIdToken();
 
             // Gửi token đến backend để xác thực và tạo session
-            const response = await fetch('/api/auth/firebase-login', {
+            const response = await fetch('/auth/api/auth/firebase-login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

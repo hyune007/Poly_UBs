@@ -117,7 +117,7 @@
                     alert(data.message);
                     // Nếu chưa đăng nhập, chuyển đến trang login
                     if (data.message.includes('đăng nhập')) {
-                        window.location.href = '/login';
+                        window.location.href = '/auth/login';
                     }
                 }
             })

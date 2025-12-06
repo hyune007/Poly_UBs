@@ -21,7 +21,8 @@ public class ProfileController {
 
     @Autowired
     private CustomerServiceImpl customerService;
-
+    @Autowired
+    private BillServiceImpl billService;
     @GetMapping("/profile")
     public String profile(HttpSession session, Model model) {
         Object loggedInUser = session.getAttribute("loggedInUser");
@@ -102,8 +103,6 @@ public class ProfileController {
         redirectAttributes.addFlashAttribute("success", "Cập nhật mật khẩu thành công!");
         return "redirect:/profile";
     }
-    @Autowired
-    private BillServiceImpl billService;
 
     @GetMapping("/orders")
     public String userOrders(HttpSession session, Model model) {

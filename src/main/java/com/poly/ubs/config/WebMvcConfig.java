@@ -22,8 +22,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         // Thêm interceptor để kiểm tra quyền truy cập vào các URL /admin/**
         registry.addInterceptor(adminAuthInterceptor)
-                .addPathPatterns("/admin/**")
-                .excludePathPatterns("/admin/login"); // Loại trừ trang login của admin nếu có
+                .addPathPatterns("/admin/**");
     }
 }
 

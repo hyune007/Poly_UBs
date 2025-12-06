@@ -18,7 +18,7 @@
 
             <div class="card shadow-sm mb-4">
                 <div class="card-body">
-                    <form method="post" th:action="@{/customer/save}" th:object="${customer}" class="row g-3">
+                    <form method="post" th:action="@{/admin/customer/save}" th:object="${customer}" class="row g-3">
                         <input th:field="*{id}" type="hidden">
 
                         <div class="col-md-6">
@@ -55,8 +55,8 @@
                             <td th:text="${c.name}"></td>
                             <td th:text="${c.email}"></td>
                             <td>
-                                <a th:href="@{|/customer/edit/${c.id}|}" class="btn btn-sm btn-warning">Edit</a>
-                                <a th:href="@{|/customer/delete/${c.id}|}"
+                                <a th:href="@{|/admin/customer/edit/${c.id}|}" class="btn btn-sm btn-warning">Edit</a>
+                                <a th:href="@{|/admin/customer/delete/${c.id}|}"
                                    onclick="return confirm('Are you sure?')"
                                    class="btn btn-sm btn-danger">Delete</a>
                             </td>

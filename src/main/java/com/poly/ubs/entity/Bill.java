@@ -61,6 +61,12 @@ public class Bill {
     @JoinColumn(name = "dc_id")
     private Address address;
 
+    /**
+     * Phương thức thanh toán
+     */
+    @Column(name = "payment_method")
+    private String paymentMethod;
+
 
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DetailBill> billDetails;

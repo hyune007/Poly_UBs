@@ -22,7 +22,7 @@ public class AdminAuthInterceptor implements HandlerInterceptor {
         // Kiểm tra xem người dùng đã đăng nhập chưa
         if (session == null || session.getAttribute("loggedInUser") == null) {
             // Chưa đăng nhập, chuyển hướng đến trang login
-            response.sendRedirect(request.getContextPath() + "/login?redirect=" + request.getRequestURI());
+            response.sendRedirect(request.getContextPath() + "/auth/login?redirect=" + request.getRequestURI());
             return false;
         }
 
@@ -42,7 +42,7 @@ public class AdminAuthInterceptor implements HandlerInterceptor {
         // Kiểm tra xem người dùng có role ROLE_ADMIN không
         if (userRole == null || !userRole.equals("ROLE_ADMIN")) {
             // Không có quyền truy cập, chuyển hướng đến trang lỗi hoặc trang chủ
-            response.sendRedirect(request.getContextPath() + "/access-denied");
+            response.sendRedirect(request.getContextPath() + "/auth/access-denied");
             return false;
         }
 
