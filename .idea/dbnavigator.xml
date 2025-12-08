@@ -22,6 +22,9 @@
   <component name="DBNavigator.Project.DatasetFilterManager">
     <filter-actions connection-id="d805aabb-5dcf-4f61-aeb4-01f6f328a7f8" dataset="poly_ubs.diachi" active-filter-id="" />
   </component>
+  <component name="DBNavigator.Project.ExecutionManager">
+    <retain-sticky-names value="false" />
+  </component>
   <component name="DBNavigator.Project.ObjectQuickFilterManager">
     <last-used-operator value="EQUAL" />
     <filters />

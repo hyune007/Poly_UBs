@@ -13,12 +13,12 @@ public class MailSender {
     /**
      * Tên đăng nhập email
      */
-    private static final String USERNAME = "huysclone001@gmail.com";
+    private static final String USERNAME = "thinhlktc00224@fpt.edu.vn";
 
     /**
      * Mật khẩu ứng dụng email
      */
-    private static final String PASSWORD = "zygp gdwv zpyw yuyk";
+    private static final String PASSWORD = "sehs htoe auok qfyu";
 
     /**
      * Gửi email với nội dung HTML

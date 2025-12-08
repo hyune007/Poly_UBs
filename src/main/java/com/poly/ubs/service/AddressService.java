@@ -49,5 +49,6 @@ public class AddressService extends GenericServiceImpl<Address, String, AddressR
     private String generateAddressId() {
         return "DC" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
     }
+
 }
 

@@ -6,6 +6,7 @@ import com.poly.ubs.service.AddressServiceImpl;
 import com.poly.ubs.service.CustomerServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,5 +72,25 @@ public class AddressController {
         // reload list từ session object:
         session.setAttribute("loggedInUser", customer);
         return ResponseEntity.ok("Đặt địa chỉ mặc định thành công");
+    }
+
+    @DeleteMapping("/addresses/{id}")
+    public ResponseEntity<?> removeAddress(@PathVariable("id") String id, HttpSession session) {
+        Object loggedInUser = session.getAttribute("loggedInUser");
+        if (loggedInUser == null || !(loggedInUser instanceof Customer)) {
+            return ResponseEntity.status(401).body("Chưa đăng nhập");
+        }
+        Customer customer = (Customer) loggedInUser;
+        try {
+            addressService.deleteByIdAndCustomer(id, customer);
+            customer.getAddresses().removeIf(a -> a.getId().equals(id));
+            // reload list từ session object:
+            session.setAttribute("loggedInUser", customer);
+            return ResponseEntity.ok("Xóa địa chỉ thành công");
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity
+                    .status(409)    // Conflict
+                    .body("Địa chỉ này đã được sử dụng trong hóa đơn. Không thể xóa!");
+        }
     }
 }

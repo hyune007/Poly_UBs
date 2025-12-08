@@ -236,5 +236,8 @@ public class ViewController {
 
         return "/container/home";
     }
-
+    @GetMapping("/order")
+    public String order(){
+        return "/container/user/infor-order";
+    }
 }

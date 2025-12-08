@@ -69,4 +69,8 @@ public class AddressServiceImpl extends GenericServiceImpl<Address, String, Addr
     private String generateAddressId() {
         return "DC" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
     }
+
+    public void deleteByIdAndCustomer(String id, Customer customer) {
+        addressRepository.deleteByIdAndCustomer(id, customer);
+    }
 }
