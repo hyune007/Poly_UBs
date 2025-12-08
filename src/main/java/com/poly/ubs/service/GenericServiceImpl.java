@@ -5,11 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 /**
- * Lớp trừu tượng dịch vụ chung cài đặt các thao tác CRUD cơ bản
+ * Lớp trừu tượng cung cấp triển khai mặc định cho các thao tác CRUD cơ bản.
  *
- * @param <T>  Loại thực thể
- * @param <ID> Loại khóa chính
- * @param <R>  Loại repository
+ * @param <T>  Kiểu thực thể.
+ * @param <ID> Kiểu dữ liệu của khóa chính.
+ * @param <R>  Kiểu Repository tương ứng.
  */
 public abstract class GenericServiceImpl<T, ID, R extends JpaRepository<T, ID>> implements IGenericService<T, ID> {
 

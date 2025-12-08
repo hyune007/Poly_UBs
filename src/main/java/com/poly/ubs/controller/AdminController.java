@@ -7,12 +7,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * Bộ điều khiển quản trị
+ * Quản lý các chức năng quản trị viên.
  */
 @RequestMapping("/admin")
 @Controller
 public class AdminController {
 
+    /**
+     * Hiển thị trang tổng quan quản trị.
+     *
+     * @param model Đối tượng Model để truyền dữ liệu sang view.
+     * @param session Phiên làm việc hiện tại.
+     * @return Tên view của trang dashboard.
+     */
     @GetMapping("/dashboard")
     public String adminDashboard(Model model, HttpSession session) {
         Object user = session.getAttribute("loggedInUser");

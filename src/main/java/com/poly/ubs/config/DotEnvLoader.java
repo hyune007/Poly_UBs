@@ -10,46 +10,41 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * DotEnvLoader - Class tải biến môi trường từ file .env
+ * Cấu hình tải biến môi trường từ tập tin .env.
  *
- * Class này implement EnvironmentPostProcessor để can thiệp vào quá trình khởi tạo
- * Spring Boot và load các biến môi trường từ file .env trước khi application.properties
+ * Lớp này triển khai EnvironmentPostProcessor để can thiệp vào quá trình khởi tạo
+ * Spring Boot, nạp các biến môi trường từ tập tin .env trước khi application.properties
  * được xử lý.
  *
  * Mục đích:
- * - Cho phép lưu trữ các thông tin nhạy cảm (API keys, database passwords, etc.)
- *   trong file .env thay vì hard-code trong application.properties
- * - File .env có thể được thêm vào .gitignore để tránh commit lên repository
- * - Hỗ trợ quản lý cấu hình khác nhau cho từng môi trường (dev, staging, prod)
+ * - Lưu trữ thông tin nhạy cảm (API keys, mật khẩu cơ sở dữ liệu) bên ngoài mã nguồn.
+ * - Hỗ trợ loại bỏ tập tin .env khỏi hệ thống quản lý phiên bản (git).
+ * - Quản lý cấu hình linh hoạt cho các môi trường khác nhau.
  */
 public class DotEnvLoader implements EnvironmentPostProcessor {
 
     /**
-     * Phương thức được Spring Boot gọi tự động trong quá trình khởi động ứng dụng,
-     * trước khi ApplicationContext được tạo.
+     * Phương thức được gọi trong quá trình khởi động ứng dụng Spring Boot,
+     * trước khi ApplicationContext được khởi tạo.
      *
-     * @param environment - Môi trường cấu hình của Spring Boot, chứa tất cả các property sources
-     * @param application - Instance của SpringApplication đang được khởi động
+     * @param environment Môi trường cấu hình hiện tại của Spring Boot.
+     * @param application Ứng dụng Spring đang được khởi chạy.
      */
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-        // Bước 1: Cấu hình và load file .env
+        // Cấu hình và tải nội dung từ tập tin .env tại thư mục gốc
         Dotenv dotenv = Dotenv.configure()
-                .directory("./")           // Tìm file .env trong thư mục gốc của project
-                .ignoreIfMissing()         // Không throw exception nếu file .env không tồn tại
-                .load();                   // Thực hiện load các biến môi trường
+                .directory("./")
+                .ignoreIfMissing()
+                .load();
 
-        // Bước 2: Chuyển đổi các entry từ Dotenv sang Map<String, Object>
-        // Map này sẽ được sử dụng để tạo PropertySource cho Spring
+        // Chuyển đổi dữ liệu từ Dotenv sang cấu trúc Map
         Map<String, Object> dotenvMap = new HashMap<>();
         dotenv.entries().forEach(e -> {
-            // Duyệt qua từng cặp key-value trong file .env và thêm vào Map
             dotenvMap.put(e.getKey(), e.getValue());
         });
 
-        // Bước 3: Thêm các biến môi trường từ .env vào Spring Environment
-        // addFirst() đảm bảo rằng các giá trị từ .env có độ ưu tiên cao nhất
-        // Nếu có cùng một key trong application.properties, giá trị từ .env sẽ được sử dụng
+        // Tích hợp biến môi trường từ .env vào Spring Environment với độ ưu tiên cao nhất
         environment.getPropertySources()
                 .addFirst(new MapPropertySource("dotenvProperties", dotenvMap));
     }

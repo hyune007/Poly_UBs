@@ -7,16 +7,16 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Repository cho thực thể DetailBill
+ * Giao diện Repository quản lý các thao tác cơ sở dữ liệu đối với thực thể DetailBill (Chi tiết hóa đơn).
  */
 @Repository
 public interface DetailBillRepository extends JpaRepository<DetailBill, String> {
 
     /**
-     * Tìm tất cả chi tiết hóa đơn theo ID hóa đơn
+     * Lấy danh sách chi tiết hóa đơn dựa trên mã hóa đơn.
      *
-     * @param billId ID hóa đơn
-     * @return danh sách chi tiết hóa đơn
+     * @param billId Mã hóa đơn.
+     * @return Danh sách các chi tiết thuộc hóa đơn chỉ định.
      */
     List<DetailBill> findByBillId(String billId);
 }

@@ -15,32 +15,59 @@
 
         <div class="order-info mt-4" style="max-width: 600px; margin: 0 auto; text-align: left;"
              th:if="${bill != null}">
-            
+
             <div th:if="${qrUrl != null}" class="card p-4 mb-3 text-center">
                 <h4>Quét mã để thanh toán</h4>
+                <div class="alert alert-warning" id="countdown-alert">
+                    Đơn hàng sẽ bị hủy nếu không thanh toán sau: <strong id="countdown-timer">10:00</strong>
+                </div>
                 <p>Nội dung chuyển khoản: <strong class="text-danger" th:text="${bill.id}"></strong></p>
                 <div class="d-flex justify-content-center">
                     <img th:src="${qrUrl}" alt="Mã QR Thanh Toán" class="img-fluid" style="max-width: 300px;">
                 </div>
                 <p class="text-muted mt-2">Vui lòng giữ nguyên nội dung chuyển khoản khi quét mã.</p>
                 <p class="text-muted small">Hệ thống sẽ tự động cập nhật trạng thái sau vài phút.</p>
-                
+
                 <script th:inline="javascript">
-                    /*<![CDATA[*/
                     const billId = /*[[${bill.id}]]*/ 'HD000000';
-                    
+                    const expiryTimeMillis = /*[[${expiryTimeMillis}]]*/ 0;
+
+                    if (expiryTimeMillis > 0) {
+                        const countdownEl = document.getElementById('countdown-timer');
+                        const countdownAlert = document.getElementById('countdown-alert');
+
+                        const timerInterval = setInterval(() => {
+                            const now = new Date().getTime();
+                            const distance = expiryTimeMillis - now;
+
+                            if (distance < 0) {
+                                clearInterval(timerInterval);
+                                countdownEl.innerHTML = "ĐÃ HẾT HẠN";
+                                countdownAlert.classList.remove('alert-warning');
+                                countdownAlert.classList.add('alert-danger');
+                                alert("Đơn hàng đã hết hạn thanh toán và sẽ bị hủy.");
+                                window.location.href = "/home";
+                                return;
+                            }
+
+                            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                            countdownEl.innerHTML = minutes + "m " + seconds + "s ";
+                        }, 1000);
+                    }
+
                     setInterval(() => {
                         fetch(`/api/payment/check-status/${billId}`)
                             .then(response => response.json())
                             .then(data => {
                                 if (data.status === 'Đã thanh toán') {
-                                    // Reload page to show success status
+
                                     window.location.reload();
                                 }
                             })
                             .catch(err => console.error('Error checking status:', err));
-                    }, 3000); // Check every 3 seconds
-                    /*]]>*/
+                    }, 3000);
                 </script>
             </div>
 
@@ -49,8 +76,8 @@
                 <p><strong>Mã đơn hàng:</strong> <span th:text="${bill.id}">HD123456</span></p>
                 <p><strong>Ngày đặt:</strong> <span
                         th:text="${#dates.format(bill.date, 'dd/MM/yyyy')}">01/01/2025</span></p>
-                <p><strong>Trạng thái:</strong> 
-                    <span class="badge" 
+                <p><strong>Trạng thái:</strong>
+                    <span class="badge"
                           th:classappend="${bill.status == 'Chưa thanh toán'} ? 'bg-danger' : (${bill.status == 'Đã thanh toán'} ? 'bg-success' : 'bg-warning')"
                           th:text="${bill.status}">Chờ xác nhận</span>
                 </p>

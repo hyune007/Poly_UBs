@@ -8,7 +8,10 @@
 <div th:replace="container/orders/order-process :: *"></div>
 <article>
     <div class="form-container">
-        <h5 class="mb-3">Thông tin khách mua hàng</h5>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">Thông tin khách mua hàng</h5>
+            <button type="button" class="btn btn-sm btn-outline-primary" id="editCustomerInfoBtn">Chỉnh sửa thông tin</button>
+        </div>
 
         <form method="post" th:action="@{/order/submit-info}" th:object="${orderInfo}">
             <input type="hidden" id="selectedAddressId" name="addressId" />
@@ -23,12 +26,6 @@
             </div>
 
             <hr class="my-4">
-
-            <h6>Chọn cách nhận hàng</h6>
-            <div class="form-check mb-2">
-                <input checked class="form-check-input" th:field="*{deliveryType}" type="radio" value="home">
-                <label class="form-check-label">Giao hàng tận nơi</label>
-            </div>
 
             <!-- Địa chỉ mặc định -->
             <div class="form-group">
@@ -127,7 +124,7 @@
             <h6>Dịch vụ giao hàng</h6>
             <div class="form-check">
                 <input checked class="form-check-input" th:field="*{shippingMethod}" type="radio" value="standard">
-                <label class="form-check-label">Giao hàng tiêu chuẩn - 40.000₫</label>
+                <label class="form-check-label">Giao hàng tiêu chuẩn - 0₫</label>
             </div>
             <div class="form-check mb-3">
                 <input class="form-check-input" th:field="*{shippingMethod}" type="radio" value="pickup">
@@ -137,9 +134,9 @@
             <div class="mb-3">
                 <strong>Tạm tính:</strong> <span
                     th:text="${#numbers.formatDecimal(total,0,'COMMA',0,'POINT')} + '₫'">0₫</span> <br>
-                <strong>Phí vận chuyển:</strong> 40.000₫ <br>
+                <strong>Phí vận chuyển:</strong> 0₫ <br>
                 <strong>Tổng tiền:</strong> <span style="color: red; font-size: 18px;"
-                                                  th:text="${#numbers.formatDecimal(total + 40000,0,'COMMA',0,'POINT')} + '₫'">0₫</span>
+                                                  th:text="${#numbers.formatDecimal(total,0,'COMMA',0,'POINT')} + '₫'">0₫</span>
             </div>
 
             <button class="btn btn-primary btn-lg w-100" type="submit">Đặt hàng ngay</button>
@@ -164,6 +161,31 @@
             const districtInput = document.getElementById('districtInput');
             const houseNumberInput = document.getElementById('houseNumberInput');
             const streetInput = document.getElementById('streetInput');
+
+            // Logic chỉnh sửa thông tin khách hàng
+            const editBtn = document.getElementById('editCustomerInfoBtn');
+            const nameInput = document.querySelector('input[name="fullName"]');
+            const phoneInput = document.querySelector('input[name="phone"]');
+
+            if(editBtn && nameInput && phoneInput) {
+                editBtn.addEventListener('click', function() {
+                    const isReadonly = nameInput.hasAttribute('readonly');
+                    if (isReadonly) {
+                        nameInput.removeAttribute('readonly');
+                        phoneInput.removeAttribute('readonly');
+                        nameInput.focus();
+                        editBtn.textContent = 'Xong';
+                        editBtn.classList.remove('btn-outline-primary');
+                        editBtn.classList.add('btn-primary');
+                    } else {
+                        nameInput.setAttribute('readonly', 'true');
+                        phoneInput.setAttribute('readonly', 'true');
+                        editBtn.textContent = 'Chỉnh sửa thông tin';
+                        editBtn.classList.add('btn-outline-primary');
+                        editBtn.classList.remove('btn-primary');
+                    }
+                });
+            }
 
             function setAddAddressInputsEnabled(enabled) {
                 if (provinceSelect) provinceSelect.disabled = !enabled;

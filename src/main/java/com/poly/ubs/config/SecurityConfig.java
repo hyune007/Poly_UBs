@@ -10,7 +10,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
- * Cấu hình bảo mật cho ứng dụng với Firebase Authentication
+ * Cấu hình bảo mật cho ứng dụng sử dụng Spring Security.
  */
 @Configuration
 @EnableWebSecurity

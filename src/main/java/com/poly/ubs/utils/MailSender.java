@@ -1,33 +1,58 @@
 package com.poly.ubs.utils;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.Properties;
 
 /**
- * Lớp tiện ích để gửi email
+ * Tiện ích hỗ trợ gửi email thông qua giao thức SMTP.
  */
+@Component("appMailSender")
 public class MailSender {
-    /**
-     * Tên đăng nhập email
-     */
-    private static final String USERNAME = "huysclone001@gmail.com";
+
+    @Value("${spring.mail.username}")
+    private String emailUsername;
+
+    @Value("${spring.mail.password}")
+    private String emailPassword;
 
     /**
-     * Mật khẩu ứng dụng email
+     * Tên đăng nhập email (được gán từ config)
      */
-    private static final String PASSWORD = "zygp gdwv zpyw yuyk";
+    private static String USERNAME;
 
     /**
-     * Gửi email với nội dung HTML
+     * Mật khẩu ứng dụng email (được gán từ config)
+     */
+    private static String PASSWORD;
+
+    /**
+     * Khởi tạo giá trị static từ bean instance sau khi Spring inject xong
+     */
+    @PostConstruct
+    public void init() {
+        USERNAME = this.emailUsername;
+        PASSWORD = this.emailPassword;
+    }
+
+    /**
+     * Gửi email với nội dung định dạng HTML.
      *
-     * @param to      địa chỉ email người nhận
-     * @param subject tiêu đề email
-     * @param body    nội dung email (hỗ trợ HTML)
+     * @param to      Địa chỉ email người nhận.
+     * @param subject Tiêu đề của email.
+     * @param body    Nội dung email (hỗ trợ mã HTML).
      */
     public static void send(String to, String subject, String body) {
+        if (USERNAME == null || PASSWORD == null) {
+            System.err.println("Mail configuration is missing. Cannot send email to " + to);
+            return;
+        }
+
         Properties props = new Properties();
         props.setProperty("mail.smtp.auth", "true");
         props.setProperty("mail.smtp.starttls.enable", "true");

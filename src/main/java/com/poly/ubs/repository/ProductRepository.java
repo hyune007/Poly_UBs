@@ -7,46 +7,73 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
- * Repository cho thực thể Product
+ * Giao diện Repository quản lý các thao tác cơ sở dữ liệu đối với thực thể Product (Sản phẩm).
  */
 @Repository
 public interface ProductRepository extends JpaRepository<Product, String> {
     /**
-     * Tìm sản phẩm theo ID danh mục với phân trang
+     * Tìm danh sách sản phẩm theo mã danh mục có hỗ trợ phân trang.
      *
-     * @param categoryId ID danh mục
-     * @param pageable   thông tin phân trang
-     * @return Page chứa danh sách sản phẩm
+     * @param categoryId Mã danh mục sản phẩm.
+     * @param pageable   Đối tượng phân trang.
+     * @return Trang kết quả chứa danh sách sản phẩm.
      */
     Page<Product> findByCategoryId(String categoryId, Pageable pageable);
 
     /**
-     * Tìm sản phẩm theo tên danh mục với phân trang
+     * Tìm danh sách sản phẩm theo tên danh mục có hỗ trợ phân trang.
      *
-     * @param categoryName tên danh mục
-     * @param pageable     thông tin phân trang
-     * @return Page chứa danh sách sản phẩm
+     * @param categoryName Tên danh mục sản phẩm.
+     * @param pageable     Đối tượng phân trang.
+     * @return Trang kết quả chứa danh sách sản phẩm.
      */
     Page<Product> findByCategoryName(String categoryName, Pageable pageable);
 
     /**
-     * Đếm số lượng sản phẩm theo tên danh mục
+     * Đếm tổng số lượng sản phẩm thuộc một danh mục cụ thể.
      *
-     * @param categoryName tên danh mục
-     * @return số lượng sản phẩm
+     * @param categoryName Tên danh mục sản phẩm.
+     * @return Số lượng sản phẩm.
      */
     long countByCategory_Name(String categoryName);
 
-    //    Page<Product> findByCategory(String categoryName, Pageable pageable);
-//    Page<Product> findAll(Pageable pageable);
-//    long countByCategory(String categoryName);
-// Tìm theo tên sản phẩm
+    /**
+     * Tìm kiếm sản phẩm theo tên (không phân biệt hoa thường) có hỗ trợ phân trang.
+     *
+     * @param name     Tên sản phẩm cần tìm.
+     * @param pageable Đối tượng phân trang.
+     * @return Trang kết quả chứa danh sách sản phẩm.
+     */
     Page<Product> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
-    // Tìm theo category + tên sản phẩm
+    /**
+     * Tìm kiếm sản phẩm thuộc một danh mục cụ thể theo tên (không phân biệt hoa thường) có hỗ trợ phân trang.
+     *
+     * @param categoryId Mã danh mục sản phẩm.
+     * @param name       Tên sản phẩm cần tìm.
+     * @param pageable   Đối tượng phân trang.
+     * @return Trang kết quả chứa danh sách sản phẩm.
+     */
     Page<Product> findByCategory_IdAndNameContainingIgnoreCase(String categoryId, String name, Pageable pageable);
 
+    /**
+     * Tìm kiếm sản phẩm trong khoảng giá xác định có hỗ trợ phân trang.
+     *
+     * @param min      Giá tối thiểu.
+     * @param max      Giá tối đa.
+     * @param pageable Đối tượng phân trang.
+     * @return Trang kết quả chứa danh sách sản phẩm.
+     */
     Page<Product> findByPriceBetween(double min, double max, Pageable pageable);
 
+    /**
+     * Tìm kiếm sản phẩm theo thương hiệu trong khoảng giá xác định có hỗ trợ phân trang.
+     *
+     * @param min      Giá tối thiểu.
+     * @param max      Giá tối đa.
+     * @param brandId  Mã thương hiệu.
+     * @param pageable Đối tượng phân trang.
+     * @return Trang kết quả chứa danh sách sản phẩm.
+     */
     Page<Product> findByPriceBetweenAndBrandId(double min, double max, String brandId, Pageable pageable);
 }

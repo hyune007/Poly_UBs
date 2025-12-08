@@ -9,7 +9,8 @@ import lombok.Setter;
 import java.util.Date;
 
 /**
- * Thực thể khuyến mãi
+ * Lớp thực thể đại diện cho chương trình khuyến mãi.
+ * Ánh xạ tới bảng "khuyenmai" trong cơ sở dữ liệu.
  */
 @Setter
 @Getter
@@ -19,39 +20,39 @@ import java.util.Date;
 @Table(name = "khuyenmai")
 public class Promotion {
     /**
-     * ID của khuyến mãi
+     * Mã định danh duy nhất của chương trình khuyến mãi.
      */
     @Id
     @Column(name = "km_id")
     private String id;
 
     /**
-     * Tên khuyến mãi
+     * Tên chương trình khuyến mãi.
      */
     @Column(name = "km_name")
     private String name;
 
     /**
-     * Mô tả khuyến mãi
+     * Mô tả chi tiết chương trình.
      */
     @Column(name = "km_description")
     private String description;
 
     /**
-     * Phần trăm giảm giá
+     * Tỷ lệ giảm giá (phần trăm).
      */
     @Column(name = "km_percent")
     private Integer percent;
 
     /**
-     * Ngày bắt đầu khuyến mãi
+     * Ngày bắt đầu áp dụng khuyến mãi.
      */
     @Column(name = "km_start_date")
     @Temporal(TemporalType.DATE)
     private Date startDate;
 
     /**
-     * Ngày kết thúc khuyến mãi
+     * Ngày kết thúc chương trình khuyến mãi.
      */
     @Column(name = "km_end_date")
     @Temporal(TemporalType.DATE)

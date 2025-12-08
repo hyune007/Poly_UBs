@@ -9,26 +9,26 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Repository cho thực thể ShoppingCart
+ * Giao diện Repository quản lý các thao tác cơ sở dữ liệu đối với thực thể ShoppingCart (Giỏ hàng).
  */
 @Repository
 public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, String> {
 
     /**
-     * Tìm tất cả sản phẩm trong giỏ hàng của khách hàng
+     * Tìm tất cả các mục sản phẩm trong giỏ hàng của một khách hàng cụ thể.
      *
-     * @param customerId ID khách hàng
-     * @return danh sách giỏ hàng
+     * @param customerId Mã khách hàng.
+     * @return Danh sách các mục sản phẩm trong giỏ hàng.
      */
     @Query("SELECT sc FROM ShoppingCart sc WHERE sc.customer.id = :customerId")
     List<ShoppingCart> findByCustomerId(@Param("customerId") String customerId);
 
     /**
-     * Tìm sản phẩm cụ thể trong giỏ hàng của khách hàng
+     * Tìm một mục sản phẩm cụ thể trong giỏ hàng của khách hàng.
      *
-     * @param customerId ID khách hàng
-     * @param productId  ID sản phẩm
-     * @return giỏ hàng nếu tìm thấy, null nếu không
+     * @param customerId Mã khách hàng.
+     * @param productId  Mã sản phẩm.
+     * @return Đối tượng ShoppingCart nếu tìm thấy, ngược lại trả về null.
      */
     @Query("SELECT sc FROM ShoppingCart sc WHERE sc.customer.id = :customerId AND sc.product.id = :productId")
     ShoppingCart findByCustomerIdAndProductId(@Param("customerId") String customerId, @Param("productId") String productId);

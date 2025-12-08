@@ -14,7 +14,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
- * Service xử lý nghiệp vụ hóa đơn
+ * Dịch vụ xử lý nghiệp vụ liên quan đến hóa đơn.
  */
 @Service
 public class BillServiceImpl extends GenericServiceImpl<Bill, String, BillRepository> {
@@ -40,13 +40,14 @@ public class BillServiceImpl extends GenericServiceImpl<Bill, String, BillReposi
     }
 
     /**
-     * Tạo hóa đơn từ giỏ hàng
+     * Tạo hóa đơn mới từ giỏ hàng hiện tại của khách hàng.
      *
-     * @param customer khách hàng
-     * @param employee nhân viên xử lý (có thể null nếu đặt hàng online)
-     * @param address  địa chỉ giao hàng
-     * @param paymentMethod phương thức thanh toán
-     * @return hóa đơn đã tạo
+     * @param customer      Khách hàng thực hiện đơn hàng.
+     * @param employee      Nhân viên xử lý (nếu có).
+     * @param address       Địa chỉ giao hàng.
+     * @param paymentMethod Phương thức thanh toán.
+     * @return Đối tượng Bill đã được tạo và lưu trữ.
+     * @throws RuntimeException Nếu giỏ hàng trống.
      */
     @Transactional
     public Bill createBillFromCart(Customer customer, Employee employee, Address address, String paymentMethod) {
@@ -104,10 +105,10 @@ public class BillServiceImpl extends GenericServiceImpl<Bill, String, BillReposi
     }
 
     /**
-     * Tính tổng tiền của hóa đơn
+     * Tính tổng giá trị tiền của một hóa đơn.
      *
-     * @param billId ID hóa đơn
-     * @return tổng tiền
+     * @param billId ID của hóa đơn.
+     * @return Tổng tiền của các chi tiết hóa đơn.
      */
     public int calculateBillTotal(String billId) {
         List<DetailBill> details = detailBillRepository.findByBillId(billId);
@@ -117,10 +118,11 @@ public class BillServiceImpl extends GenericServiceImpl<Bill, String, BillReposi
     }
 
     /**
-     * Cập nhật trạng thái hóa đơn
+     * Cập nhật trạng thái của hóa đơn.
      *
-     * @param billId ID hóa đơn
-     * @param status trạng thái mới
+     * @param billId ID của hóa đơn.
+     * @param status Trạng thái mới.
+     * @throws RuntimeException Nếu không tìm thấy hóa đơn.
      */
     public void updateStatus(String billId, String status) {
         Bill bill = billRepository.findById(billId)
@@ -130,18 +132,18 @@ public class BillServiceImpl extends GenericServiceImpl<Bill, String, BillReposi
     }
 
     /**
-     * Tạo ID ngẫu nhiên cho hóa đơn
+     * Sinh mã định danh ngẫu nhiên cho hóa đơn.
      *
-     * @return ID hóa đơn
+     * @return Chuỗi ID hóa đơn.
      */
     private String generateBillId() {
         return "HD" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
     }
 
     /**
-     * Tạo ID ngẫu nhiên cho chi tiết hóa đơn
+     * Sinh mã định danh ngẫu nhiên cho chi tiết hóa đơn.
      *
-     * @return ID chi tiết hóa đơn
+     * @return Chuỗi ID chi tiết hóa đơn.
      */
     private String generateDetailBillId() {
         return "CT" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
@@ -150,7 +152,7 @@ public class BillServiceImpl extends GenericServiceImpl<Bill, String, BillReposi
         return billRepository.findById(id).orElse(null);
     }
 
-    /** Lấy danh sách khách hàng có hóa đơn */
+    /** Lấy danh sách khách hàng có hóa đơn. */
     public List<Customer> findCustomersWithBills() {
         return billRepository.findAll().stream()
                 .map(Bill::getCustomer)
@@ -158,7 +160,7 @@ public class BillServiceImpl extends GenericServiceImpl<Bill, String, BillReposi
                 .collect(Collectors.toList());
     }
 
-    /** Lấy tất cả hóa đơn */
+    /** Lấy danh sách tất cả hóa đơn. */
     public List<Bill> findAllBills() {
         return billRepository.findAll();
     }
