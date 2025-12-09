@@ -46,8 +46,16 @@ public class ViewController {
     @RequestMapping("header")
     public String header(Model model) {
         return "/main-frame/header";
+    }       
+    /**
+         * Chuyển hướng từ root đến trang chủ
+         *
+         * @return chuỗi chuyển hướng đến trang chủ
+    */
+    @GetMapping("/")
+    public String redirectRoot() {
+        return "redirect:/home";
     }
-
     /**
      * Hiển thị trang chủ với danh sách sản phẩm.
      *
