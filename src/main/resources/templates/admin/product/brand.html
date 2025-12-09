@@ -20,16 +20,16 @@
 
         <div class="card shadow-sm mb-4">
             <div class="card-body">
-                <form method="post" th:action="@{/admin/save}" th:object="${brand}" class="row g-3">
+                <form class="row g-3" method="post" th:action="@{/admin/save}" th:object="${brand}">
                     <input th:field="*{id}" type="hidden">
 
                     <div class="col-md-6">
                         <label class="form-label">Name:</label>
-                        <input placeholder="Brand name" required th:field="*{name}" type="text" class="form-control">
+                        <input class="form-control" placeholder="Brand name" required th:field="*{name}" type="text">
                     </div>
 
                     <div class="col-md-12">
-                        <button type="submit" class="btn btn-primary px-4">Save</button>
+                        <button class="btn btn-primary px-4" type="submit">Save</button>
                     </div>
                 </form>
             </div>
@@ -50,8 +50,9 @@
                         <td th:text="${b.id}"></td>
                         <td th:text="${b.name}"></td>
                         <td>
-                            <a th:href="@{|/admin/edit/${b.id}|}" class="btn btn-sm btn-warning">Edit</a>
-                            <a th:href="@{|/admin/delete/${b.id}|}" onclick="return confirm('Are you sure?')" class="btn btn-sm btn-danger">Delete</a>
+                            <a class="btn btn-sm btn-warning" th:href="@{|/admin/edit/${b.id}|}">Edit</a>
+                            <a class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')"
+                               th:href="@{|/admin/delete/${b.id}|}">Delete</a>
                         </td>
                     </tr>
                     </tbody>

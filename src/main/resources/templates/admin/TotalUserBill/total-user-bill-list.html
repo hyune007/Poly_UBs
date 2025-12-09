@@ -1,129 +1,133 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8"/>
-  <title>Hóa đơn của khách</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="/css/admin/TotalUserBill/total-user-bill-list.css">
-  <style>
+    <meta charset="UTF-8"/>
+    <title>Hóa đơn của khách</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/css/admin/TotalUserBill/total-user-bill-list.css" rel="stylesheet">
+    <style>
 
-  </style>
+    </style>
 </head>
 <body>
 <div>
-  <div th:replace="admin/main-frame-admin/sidebar :: sidebar"></div>
+    <div th:replace="admin/main-frame-admin/sidebar :: sidebar"></div>
 </div>
-  <div class="container"style="margin-left:260px; padding:20px; background:#f5f6fa; min-height:100vh; width: 82%">
+<div class="container" style="margin-left:260px; padding:20px; background:#f5f6fa; min-height:100vh; width: 82%">
     <div class="page-card">
-      <div class="page-header" style="height: 90px">
-        <div class="brand-title">
-          <div class="brand-badge">HĐ</div>
-          <div>
-            <h5 class="mb-0">Hóa đơn của: <span th:text="${customer != null ? customer.name : '---'}"></span></h5>
-            <div class="small-muted">Danh sách các hóa đơn theo người dùng</div>
-          </div>
+        <div class="page-header" style="height: 90px">
+            <div class="brand-title">
+                <div class="brand-badge">HĐ</div>
+                <div>
+                    <h5 class="mb-0">Hóa đơn của: <span th:text="${customer != null ? customer.name : '---'}"></span>
+                    </h5>
+                    <div class="small-muted">Danh sách các hóa đơn theo người dùng</div>
+                </div>
+            </div>
+            <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${successMessage}">
+                <span th:text="${successMessage}"></span>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="alert" type="button"></button>
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+                <a class="btn back-link btn-sm" th:href="@{/admin/bills/manage}">Quay lại</a>
+            </div>
         </div>
-        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
-          <span th:text="${successMessage}"></span>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+        <div class="py-4" th:if="${bills == null or #lists.isEmpty(bills)}">
+            <div class="alert alert-info mb-0">Người dùng chưa có hóa đơn.</div>
         </div>
 
-        <div class="d-flex align-items-center gap-2">
-          <a th:href="@{/admin/bills/manage}" class="btn back-link btn-sm">Quay lại</a>
+        <div class="table-card mt-3" th:if="${bills != null and !#lists.isEmpty(bills)}">
+            <div class="table-responsive">
+                <table class="table table-custom mb-0">
+                    <thead>
+                    <tr>
+                        <th class="ps-4">Mã HĐ</th>
+                        <th>Ngày</th>
+                        <th>Địa chỉ giao</th>
+                        <th>Trạng thái</th>
+                        <th class="pe-4">Chi tiết</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="bill : ${bills}">
+                        <td class="ps-4" th:text="${bill.id}"></td>
+                        <td th:text="${#dates.format(bill.date, 'dd/MM/yyyy')}"></td>
+                        <td>
+                            <div th:if="${bill.address != null}">
+                                <div class="muted" th:text="${bill.address.detailAddress}"></div>
+                                <div class="small-muted">
+                                    <span th:text="${bill.address.ward}"></span> • <span
+                                        th:text="${bill.address.city}"></span>
+                                </div>
+                            </div>
+                            <div class="muted" th:if="${bill.address == null}">—</div>
+                        </td>
+
+                        <td>
+                            <form class="d-flex align-items-center gap-2" method="post"
+                                  th:action="@{/admin/bills/updateStatus}">
+                                <input name="billId" th:value="${bill.id}" type="hidden"/>
+                                <input name="customerId" th:value="${customer != null ? customer.id : ''}"
+                                       type="hidden"/>
+                                <!--Combobox status-->
+                                <select class="form-select form-select-sm status-select" name="status">
+                                    <!-- Chờ xác nhận -->
+                                    <option th:disabled="${bill.status == 'Đã xác nhận' or bill.status == 'Đã Hủy'}"
+                                            th:selected="${bill.status == null or bill.status == 'Chờ xác nhận'}"
+                                            th:value="'Chờ xác nhận'">
+                                        Chờ xác nhận
+                                    </option>
+                                    <!-- Đã xác nhận -->
+                                    <option th:disabled="${bill.status == 'Đã Hủy'}"
+                                            th:selected="${bill.status == 'Đã xác nhận'}"
+                                            th:value="'Đã xác nhận'">
+                                        Đã xác nhận
+                                    </option>
+                                    <!-- Đã Hủy -->
+                                    <option th:selected="${bill.status == 'Đã Hủy'}"
+                                            th:value="'Đã Hủy'">
+                                        Đã Hủy
+                                    </option>
+                                </select>
+
+                                <button class="btn btn-sm btn-primary" title="Lưu" type="submit">Lưu</button>
+                            </form>
+                        </td>
+
+                        <td class="pe-4">
+                            <details>
+                                <summary>Xem sản phẩm</summary>
+                                <div class="mt-2">
+                                    <table class="table table-sm detail-table mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th>Sản phẩm</th>
+                                            <th style="width:120px;">Số lượng</th>
+                                            <th style="width:120px;">Tổng</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="d : ${bill.billDetails}">
+                                            <td th:text="${d.product != null ? d.product.name : '—'}"></td>
+                                            <td th:text="${d.quantity}"></td>
+                                            <td th:text="${d.total}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </details>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-      </div>
-
-      <div th:if="${bills == null or #lists.isEmpty(bills)}" class="py-4">
-        <div class="alert alert-info mb-0">Người dùng chưa có hóa đơn.</div>
-      </div>
-
-      <div th:if="${bills != null and !#lists.isEmpty(bills)}" class="table-card mt-3">
-        <div class="table-responsive">
-          <table class="table table-custom mb-0">
-            <thead>
-              <tr>
-                <th class="ps-4">Mã HĐ</th>
-                <th>Ngày</th>
-                <th>Địa chỉ giao</th>
-                <th>Trạng thái</th>
-                <th class="pe-4">Chi tiết</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr th:each="bill : ${bills}">
-                <td class="ps-4" th:text="${bill.id}"></td>
-                <td th:text="${#dates.format(bill.date, 'dd/MM/yyyy')}"></td>
-                <td>
-                  <div th:if="${bill.address != null}">
-                    <div class="muted" th:text="${bill.address.detailAddress}"></div>
-                    <div class="small-muted">
-                      <span th:text="${bill.address.ward}"></span> • <span th:text="${bill.address.city}"></span>
-                    </div>
-                  </div>
-                  <div th:if="${bill.address == null}" class="muted">—</div>
-                </td>
-
-                <td>
-                  <form th:action="@{/admin/bills/updateStatus}" method="post"  class="d-flex align-items-center gap-2">
-                    <input type="hidden" name="billId" th:value="${bill.id}"/>
-                    <input type="hidden" name="customerId" th:value="${customer != null ? customer.id : ''}"/>
-<!--Combobox status-->
-                    <select name="status" class="form-select form-select-sm status-select">
-                      <!-- Chờ xác nhận -->
-                      <option th:value="'Chờ xác nhận'"
-                              th:selected="${bill.status == null or bill.status == 'Chờ xác nhận'}"
-                              th:disabled="${bill.status == 'Đã xác nhận' or bill.status == 'Đã Hủy'}">
-                        Chờ xác nhận
-                      </option>
-                      <!-- Đã xác nhận -->
-                      <option th:value="'Đã xác nhận'"
-                              th:selected="${bill.status == 'Đã xác nhận'}"
-                              th:disabled="${bill.status == 'Đã Hủy'}">
-                        Đã xác nhận
-                      </option>
-                      <!-- Đã Hủy -->
-                      <option th:value="'Đã Hủy'"
-                              th:selected="${bill.status == 'Đã Hủy'}">
-                        Đã Hủy
-                      </option>
-                    </select>
-
-                    <button type="submit" class="btn btn-sm btn-primary" title="Lưu">Lưu</button>
-                  </form>
-                </td>
-
-                <td class="pe-4">
-                  <details>
-                    <summary>Xem sản phẩm</summary>
-                    <div class="mt-2">
-                      <table class="table table-sm detail-table mb-0">
-                        <thead>
-                          <tr>
-                            <th>Sản phẩm</th>
-                            <th style="width:120px;">Số lượng</th>
-                            <th style="width:120px;">Tổng</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr th:each="d : ${bill.billDetails}">
-                            <td th:text="${d.product != null ? d.product.name : '—'}"></td>
-                            <td th:text="${d.quantity}"></td>
-                            <td th:text="${d.total}"></td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </details>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
 
     </div>
-  </div>
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

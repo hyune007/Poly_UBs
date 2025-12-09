@@ -18,21 +18,22 @@
 
             <div class="card shadow-sm mb-4">
                 <div class="card-body">
-                    <form method="post" th:action="@{/admin/customer/save}" th:object="${customer}" class="row g-3">
+                    <form class="row g-3" method="post" th:action="@{/admin/customer/save}" th:object="${customer}">
                         <input th:field="*{id}" type="hidden">
 
                         <div class="col-md-6">
                             <label class="form-label">Name:</label>
-                            <input placeholder="Customer name" required th:field="*{name}" type="text" class="form-control">
+                            <input class="form-control" placeholder="Customer name" required th:field="*{name}"
+                                   type="text">
                         </div>
 
                         <div class="col-md-6">
                             <label class="form-label">Email:</label>
-                            <input placeholder="Email" required th:field="*{email}" type="email" class="form-control">
+                            <input class="form-control" placeholder="Email" required th:field="*{email}" type="email">
                         </div>
 
                         <div class="col-md-12">
-                            <button type="submit" class="btn btn-primary px-4">Save</button>
+                            <button class="btn btn-primary px-4" type="submit">Save</button>
                         </div>
                     </form>
                 </div>
@@ -55,10 +56,10 @@
                             <td th:text="${c.name}"></td>
                             <td th:text="${c.email}"></td>
                             <td>
-                                <a th:href="@{|/admin/customer/edit/${c.id}|}" class="btn btn-sm btn-warning">Edit</a>
-                                <a th:href="@{|/admin/customer/delete/${c.id}|}"
+                                <a class="btn btn-sm btn-warning" th:href="@{|/admin/customer/edit/${c.id}|}">Edit</a>
+                                <a class="btn btn-sm btn-danger"
                                    onclick="return confirm('Are you sure?')"
-                                   class="btn btn-sm btn-danger">Delete</a>
+                                   th:href="@{|/admin/customer/delete/${c.id}|}">Delete</a>
                             </td>
                         </tr>
                         </tbody>

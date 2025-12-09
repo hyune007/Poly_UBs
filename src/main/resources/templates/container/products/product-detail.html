@@ -76,7 +76,9 @@
         <!-- Chọn số lượng -->
         <div style="margin-top: 20px; display: flex; align-items: center; gap: 15px;">
             <label for="quantity" style="font-weight: bold;">Số lượng:</label>
-            <input id="quantity" min="1" name="quantity" style="width: 80px; padding: 8px; border: 1px solid #ddd; border-radius: 4px; text-align: center;" th:max="${item.stock}"
+            <input id="quantity" min="1" name="quantity"
+                   style="width: 80px; padding: 8px; border: 1px solid #ddd; border-radius: 4px; text-align: center;"
+                   th:max="${item.stock}"
                    type="number"
                    value="1">
         </div>

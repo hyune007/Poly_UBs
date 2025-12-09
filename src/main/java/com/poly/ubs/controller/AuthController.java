@@ -118,7 +118,7 @@ public class AuthController {
     /**
      * Xử lý đăng ký tài khoản mới.
      *
-     * @param req Yêu cầu HTTP chứa thông tin đăng ký.
+     * @param req                Yêu cầu HTTP chứa thông tin đăng ký.
      * @param redirectAttributes Đối tượng truyền thông báo.
      * @return Đường dẫn chuyển hướng sau khi xử lý.
      */
@@ -199,7 +199,7 @@ public class AuthController {
     /**
      * Xử lý yêu cầu đặt lại mật khẩu qua email.
      *
-     * @param email Email của khách hàng.
+     * @param email              Email của khách hàng.
      * @param redirectAttributes Đối tượng truyền thông báo.
      * @return Đường dẫn chuyển hướng sau khi xử lý.
      */
@@ -221,8 +221,8 @@ public class AuthController {
     /**
      * Hiển thị trang đặt lại mật khẩu.
      *
-     * @param token Mã xác thực.
-     * @param model Đối tượng Model.
+     * @param token              Mã xác thực.
+     * @param model              Đối tượng Model.
      * @param redirectAttributes Đối tượng truyền thông báo.
      * @return Tên view trang đặt lại mật khẩu.
      */
@@ -248,9 +248,9 @@ public class AuthController {
     /**
      * Xử lý cập nhật mật khẩu mới.
      *
-     * @param token Mã xác thực.
-     * @param newPassword Mật khẩu mới.
-     * @param confirmPassword Xác nhận mật khẩu mới.
+     * @param token              Mã xác thực.
+     * @param newPassword        Mật khẩu mới.
+     * @param confirmPassword    Xác nhận mật khẩu mới.
      * @param redirectAttributes Đối tượng truyền thông báo.
      * @return Đường dẫn chuyển hướng sau khi xử lý.
      */

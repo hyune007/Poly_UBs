@@ -15,30 +15,18 @@ import java.util.Properties;
 @Component("appMailSender")
 public class MailSender {
 
-    @Value("${spring.mail.username}")
-    private String emailUsername;
-
-    @Value("${spring.mail.password}")
-    private String emailPassword;
-
     /**
      * Tên đăng nhập email (được gán từ config)
      */
     private static String USERNAME;
-
     /**
      * Mật khẩu ứng dụng email (được gán từ config)
      */
     private static String PASSWORD;
-
-    /**
-     * Khởi tạo giá trị static từ bean instance sau khi Spring inject xong
-     */
-    @PostConstruct
-    public void init() {
-        USERNAME = this.emailUsername;
-        PASSWORD = this.emailPassword;
-    }
+    @Value("${spring.mail.username}")
+    private String emailUsername;
+    @Value("${spring.mail.password}")
+    private String emailPassword;
 
     /**
      * Gửi email với nội dung định dạng HTML.
@@ -78,5 +66,14 @@ public class MailSender {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Khởi tạo giá trị static từ bean instance sau khi Spring inject xong
+     */
+    @PostConstruct
+    public void init() {
+        USERNAME = this.emailUsername;
+        PASSWORD = this.emailPassword;
     }
 }

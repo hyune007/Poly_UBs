@@ -45,7 +45,7 @@ public class CustomerController {
     /**
      * Hiển thị form chỉnh sửa khách hàng.
      *
-     * @param id ID khách hàng.
+     * @param id    ID khách hàng.
      * @param model Đối tượng Model.
      * @return Tên view quản lý khách hàng.
      */

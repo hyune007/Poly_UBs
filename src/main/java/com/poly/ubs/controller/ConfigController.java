@@ -1,5 +1,6 @@
 package com.poly.ubs.controller;
 
+import com.poly.ubs.dto.OrderInfoDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +15,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/config")
-public class ConfigController {
+public class ConfigController extends OrderInfoDTO {
 
     @Value("${FIREBASE_WEB_API_KEY:}")
     private String firebaseApiKey;

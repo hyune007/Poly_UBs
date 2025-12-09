@@ -62,7 +62,7 @@ public class BillServiceImpl extends GenericServiceImpl<Bill, String, BillReposi
         Bill bill = new Bill();
         bill.setId(generateBillId());
         bill.setDate(new Date());
-        
+
         // Set phương thức thanh toán
         bill.setPaymentMethod(paymentMethod);
 
@@ -148,11 +148,14 @@ public class BillServiceImpl extends GenericServiceImpl<Bill, String, BillReposi
     private String generateDetailBillId() {
         return "CT" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
     }
+
     public Bill findById(String id) {
         return billRepository.findById(id).orElse(null);
     }
 
-    /** Lấy danh sách khách hàng có hóa đơn. */
+    /**
+     * Lấy danh sách khách hàng có hóa đơn.
+     */
     public List<Customer> findCustomersWithBills() {
         return billRepository.findAll().stream()
                 .map(Bill::getCustomer)
@@ -160,7 +163,9 @@ public class BillServiceImpl extends GenericServiceImpl<Bill, String, BillReposi
                 .collect(Collectors.toList());
     }
 
-    /** Lấy danh sách tất cả hóa đơn. */
+    /**
+     * Lấy danh sách tất cả hóa đơn.
+     */
     public List<Bill> findAllBills() {
         return billRepository.findAll();
     }

@@ -45,7 +45,7 @@ public class BrandController {
     /**
      * Hiển thị form chỉnh sửa thương hiệu.
      *
-     * @param id ID thương hiệu cần sửa.
+     * @param id    ID thương hiệu cần sửa.
      * @param model Đối tượng Model.
      * @return Tên view quản lý thương hiệu với thông tin cần sửa.
      */

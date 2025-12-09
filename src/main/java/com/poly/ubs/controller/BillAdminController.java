@@ -38,7 +38,7 @@ public class BillAdminController {
      * Hiển thị danh sách hóa đơn của một khách hàng cụ thể.
      *
      * @param customerId ID của khách hàng.
-     * @param model Đối tượng Model.
+     * @param model      Đối tượng Model.
      * @return Tên view danh sách hóa đơn.
      */
     @GetMapping("/customer/{customerId}")
@@ -60,9 +60,9 @@ public class BillAdminController {
     /**
      * Cập nhật trạng thái của hóa đơn.
      *
-     * @param billId ID hóa đơn.
-     * @param status Trạng thái mới.
-     * @param customerId ID khách hàng.
+     * @param billId             ID hóa đơn.
+     * @param status             Trạng thái mới.
+     * @param customerId         ID khách hàng.
      * @param redirectAttributes Đối tượng truyền thông báo.
      * @return Đường dẫn chuyển hướng về danh sách hóa đơn.
      */

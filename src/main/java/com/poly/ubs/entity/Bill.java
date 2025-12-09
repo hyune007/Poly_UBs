@@ -1,4 +1,3 @@
-
 package com.poly.ubs.entity;
 
 import jakarta.persistence.*;

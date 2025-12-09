@@ -170,15 +170,18 @@ p {
     overflow-y: auto;
     cursor: pointer;
 }
+
 #search-suggest li:hover {
     background-color: #007bff;
     color: white;
 }
+
 #search-suggest {
     max-height: 250px;
     overflow-y: auto;
     cursor: pointer;
 }
+
 #search-suggest li:hover {
     background-color: #007bff;
     color: white;
@@ -189,8 +192,14 @@ p {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-3px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-3px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .popup-item {

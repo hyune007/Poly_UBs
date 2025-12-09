@@ -16,7 +16,7 @@ public class AdminController {
     /**
      * Hiển thị trang tổng quan quản trị.
      *
-     * @param model Đối tượng Model để truyền dữ liệu sang view.
+     * @param model   Đối tượng Model để truyền dữ liệu sang view.
      * @param session Phiên làm việc hiện tại.
      * @return Tên view của trang dashboard.
      */

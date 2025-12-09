@@ -48,7 +48,11 @@ public class Address {
     @ManyToOne
     @JoinColumn(name = "kh_id")
     private Customer customer;
-
+    /**
+     * Trạng thái xác định đây có phải là địa chỉ mặc định của khách hàng hay không.
+     */
+    @Column(name = "dc_is_default")
+    private Boolean isDefault = false;
 
     /**
      * Trả về chuỗi địa chỉ đầy đủ được định dạng từ các thành phần chi tiết, phường/xã và thành phố.
@@ -63,10 +67,4 @@ public class Address {
         if (city != null) sb.append(sb.length() > 0 ? ", " : "").append(city);
         return sb.toString();
     }
-
-    /**
-     * Trạng thái xác định đây có phải là địa chỉ mặc định của khách hàng hay không.
-     */
-    @Column(name = "dc_is_default")
-    private Boolean isDefault = false;
 }

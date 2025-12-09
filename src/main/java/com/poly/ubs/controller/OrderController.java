@@ -8,8 +8,8 @@ import com.poly.ubs.entity.ShoppingCart;
 import com.poly.ubs.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,7 +54,7 @@ public class OrderController {
      * Hiển thị trang giỏ hàng và tính tổng tiền.
      *
      * @param request Yêu cầu HTTP.
-     * @param model Đối tượng Model.
+     * @param model   Đối tượng Model.
      * @param session Phiên làm việc hiện tại.
      * @return Tên view giỏ hàng hoặc chuyển hướng đăng nhập.
      */
@@ -85,7 +85,7 @@ public class OrderController {
      * Hiển thị trang nhập thông tin giao hàng.
      *
      * @param request Yêu cầu HTTP.
-     * @param model Đối tượng Model.
+     * @param model   Đối tượng Model.
      * @param session Phiên làm việc hiện tại.
      * @return Tên view thông tin đơn hàng.
      */
@@ -120,10 +120,10 @@ public class OrderController {
     /**
      * Xử lý thông tin giao hàng và lưu tạm vào session.
      *
-     * @param orderInfo Thông tin đơn hàng từ form.
-     * @param session Phiên làm việc hiện tại.
+     * @param orderInfo          Thông tin đơn hàng từ form.
+     * @param session            Phiên làm việc hiện tại.
      * @param redirectAttributes Đối tượng truyền thông báo.
-     * @param request Yêu cầu HTTP.
+     * @param request            Yêu cầu HTTP.
      * @return Chuyển hướng đến trang thanh toán.
      */
     @PostMapping("/order/submit-info")
@@ -190,7 +190,7 @@ public class OrderController {
      * Hiển thị trang lựa chọn phương thức thanh toán.
      *
      * @param request Yêu cầu HTTP.
-     * @param model Đối tượng Model.
+     * @param model   Đối tượng Model.
      * @param session Phiên làm việc hiện tại.
      * @return Tên view thanh toán.
      */
@@ -225,8 +225,8 @@ public class OrderController {
     /**
      * Xử lý xác nhận thanh toán và tạo hóa đơn.
      *
-     * @param paymentMethod Phương thức thanh toán được chọn.
-     * @param session Phiên làm việc hiện tại.
+     * @param paymentMethod      Phương thức thanh toán được chọn.
+     * @param session            Phiên làm việc hiện tại.
      * @param redirectAttributes Đối tượng truyền thông báo.
      * @return Chuyển hướng đến trang hoàn tất đơn hàng.
      */
@@ -289,7 +289,7 @@ public class OrderController {
      * Hiển thị trang hoàn tất đơn hàng và mã QR (nếu có).
      *
      * @param request Yêu cầu HTTP.
-     * @param model Đối tượng Model.
+     * @param model   Đối tượng Model.
      * @param session Phiên làm việc hiện tại.
      * @return Tên view hoàn tất đơn hàng.
      */
@@ -309,7 +309,8 @@ public class OrderController {
             // Tạo URL mã QR thanh toán nếu phương thức là chuyển khoản ngân hàng
             if ("bank".equals(paymentMethod) && totalAmount != null) {
                 // Định dạng URL SePay: https://qr.sepay.vn/img?acc={acc}&bank={bank}&amount={amount}&des={des}&template={template}
-                String qrUrl = String.format("https://qr.sepay.vn/img?acc=%s&bank=%s&amount=%d&des=%s&template=%s",
+                String qrUrl = String.format(
+                        "https://qr.sepay.vn/img?acc=%s&bank=%s&amount=%d&des=%s&template=%s",
                         sepayAccount,
                         sepayBankCode,
                         totalAmount,
@@ -317,8 +318,8 @@ public class OrderController {
                         sepayTemplate != null ? sepayTemplate : "compact"
                 );
                 model.addAttribute("qrUrl", qrUrl);
-                
-                // Thiết lập thời gian hết hạn hiển thị (ví dụ: 10 phút)
+
+                // Thiết lập thời gian hết hạn
                 long expiryTimeMillis = bill.getDate().getTime() + (10 * 60 * 1000);
                 model.addAttribute("expiryTimeMillis", expiryTimeMillis);
             }

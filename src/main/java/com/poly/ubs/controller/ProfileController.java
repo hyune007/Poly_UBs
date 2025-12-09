@@ -31,7 +31,7 @@ public class ProfileController {
      * Hiển thị trang thông tin cá nhân.
      *
      * @param session Phiên làm việc hiện tại.
-     * @param model Đối tượng Model.
+     * @param model   Đối tượng Model.
      * @return Tên view profile.
      */
     @GetMapping("/profile")
@@ -51,10 +51,10 @@ public class ProfileController {
     /**
      * Cập nhật thông tin cá nhân (tên, số điện thoại, email).
      *
-     * @param name Tên mới.
-     * @param phone Số điện thoại mới.
-     * @param email Email mới.
-     * @param session Phiên làm việc hiện tại.
+     * @param name               Tên mới.
+     * @param phone              Số điện thoại mới.
+     * @param email              Email mới.
+     * @param session            Phiên làm việc hiện tại.
      * @param redirectAttributes Đối tượng truyền thông báo.
      * @return Chuyển hướng về trang profile.
      */
@@ -89,10 +89,10 @@ public class ProfileController {
     /**
      * Thay đổi mật khẩu đăng nhập.
      *
-     * @param currentPass Mật khẩu hiện tại.
-     * @param newPass Mật khẩu mới.
-     * @param confirmPass Xác nhận mật khẩu mới.
-     * @param session Phiên làm việc hiện tại.
+     * @param currentPass        Mật khẩu hiện tại.
+     * @param newPass            Mật khẩu mới.
+     * @param confirmPass        Xác nhận mật khẩu mới.
+     * @param session            Phiên làm việc hiện tại.
      * @param redirectAttributes Đối tượng truyền thông báo.
      * @return Chuyển hướng về trang profile.
      */
@@ -139,7 +139,7 @@ public class ProfileController {
      * Hiển thị lịch sử đơn hàng của khách hàng.
      *
      * @param session Phiên làm việc hiện tại.
-     * @param model Đối tượng Model.
+     * @param model   Đối tượng Model.
      * @return Tên view lịch sử đơn hàng.
      */
     @GetMapping("/orders")

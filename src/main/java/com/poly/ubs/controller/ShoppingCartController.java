@@ -29,7 +29,7 @@ public class ShoppingCartController {
      * Hiển thị trang chi tiết giỏ hàng.
      *
      * @param session Phiên làm việc hiện tại.
-     * @param model Đối tượng Model.
+     * @param model   Đối tượng Model.
      * @return Tên view giỏ hàng.
      */
     @GetMapping
@@ -68,8 +68,8 @@ public class ShoppingCartController {
      * API thêm sản phẩm vào giỏ hàng.
      *
      * @param productId ID sản phẩm.
-     * @param quantity Số lượng.
-     * @param session Phiên làm việc hiện tại.
+     * @param quantity  Số lượng.
+     * @param session   Phiên làm việc hiện tại.
      * @return Phản hồi JSON kết quả thực hiện.
      */
     @PostMapping("/add")
@@ -121,9 +121,9 @@ public class ShoppingCartController {
     /**
      * API cập nhật số lượng sản phẩm trong giỏ.
      *
-     * @param cartId ID giỏ hàng chi tiết.
+     * @param cartId   ID giỏ hàng chi tiết.
      * @param quantity Số lượng mới.
-     * @param session Phiên làm việc hiện tại.
+     * @param session  Phiên làm việc hiện tại.
      * @return Phản hồi JSON kết quả thực hiện.
      */
     @PostMapping("/update")
@@ -173,7 +173,7 @@ public class ShoppingCartController {
     /**
      * API xóa sản phẩm khỏi giỏ hàng.
      *
-     * @param cartId ID giỏ hàng chi tiết.
+     * @param cartId  ID giỏ hàng chi tiết.
      * @param session Phiên làm việc hiện tại.
      * @return Phản hồi JSON kết quả thực hiện.
      */

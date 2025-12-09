@@ -31,10 +31,10 @@ public class ProductController {
     /**
      * Hiển thị danh sách sản phẩm với phân trang và bộ lọc.
      *
-     * @param page Số trang hiện tại.
-     * @param size Số lượng sản phẩm trên mỗi trang.
+     * @param page     Số trang hiện tại.
+     * @param size     Số lượng sản phẩm trên mỗi trang.
      * @param category Danh mục cần lọc.
-     * @param model Đối tượng Model.
+     * @param model    Đối tượng Model.
      * @return Tên view danh sách sản phẩm.
      */
     @GetMapping
@@ -119,7 +119,7 @@ public class ProductController {
     /**
      * Hiển thị form chỉnh sửa sản phẩm.
      *
-     * @param id ID sản phẩm cần sửa.
+     * @param id    ID sản phẩm cần sửa.
      * @param model Đối tượng Model.
      * @return Tên view form sản phẩm.
      */

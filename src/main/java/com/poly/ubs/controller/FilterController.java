@@ -47,9 +47,9 @@ public class FilterController {
     /**
      * Hiển thị danh sách sản phẩm theo danh mục và phân trang.
      *
-     * @param model Đối tượng Model.
-     * @param session Phiên làm việc hiện tại.
-     * @param p Trang hiện tại.
+     * @param model      Đối tượng Model.
+     * @param session    Phiên làm việc hiện tại.
+     * @param p          Trang hiện tại.
      * @param categoryId ID danh mục sản phẩm.
      * @return Tên view hiển thị sản phẩm.
      */
@@ -122,12 +122,12 @@ public class FilterController {
     /**
      * Lọc sản phẩm theo giá và thương hiệu.
      *
-     * @param model Đối tượng Model.
-     * @param min Giá tối thiểu.
-     * @param max Giá tối đa.
-     * @param sort Tiêu chí sắp xếp.
+     * @param model   Đối tượng Model.
+     * @param min     Giá tối thiểu.
+     * @param max     Giá tối đa.
+     * @param sort    Tiêu chí sắp xếp.
      * @param brandId ID thương hiệu.
-     * @param p Trang hiện tại.
+     * @param p       Trang hiện tại.
      * @return Tên view kết quả lọc.
      */
     @GetMapping("/product/filter")

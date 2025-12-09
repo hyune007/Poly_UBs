@@ -3,7 +3,6 @@ package com.poly.ubs.controller;
 import com.poly.ubs.entity.Bill;
 import com.poly.ubs.entity.Customer;
 import com.poly.ubs.service.BillServiceImpl;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,7 +39,7 @@ public class ShipperController {
      * Hiển thị danh sách đơn hàng cần giao của một khách hàng cụ thể.
      *
      * @param customerId ID khách hàng.
-     * @param model Đối tượng Model.
+     * @param model      Đối tượng Model.
      * @return Tên view danh sách đơn hàng của khách hàng.
      */
     @GetMapping("/customer/{customerId}")
@@ -62,9 +61,9 @@ public class ShipperController {
     /**
      * Cập nhật trạng thái giao hàng của hóa đơn.
      *
-     * @param billId ID hóa đơn.
-     * @param status Trạng thái mới.
-     * @param customerId ID khách hàng.
+     * @param billId             ID hóa đơn.
+     * @param status             Trạng thái mới.
+     * @param customerId         ID khách hàng.
      * @param redirectAttributes Đối tượng truyền thông báo.
      * @return Chuyển hướng lại trang danh sách đơn hàng.
      */
@@ -79,7 +78,6 @@ public class ShipperController {
         } else {
             redirectAttributes.addFlashAttribute("successMessage", "Cập nhật trạng thái thành công!");
         }
-
 
 
         return "redirect:/shipper/customer/" + customerId;

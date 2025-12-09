@@ -28,7 +28,7 @@ public class PaymentController {
      * Xác thực token, tìm hóa đơn tương ứng và cập nhật trạng thái thanh toán.
      *
      * @param webhookData Dữ liệu giao dịch từ SePay.
-     * @param authHeader Header xác thực chứa API Key.
+     * @param authHeader  Header xác thực chứa API Key.
      * @return Phản hồi HTTP về kết quả xử lý.
      */
     @PostMapping("/sepay-webhook")
@@ -55,7 +55,7 @@ public class PaymentController {
             // Tìm kiếm hóa đơn trong hệ thống có mã trùng với nội dung chuyển khoản
             List<Bill> allBills = billService.findAllBills();
             Bill foundBill = null;
-            
+
             for (Bill bill : allBills) {
                 if (transactionContent.contains(bill.getId())) {
                     foundBill = bill;

@@ -51,9 +51,9 @@ public class ViewController {
     /**
      * Hiển thị trang chủ với danh sách sản phẩm.
      *
-     * @param model Đối tượng Model.
-     * @param session Phiên làm việc hiện tại.
-     * @param p Trang hiện tại.
+     * @param model      Đối tượng Model.
+     * @param session    Phiên làm việc hiện tại.
+     * @param p          Trang hiện tại.
      * @param categoryId ID danh mục cần lọc.
      * @return Tên view trang chủ.
      */
@@ -125,7 +125,7 @@ public class ViewController {
     /**
      * Hiển thị trang chi tiết sản phẩm.
      *
-     * @param id ID sản phẩm.
+     * @param id    ID sản phẩm.
      * @param model Đối tượng Model.
      * @return Tên view chi tiết sản phẩm.
      */
@@ -175,10 +175,10 @@ public class ViewController {
     /**
      * Tìm kiếm và lọc sản phẩm.
      *
-     * @param keyword Từ khóa tìm kiếm.
+     * @param keyword    Từ khóa tìm kiếm.
      * @param categoryId ID danh mục.
-     * @param p Trang hiện tại.
-     * @param model Đối tượng Model.
+     * @param p          Trang hiện tại.
+     * @param model      Đối tượng Model.
      * @return Tên view kết quả tìm kiếm.
      */
     @GetMapping("/product/search")

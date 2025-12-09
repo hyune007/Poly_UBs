@@ -10,18 +10,21 @@
     <div class="form-container">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h5 class="mb-0">Thông tin khách mua hàng</h5>
-            <button type="button" class="btn btn-sm btn-outline-primary" id="editCustomerInfoBtn">Chỉnh sửa thông tin</button>
+            <button class="btn btn-sm btn-outline-primary" id="editCustomerInfoBtn" type="button">Chỉnh sửa thông tin
+            </button>
         </div>
 
         <form method="post" th:action="@{/order/submit-info}" th:object="${orderInfo}">
-            <input type="hidden" id="selectedAddressId" name="addressId" />
+            <input id="selectedAddressId" name="addressId" type="hidden"/>
 
             <div class="row g-3">
                 <div class="col-md-6">
-                    <input class="form-control" name="fullName" readonly required th:value="${orderInfo.fullName != null ? orderInfo.fullName : customer.name}" type="text"/>
+                    <input class="form-control" name="fullName" readonly required
+                           th:value="${orderInfo.fullName != null ? orderInfo.fullName : customer.name}" type="text"/>
                 </div>
                 <div class="col-md-6">
-                    <input class="form-control" name="phone" readonly required th:value="${orderInfo.phone != null ? orderInfo.phone : customer.phone}" type="tel"/>
+                    <input class="form-control" name="phone" readonly required
+                           th:value="${orderInfo.phone != null ? orderInfo.phone : customer.phone}" type="tel"/>
                 </div>
             </div>
 
@@ -30,24 +33,28 @@
             <!-- Địa chỉ mặc định -->
             <div class="form-group">
                 <label>Địa chỉ mặc định</label>
-                <select id="addressSelect"
-                        th:if="${customer.addresses}" class="form-select form-select-sm">
+                <select class="form-select form-select-sm"
+                        id="addressSelect" th:if="${customer.addresses}">
                     <option th:each="addr : ${customer.addresses}"
-                            th:value="${addr.id}"
+                            th:selected="${addr.isDefault}"
                             th:text="${addr.fullAddress}"
-                            th:selected="${addr.isDefault}">
+                            th:value="${addr.id}">
                     </option>
                 </select>
-                <div id="noAddressHint" th:if="${#lists.isEmpty(customer.addresses)}" class="text-muted small">Chưa có địa chỉ nào, hãy thêm bên dưới.</div>
-                <button type="button" id="addAddressToggleBtn" class="btn btn-outline-primary btn-sm mt-2" >+ Thêm địa chỉ</button>
+                <div class="text-muted small" id="noAddressHint" th:if="${#lists.isEmpty(customer.addresses)}">Chưa có
+                    địa chỉ nào, hãy thêm bên dưới.
+                </div>
+                <button class="btn btn-outline-primary btn-sm mt-2" id="addAddressToggleBtn" type="button">+ Thêm địa
+                    chỉ
+                </button>
             </div>
             <!-- Modal thêm địa chỉ -->
-            <div class="modal fade" id="addAddressModal" tabindex="-1" aria-hidden="true">
+            <div aria-hidden="true" class="modal fade" id="addAddressModal" tabindex="-1">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Thêm địa chỉ</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
                         </div>
                         <div class="modal-body">
                             <div class="row g-2">
@@ -93,22 +100,30 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Quận/Huyện/Phường</label>
-                                    <input type="text" class="form-control form-control-sm" id="districtInput" placeholder="Ví dụ: Cầu Giấy">
+                                    <input class="form-control form-control-sm" id="districtInput"
+                                           placeholder="Ví dụ: Cầu Giấy"
+                                           type="text">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Số nhà</label>
-                                    <input type="text" class="form-control form-control-sm" id="houseNumberInput" placeholder="Ví dụ: 123">
+                                    <input class="form-control form-control-sm" id="houseNumberInput"
+                                           placeholder="Ví dụ: 123"
+                                           type="text">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Tên đường</label>
-                                    <input type="text" class="form-control form-control-sm" id="streetInput" placeholder="Ví dụ: Trần Duy Hưng">
+                                    <input class="form-control form-control-sm" id="streetInput"
+                                           placeholder="Ví dụ: Trần Duy Hưng"
+                                           type="text">
                                 </div>
                             </div>
-                            <div id="addressMessage" class="small mt-2 text-success d-none">Lưu thành công!</div>
+                            <div class="small mt-2 text-success d-none" id="addressMessage">Lưu thành công!</div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" id="cancelAddAddressBtn" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                            <button type="button" id="saveAddressBtn" class="btn btn-primary">Lưu địa chỉ</button>
+                            <button class="btn btn-secondary" data-bs-dismiss="modal" id="cancelAddAddressBtn"
+                                    type="button">Hủy
+                            </button>
+                            <button class="btn btn-primary" id="saveAddressBtn" type="button">Lưu địa chỉ</button>
                         </div>
                     </div>
                 </div>
@@ -167,8 +182,8 @@
             const nameInput = document.querySelector('input[name="fullName"]');
             const phoneInput = document.querySelector('input[name="phone"]');
 
-            if(editBtn && nameInput && phoneInput) {
-                editBtn.addEventListener('click', function() {
+            if (editBtn && nameInput && phoneInput) {
+                editBtn.addEventListener('click', function () {
                     const isReadonly = nameInput.hasAttribute('readonly');
                     if (isReadonly) {
                         nameInput.removeAttribute('readonly');
@@ -224,8 +239,8 @@
                 try {
                     const resp = await fetch('/addresses', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ city: province, ward: district, detailAddress })
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({city: province, ward: district, detailAddress})
                     });
                     if (!resp.ok) throw new Error(await resp.text());
                     const data = await resp.json();
@@ -248,7 +263,9 @@
                     }
                     setAddAddressInputsEnabled(false);
                     if (provinceSelect) provinceSelect.selectedIndex = 0;
-                    [districtInput, houseNumberInput, streetInput].forEach(el => { if (el) el.value = ''; });
+                    [districtInput, houseNumberInput, streetInput].forEach(el => {
+                        if (el) el.value = '';
+                    });
                 } catch (e) {
                     addressMessage.classList.remove('d-none');
                     addressMessage.classList.replace('text-success', 'text-danger');
@@ -265,7 +282,7 @@
                 const id = e.target.value;
                 if (hiddenAddress) hiddenAddress.value = id;
                 try {
-                    const resp = await fetch(`/addresses/${id}/default`, { method: 'PUT' });
+                    const resp = await fetch(`/addresses/${id}/default`, {method: 'PUT'});
                     if (!resp.ok) throw new Error(await resp.text());
                 } catch (err) {
                     console.error('Đổi địa chỉ mặc định lỗi:', err);

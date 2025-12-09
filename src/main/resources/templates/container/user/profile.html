@@ -48,19 +48,23 @@
                 <!-- Địa chỉ mặc định -->
                 <div class="form-group">
                     <label>Địa chỉ mặc định</label>
-                    <select id="addressSelect" disabled
-                            th:if="${customer.addresses}" class="form-select form-select-sm">
+                    <select class="form-select form-select-sm" disabled
+                            id="addressSelect" th:if="${customer.addresses}">
                         <option th:each="addr : ${customer.addresses}"
-                                th:value="${addr.id}"
+                                th:selected="${addr.isDefault}"
                                 th:text="${addr.fullAddress}"
-                                th:selected="${addr.isDefault}">
+                                th:value="${addr.id}">
                         </option>
                     </select>
-                    <div id="noAddressHint" th:if="${#lists.isEmpty(customer.addresses)}" class="text-muted small">Chưa có địa chỉ nào, hãy thêm bên dưới.</div>
-                    <button type="button" id="addAddressToggleBtn" class="btn btn-outline-primary btn-sm mt-2" disabled>+ Thêm địa chỉ</button>
+                    <div class="text-muted small" id="noAddressHint" th:if="${#lists.isEmpty(customer.addresses)}">Chưa
+                        có địa chỉ nào, hãy thêm bên dưới.
+                    </div>
+                    <button class="btn btn-outline-primary btn-sm mt-2" disabled id="addAddressToggleBtn" type="button">
+                        + Thêm địa chỉ
+                    </button>
                 </div>
                 <!-- Collapse thêm địa chỉ -->
-                <div id="addAddressCollapse" class="card p-3 mb-3 d-none">
+                <div class="card p-3 mb-3 d-none" id="addAddressCollapse">
                     <h6 class="mb-2">Thêm địa chỉ</h6>
                     <div class="row g-2">
                         <div class="col-md-6">
@@ -105,22 +109,26 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Quận/Huyện/Phường</label>
-                            <input type="text" class="form-control form-control-sm" id="districtInput" placeholder="Ví dụ: Cầu Giấy">
+                            <input class="form-control form-control-sm" id="districtInput" placeholder="Ví dụ: Cầu Giấy"
+                                   type="text">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Số nhà</label>
-                            <input type="text" class="form-control form-control-sm" id="houseNumberInput" placeholder="Ví dụ: 123">
+                            <input class="form-control form-control-sm" id="houseNumberInput" placeholder="Ví dụ: 123"
+                                   type="text">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Tên đường</label>
-                            <input type="text" class="form-control form-control-sm" id="streetInput" placeholder="Ví dụ: Trần Duy Hưng">
+                            <input class="form-control form-control-sm" id="streetInput"
+                                   placeholder="Ví dụ: Trần Duy Hưng"
+                                   type="text">
                         </div>
                     </div>
                     <div class="mt-3">
-                        <button type="button" id="saveAddressBtn" class="btn btn-success btn-sm">Lưu địa chỉ</button>
-                        <button type="button" id="cancelAddAddressBtn" class="btn btn-secondary btn-sm">Hủy</button>
+                        <button class="btn btn-success btn-sm" id="saveAddressBtn" type="button">Lưu địa chỉ</button>
+                        <button class="btn btn-secondary btn-sm" id="cancelAddAddressBtn" type="button">Hủy</button>
                     </div>
-                    <div id="addressMessage" class="small mt-2 text-success d-none">Lưu thành công!</div>
+                    <div class="small mt-2 text-success d-none" id="addressMessage">Lưu thành công!</div>
                 </div>
                 <div class="form-group">
                     <label>Mật khẩu</label>
@@ -227,12 +235,14 @@
         const districtInput = document.getElementById('districtInput');
         const houseNumberInput = document.getElementById('houseNumberInput');
         const streetInput = document.getElementById('streetInput');
+
         function setAddAddressInputsEnabled(enabled) {
             if (provinceSelect) provinceSelect.disabled = !enabled;
             if (districtInput) districtInput.disabled = !enabled;
             if (houseNumberInput) houseNumberInput.disabled = !enabled;
             if (streetInput) streetInput.disabled = !enabled;
         }
+
         // Khởi tạo: collapse đang đóng -> disable các input
         setAddAddressInputsEnabled(false);
 
@@ -259,8 +269,8 @@
             try {
                 const resp = await fetch('/addresses', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ city: province, ward: district, detailAddress })
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({city: province, ward: district, detailAddress})
                 });
                 if (!resp.ok) throw new Error(await resp.text());
                 const data = await resp.json();
@@ -277,8 +287,9 @@
                 addressMessage.textContent = 'Lưu thành công!';
                 addAddressCollapse.classList.add('d-none');
                 if (provinceSelect) provinceSelect.selectedIndex = 0;
-                ['districtInput','houseNumberInput','streetInput'].forEach(id => {
-                    const el = document.getElementById(id); if (el) el.value='';
+                ['districtInput', 'houseNumberInput', 'streetInput'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = '';
                 });
             } catch (e) {
                 addressMessage.classList.remove('d-none');
@@ -296,7 +307,7 @@
             const id = e.target.value;
             if (addressSelect.disabled) return; // chỉ đổi khi đang edit
             try {
-                const resp = await fetch(`/addresses/${id}/default`, { method: 'PUT' });
+                const resp = await fetch(`/addresses/${id}/default`, {method: 'PUT'});
                 if (!resp.ok) throw new Error(await resp.text());
             } catch (err) {
                 console.error('Đổi địa chỉ mặc định lỗi:', err);

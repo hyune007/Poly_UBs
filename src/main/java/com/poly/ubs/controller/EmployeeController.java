@@ -21,8 +21,8 @@ public class EmployeeController {
     /**
      * Hiển thị danh sách nhân viên với phân trang và tìm kiếm.
      *
-     * @param model Đối tượng Model.
-     * @param page Số trang hiện tại (mặc định là 0).
+     * @param model   Đối tượng Model.
+     * @param page    Số trang hiện tại (mặc định là 0).
      * @param keyword Từ khóa tìm kiếm.
      * @return Tên view danh sách nhân viên.
      */
@@ -71,7 +71,7 @@ public class EmployeeController {
     /**
      * Hiển thị form chỉnh sửa nhân viên.
      *
-     * @param id ID nhân viên cần sửa.
+     * @param id    ID nhân viên cần sửa.
      * @param model Đối tượng Model.
      * @return Tên view form nhân viên.
      * @throws RuntimeException Nếu không tìm thấy nhân viên.
