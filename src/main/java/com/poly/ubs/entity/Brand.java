@@ -1,4 +1,3 @@
-
 package com.poly.ubs.entity;
 
 import jakarta.persistence.Column;
@@ -11,7 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Thực thể thương hiệu
+ * Lớp thực thể đại diện cho thương hiệu sản phẩm.
+ * Ánh xạ tới bảng "hang" trong cơ sở dữ liệu.
  */
 @Setter
 @Getter
@@ -21,14 +21,14 @@ import lombok.Setter;
 @Table(name = "hang")
 public class Brand {
     /**
-     * ID của thương hiệu
+     * Mã định danh duy nhất của thương hiệu.
      */
     @Id
     @Column(name = "hang_id", length = 10)
     private String id;
 
     /**
-     * Tên thương hiệu
+     * Tên thương hiệu.
      */
     @Column(name = "hang_name", length = 50)
     private String name;

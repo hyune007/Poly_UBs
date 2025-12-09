@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Bộ điều khiển xem giao diện
+ * Quản lý hiển thị các trang giao diện chính.
  */
 @org.springframework.stereotype.Controller
 public class ViewController {
@@ -28,16 +28,21 @@ public class ViewController {
     private CategoryServiceImpl categoryService;
 
     /**
-     * Hiển thị phần header
+     * Lấy danh sách danh mục sản phẩm.
      *
-     * @param model đối tượng model để truyền dữ liệu đến view
-     * @return đường dẫn đến template header
+     * @return Danh sách Category.
      */
     @ModelAttribute("categories")
     public List<Category> getCategories() {
         return categoryService.getCategories();
     }
 
+    /**
+     * Hiển thị header của trang.
+     *
+     * @param model Đối tượng Model.
+     * @return Tên view header.
+     */
     @RequestMapping("header")
     public String header(Model model) {
         return "/main-frame/header";
@@ -52,11 +57,13 @@ public class ViewController {
         return "redirect:/home";
     }
     /**
-     * Hiển thị trang chủ
+     * Hiển thị trang chủ với danh sách sản phẩm.
      *
-     * @param model   đối tượng model để truyền dữ liệu đến view
-     * @param session đối tượng session để lấy thông tin người dùng
-     * @return đường dẫn đến template trang chủ
+     * @param model      Đối tượng Model.
+     * @param session    Phiên làm việc hiện tại.
+     * @param p          Trang hiện tại.
+     * @param categoryId ID danh mục cần lọc.
+     * @return Tên view trang chủ.
      */
     @GetMapping("home")
     public String home(Model model, HttpSession session, @RequestParam("p") Optional<Integer> p, @RequestParam(value = "categoryId", required = false) String categoryId) {
@@ -82,10 +89,7 @@ public class ViewController {
             model.addAttribute("selectedCategoryName", "Tất cả sản phẩm");
         }
 
-        /**
-         * Truy xuất các phần tử trong danh sách sản phẩm
-         * Cái nào có mã loại sản phẩm gì thì gán đường dẫn image tương đương của loại sản phẩm đó
-         */
+        // Cập nhật đường dẫn hình ảnh cho từng sản phẩm
         for (Product item : items) {
             String folder = "";
             switch (item.getCategory().getId()) {
@@ -126,6 +130,13 @@ public class ViewController {
         return "/container/home";
     }
 
+    /**
+     * Hiển thị trang chi tiết sản phẩm.
+     *
+     * @param id    ID sản phẩm.
+     * @param model Đối tượng Model.
+     * @return Tên view chi tiết sản phẩm.
+     */
     @GetMapping("/product/detail/{id}")
     public String detail(@PathVariable("id") String id, Model model) {
         Product item = productService.findById(id);
@@ -169,6 +180,15 @@ public class ViewController {
         return "/container/products/product-detail";
     }
 
+    /**
+     * Tìm kiếm và lọc sản phẩm.
+     *
+     * @param keyword    Từ khóa tìm kiếm.
+     * @param categoryId ID danh mục.
+     * @param p          Trang hiện tại.
+     * @param model      Đối tượng Model.
+     * @return Tên view kết quả tìm kiếm.
+     */
     @GetMapping("/product/search")
     public String searchProducts(
             @RequestParam(value = "keyword", required = false) String keyword,

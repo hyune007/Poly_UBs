@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Cài đặt dịch vụ cho thực thể Customer sử dụng dịch vụ chung
+ * Triển khai dịch vụ xử lý nghiệp vụ liên quan đến khách hàng.
  */
 @Service
 public class CustomerServiceImpl extends GenericServiceImpl<Customer, String, CustomerRepository> {
@@ -20,21 +20,21 @@ public class CustomerServiceImpl extends GenericServiceImpl<Customer, String, Cu
     }
 
     /**
-     * Tìm khách hàng theo email và mật khẩu
+     * Tìm kiếm khách hàng dựa trên địa chỉ email và mật khẩu.
      *
-     * @param email    email của khách hàng
-     * @param password mật khẩu của khách hàng
-     * @return khách hàng nếu tìm thấy, null nếu không tìm thấy
+     * @param email    Địa chỉ email.
+     * @param password Mật khẩu.
+     * @return Đối tượng Customer nếu tìm thấy, ngược lại trả về null.
      */
     public Customer findByEmailAndPassword(String email, String password) {
         return customerRepository.findByEmailAndPassword(email, password);
     }
 
     /**
-     * Tìm khách hàng theo email
+     * Tìm kiếm khách hàng dựa trên địa chỉ email.
      *
-     * @param email email của khách hàng
-     * @return khách hàng nếu tìm thấy, null nếu không tìm thấy
+     * @param email Địa chỉ email.
+     * @return Đối tượng Customer nếu tìm thấy, ngược lại trả về null.
      */
     public Customer findByEmail(String email) {
         return customerRepository.findByEmail(email);

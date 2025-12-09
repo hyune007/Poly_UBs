@@ -1,4 +1,3 @@
-
 package com.poly.ubs.entity;
 
 import jakarta.persistence.*;
@@ -11,7 +10,8 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Thực thể hóa đơn
+ * Lớp thực thể đại diện cho hóa đơn bán hàng.
+ * Ánh xạ tới bảng "hoadon" trong cơ sở dữ liệu.
  */
 @Setter
 @Getter
@@ -21,53 +21,55 @@ import java.util.List;
 @Table(name = "hoadon")
 public class Bill {
     /**
-     * ID của hóa đơn
+     * Mã định danh duy nhất của hóa đơn.
      */
     @Id
     @Column(name = "hd_id", length = 8)
     private String id;
 
     /**
-     * Ngày tạo hóa đơn
+     * Ngày và giờ tạo hóa đơn.
      */
     @Column(name = "hd_date")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
     /**
-     * Trạng thái hóa đơn
+     * Trạng thái hiện tại của hóa đơn (ví dụ: Chờ xác nhận, Đã thanh toán, Đã hủy).
      */
     @Column(name = "hd_status")
     private String status;
 
     /**
-     * Khách hàng liên quan đến hóa đơn
+     * Khách hàng thực hiện đơn hàng này.
      */
     @ManyToOne
     @JoinColumn(name = "kh_id")
     private Customer customer;
 
     /**
-     * Nhân viên xử lý hóa đơn
+     * Nhân viên phụ trách xử lý đơn hàng (nếu có).
      */
     @ManyToOne
     @JoinColumn(name = "nv_id")
     private Employee employee;
 
     /**
-     * Địa chỉ giao hàng
+     * Địa chỉ giao hàng được chọn cho hóa đơn này.
      */
     @ManyToOne
     @JoinColumn(name = "dc_id")
     private Address address;
 
     /**
-     * Phương thức thanh toán
+     * Phương thức thanh toán được sử dụng.
      */
     @Column(name = "payment_method")
     private String paymentMethod;
 
-
+    /**
+     * Danh sách chi tiết các sản phẩm trong hóa đơn.
+     */
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DetailBill> billDetails;
 

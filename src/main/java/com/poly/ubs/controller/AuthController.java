@@ -23,8 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Bộ điều khiển xác thực người dùng
- * Quản lý tất cả các vấn đề về bảo mật: đăng nhập, đăng ký, quên mật khẩu, Firebase authentication
+ * Quản lý xác thực và phân quyền người dùng (đăng nhập, đăng ký, quên mật khẩu).
  */
 @RequestMapping("/auth")
 @Controller
@@ -38,9 +37,9 @@ public class AuthController {
     private PasswordResetService passwordResetService;
 
     /**
-     * Hiển thị trang đăng nhập
+     * Hiển thị trang đăng nhập.
      *
-     * @return tên template đăng nhập
+     * @return Tên view trang đăng nhập.
      */
     @GetMapping("/login")
     public String login() {
@@ -48,9 +47,9 @@ public class AuthController {
     }
 
     /**
-     * Hiển thị trang access denied khi người dùng không có quyền truy cập
+     * Hiển thị trang thông báo từ chối truy cập.
      *
-     * @return tên template access denied
+     * @return Tên view trang access denied.
      */
     @GetMapping("/access-denied")
     public String accessDenied() {
@@ -58,10 +57,10 @@ public class AuthController {
     }
 
     /**
-     * Xử lý yêu cầu đăng nhập
+     * Xử lý đăng nhập người dùng.
      *
-     * @param req yêu cầu HTTP
-     * @return chuyển hướng đến trang chủ
+     * @param req Yêu cầu HTTP chứa thông tin đăng nhập.
+     * @return Đường dẫn chuyển hướng sau khi xử lý.
      */
     @PostMapping("/login-post")
     public String loginPost(HttpServletRequest req) {
@@ -87,15 +86,15 @@ public class AuthController {
             return "redirect:/home";
         } else {
             // Đăng nhập thất bại, quay lại trang đăng nhập với thông báo lỗi
-            return "redirect:/login?error=true";
+            return "redirect:/auth/login?error=true";
         }
     }
 
     /**
-     * Xử lý yêu cầu đăng xuất
+     * Xử lý đăng xuất người dùng.
      *
-     * @param req yêu cầu HTTP
-     * @return chuyển hướng đến trang chủ
+     * @param req Yêu cầu HTTP.
+     * @return Chuyển hướng về trang chủ.
      */
     @GetMapping("/logout")
     public String logout(HttpServletRequest req) {
@@ -107,9 +106,9 @@ public class AuthController {
     }
 
     /**
-     * Hiển thị trang đăng ký
+     * Hiển thị trang đăng ký tài khoản.
      *
-     * @return tên template đăng ký
+     * @return Tên view trang đăng ký.
      */
     @GetMapping("/register")
     public String register() {
@@ -117,10 +116,11 @@ public class AuthController {
     }
 
     /**
-     * Xử lý yêu cầu đăng ký
+     * Xử lý đăng ký tài khoản mới.
      *
-     * @param req yêu cầu HTTP
-     * @return chuyển hướng đến trang đăng nhập với thông báo thành công
+     * @param req                Yêu cầu HTTP chứa thông tin đăng ký.
+     * @param redirectAttributes Đối tượng truyền thông báo.
+     * @return Đường dẫn chuyển hướng sau khi xử lý.
      */
     @PostMapping("/register-post")
     public String registerPost(HttpServletRequest req, RedirectAttributes redirectAttributes) {
@@ -133,13 +133,13 @@ public class AuthController {
         // Kiểm tra xem email đã tồn tại chưa
         if (customerService.findByEmail(email) != null) {
             redirectAttributes.addFlashAttribute("error", "Email đã được sử dụng!");
-            return "redirect:/register";
+            return "redirect:/auth/register";
         }
 
         // Kiểm tra mật khẩu và xác nhận mật khẩu có khớp nhau không
         if (!password.equals(confirmPassword)) {
             redirectAttributes.addFlashAttribute("error", "Mật khẩu xác nhận không khớp!");
-            return "redirect:/register";
+            return "redirect:/auth/register";
         }
 
         // Tạo khách hàng mới
@@ -155,13 +155,13 @@ public class AuthController {
         customerService.save(customer);
         MailSender.send(customer.getEmail(), "Xác nhận đăng ký tài khoản Poly_UBs", "Xin chào " + customer.getName() + ", tài khoản của bạn đã được tạo thành công!");
 //        redirectAttributes.addFlashAttribute("success", "Đăng ký thành công! Vui lòng đăng nhập.");
-        return "redirect:/login?message=true";
+        return "redirect:/auth/login?message=true";
     }
 
     /**
-     * Tạo ID cho khách hàng mới
+     * Tạo mã khách hàng tự động.
      *
-     * @return ID duy nhất cho khách hàng
+     * @return Mã khách hàng mới.
      */
     private String generateCustomerId() {
         // Lấy tất cả các ID khách hàng hiện có
@@ -187,9 +187,9 @@ public class AuthController {
     }
 
     /**
-     * Hiển thị trang quên mật khẩu
+     * Hiển thị trang quên mật khẩu.
      *
-     * @return tên template quên mật khẩu
+     * @return Tên view trang quên mật khẩu.
      */
     @GetMapping("/forgot-password")
     public String forgotPassword() {
@@ -197,11 +197,11 @@ public class AuthController {
     }
 
     /**
-     * Xử lý yêu cầu gửi email reset mật khẩu
+     * Xử lý yêu cầu đặt lại mật khẩu qua email.
      *
-     * @param email              email của khách hàng
-     * @param redirectAttributes để truyền thông báo
-     * @return chuyển hướng về trang forgot password với thông báo
+     * @param email              Email của khách hàng.
+     * @param redirectAttributes Đối tượng truyền thông báo.
+     * @return Đường dẫn chuyển hướng sau khi xử lý.
      */
     @PostMapping("/forgot-password-post")
     public String forgotPasswordPost(@RequestParam("email") String email,
@@ -211,19 +211,20 @@ public class AuthController {
             redirectAttributes.addFlashAttribute(
                     "success",
                     "Link đặt lại mật khẩu đã được gửi đến email của bạn. Vui lòng kiểm tra hộp thư!");
-            return "redirect:/forgot-password?success=true";
+            return "redirect:/auth/forgot-password?success=true";
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
-            return "redirect:/forgot-password?error=true";
+            return "redirect:/auth/forgot-password?error=true";
         }
     }
 
     /**
-     * Hiển thị trang đặt lại mật khẩu
+     * Hiển thị trang đặt lại mật khẩu.
      *
-     * @param token token để xác thực
-     * @param model để truyền dữ liệu sang view
-     * @return tên template đặt lại mật khẩu
+     * @param token              Mã xác thực.
+     * @param model              Đối tượng Model.
+     * @param redirectAttributes Đối tượng truyền thông báo.
+     * @return Tên view trang đặt lại mật khẩu.
      */
     @GetMapping("/reset-password")
     public String resetPassword(@RequestParam(value = "token", required = false) String token,
@@ -231,13 +232,13 @@ public class AuthController {
                                 RedirectAttributes redirectAttributes) {
         if (token == null || token.isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "Link không hợp lệ");
-            return "redirect:/forgot-password";
+            return "redirect:/auth/forgot-password";
         }
 
         // Kiểm tra token có hợp lệ không
         if (!passwordResetService.validateToken(token)) {
             redirectAttributes.addFlashAttribute("error", "Link đã hết hạn hoặc không hợp lệ");
-            return "redirect:/forgot-password";
+            return "redirect:/auth/forgot-password";
         }
 
         model.addAttribute("token", token);
@@ -245,13 +246,13 @@ public class AuthController {
     }
 
     /**
-     * Xử lý yêu cầu đặt lại mật khẩu
+     * Xử lý cập nhật mật khẩu mới.
      *
-     * @param token              token để xác thực
-     * @param newPassword        mật khẩu mới
-     * @param confirmPassword    xác nhận mật khẩu mới
-     * @param redirectAttributes để truyền thông báo
-     * @return chuyển hướng đến trang đăng nhập
+     * @param token              Mã xác thực.
+     * @param newPassword        Mật khẩu mới.
+     * @param confirmPassword    Xác nhận mật khẩu mới.
+     * @param redirectAttributes Đối tượng truyền thông báo.
+     * @return Đường dẫn chuyển hướng sau khi xử lý.
      */
     @PostMapping("/reset-password-post")
     public String resetPasswordPost(@RequestParam("token") String token,
@@ -262,33 +263,33 @@ public class AuthController {
             // Kiểm tra mật khẩu và xác nhận mật khẩu có khớp không
             if (!newPassword.equals(confirmPassword)) {
                 redirectAttributes.addFlashAttribute("error", "Mật khẩu xác nhận không khớp!");
-                return "redirect:/reset-password?token=" + token;
+                return "redirect:/auth/reset-password?token=" + token;
             }
 
             // Kiểm tra mật khẩu có đủ độ dài không
             if (newPassword.length() < 6) {
                 redirectAttributes.addFlashAttribute("error", "Mật khẩu phải có ít nhất 6 ký tự!");
-                return "redirect:/reset-password?token=" + token;
+                return "redirect:/auth/reset-password?token=" + token;
             }
 
             // Đặt lại mật khẩu
             passwordResetService.resetPassword(token, newPassword);
             redirectAttributes.addFlashAttribute("success", "Đặt lại mật khẩu thành công! Vui lòng đăng nhập.");
-            return "redirect:/login?resetSuccess=true";
+            return "redirect:/auth/login?resetSuccess=true";
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
-            return "redirect:/forgot-password";
+            return "redirect:/auth/forgot-password";
         }
     }
 
     // ==================== FIREBASE AUTHENTICATION ====================
 
     /**
-     * Endpoint API để xác thực Firebase ID Token và tạo session
+     * Xử lý đăng nhập bằng tài khoản Google thông qua Firebase.
      *
-     * @param request chứa idToken từ Firebase client
-     * @param session HTTP session
-     * @return thông tin customer dưới dạng JSON
+     * @param request Chứa idToken từ Firebase client.
+     * @param session Phiên làm việc hiện tại.
+     * @return Thông tin khách hàng dưới dạng JSON.
      */
     @PostMapping("/api/auth/firebase-login")
     public ResponseEntity<?> firebaseLogin(@RequestBody Map<String, String> request, HttpSession session) {

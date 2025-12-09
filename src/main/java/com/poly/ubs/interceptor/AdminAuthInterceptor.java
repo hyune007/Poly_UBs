@@ -9,11 +9,21 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 /**
- * Interceptor để kiểm tra quyền truy cập vào các trang admin
+ * Bộ chặn (Interceptor) kiểm soát quyền truy cập vào các tài nguyên dành cho quản trị viên.
  */
 @Component
 public class AdminAuthInterceptor implements HandlerInterceptor {
 
+    /**
+     * Phương thức chặn trước khi yêu cầu được xử lý bởi Controller.
+     * Kiểm tra phiên đăng nhập và vai trò người dùng để quyết định cho phép truy cập hay chuyển hướng.
+     *
+     * @param request  Đối tượng HttpServletRequest.
+     * @param response Đối tượng HttpServletResponse.
+     * @param handler  Đối tượng xử lý yêu cầu.
+     * @return true nếu được phép truy cập, false nếu bị từ chối.
+     * @throws Exception Các lỗi ngoại lệ có thể xảy ra trong quá trình xử lý.
+     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // Lấy session hiện tại

@@ -6,24 +6,39 @@
 </head>
 <body>
 <div th:fragment="sidebar">
-    <div class="sidebar" style="height: 100vh; background: #2f3640; color: white; position: fixed; width: 240px; padding-top: 20px;">
+    <div class="sidebar"
+         style="height: 100vh; background: #2f3640; color: white; position: fixed; width: 240px; padding-top: 20px;">
         <h4 class="text-center mb-4">Poly_UBs Admin</h4>
 
-        <a th:href="@{/admin/dashboard}" style="color:#dcdde1; text-decoration:none; display:block; padding:12px 20px; margin:5px 10px; border-radius:8px;">🏠 Trang chủ</a>
+        <a style="color:#dcdde1; text-decoration:none; display:block; padding:12px 20px; margin:5px 10px; border-radius:8px;"
+           th:href="@{/admin/dashboard}">🏠
+            Trang chủ</a>
 
-        <a th:href="@{/admin/customer}" style="color:#dcdde1; text-decoration:none; display:block; padding:12px 20px; margin:5px 10px; border-radius:8px;">👤 Quản lý khách hàng</a>
+        <a style="color:#dcdde1; text-decoration:none; display:block; padding:12px 20px; margin:5px 10px; border-radius:8px;"
+           th:href="@{/admin/customer}">👤
+            Quản lý khách hàng</a>
 
-        <a th:href="@{/admin/employee}" style="color:#dcdde1; text-decoration:none; display:block; padding:12px 20px; margin:5px 10px; border-radius:8px;">🧑‍💼 Quản lý nhân viên</a>
+        <a style="color:#dcdde1; text-decoration:none; display:block; padding:12px 20px; margin:5px 10px; border-radius:8px;"
+           th:href="@{/admin/employee}">🧑‍💼
+            Quản lý nhân viên</a>
 
-        <a th:href="@{/admin/products}" style="color:#dcdde1!important; text-decoration:none!important; display:block!important; padding:12px 20px!important; margin:5px 10px!important; border-radius:8px!important;">📦 Quản lý sản phẩm</a>
+        <a style="color:#dcdde1!important; text-decoration:none!important; display:block!important; padding:12px 20px!important; margin:5px 10px!important; border-radius:8px!important;"
+           th:href="@{/admin/products}">📦
+            Quản lý sản phẩm</a>
 
-        <a th:href="@{/admin/bills/manage}" style="color:#dcdde1; text-decoration:none; display:block; padding:12px 20px; margin:5px 10px; border-radius:8px;">📦 Quản lý đơn hàng</a>
+        <a style="color:#dcdde1; text-decoration:none; display:block; padding:12px 20px; margin:5px 10px; border-radius:8px;"
+           th:href="@{/admin/bills/manage}">📦
+            Quản lý đơn hàng</a>
 
-        <a th:href="@{/admin/brand}" style="color:#dcdde1; text-decoration:none; display:block; padding:12px 20px; margin:5px 10px; border-radius:8px;">📦 Quản lý hãng</a>
+        <a style="color:#dcdde1; text-decoration:none; display:block; padding:12px 20px; margin:5px 10px; border-radius:8px;"
+           th:href="@{/admin/brand}">📦
+            Quản lý hãng</a>
 
         <hr class="text-secondary">
 
-        <a th:href="@{/auth/logout}" style="color:#dcdde1; text-decoration:none; display:block; padding:12px 20px; margin:5px 10px; border-radius:8px;">🚪 Đăng xuất</a>
+        <a style="color:#dcdde1; text-decoration:none; display:block; padding:12px 20px; margin:5px 10px; border-radius:8px;"
+           th:href="@{/auth/logout}">🚪
+            Đăng xuất</a>
     </div>
 </div>
 

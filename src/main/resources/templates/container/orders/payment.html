@@ -93,7 +93,7 @@
                     </div>
 
                     <form method="post" th:action="@{/order/confirm-payment}">
-                        <input type="hidden" name="paymentMethod" id="hiddenPaymentMethod" value="cod">
+                        <input id="hiddenPaymentMethod" name="paymentMethod" type="hidden" value="cod">
                         <button class="btn btn-success btn-lg w-100" type="submit">Xác nhận thanh toán</button>
                     </form>
 

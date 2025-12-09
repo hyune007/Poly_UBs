@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
- * Service xử lý chức năng reset mật khẩu
+ * Dịch vụ xử lý quy trình đặt lại mật khẩu.
  */
 @Service
 public class PasswordResetService {
@@ -25,10 +25,10 @@ public class PasswordResetService {
     private CustomerRepository customerRepository;
 
     /**
-     * Tạo token reset mật khẩu và gửi email
+     * Tạo token đặt lại mật khẩu và gửi email hướng dẫn cho khách hàng.
      *
-     * @param email email của khách hàng
-     * @throws RuntimeException nếu email không tồn tại
+     * @param email Địa chỉ email của khách hàng.
+     * @throws RuntimeException Nếu email không tồn tại trong hệ thống.
      */
     @Transactional
     public void createPasswordResetToken(String email) {
@@ -77,11 +77,11 @@ public class PasswordResetService {
     }
 
     /**
-     * Xác thực token và đổi mật khẩu mới
+     * Xác thực token và cập nhật mật khẩu mới cho khách hàng.
      *
-     * @param token       chuỗi token
-     * @param newPassword mật khẩu mới
-     * @throws RuntimeException nếu token không hợp lệ hoặc đã hết hạn
+     * @param token       Chuỗi token xác thực.
+     * @param newPassword Mật khẩu mới.
+     * @throws RuntimeException Nếu token không hợp lệ hoặc đã hết hạn.
      */
     @Transactional
     public void resetPassword(String token, String newPassword) {
@@ -105,10 +105,10 @@ public class PasswordResetService {
     }
 
     /**
-     * Kiểm tra token có hợp lệ không
+     * Kiểm tra tính hợp lệ của token.
      *
-     * @param token chuỗi token
-     * @return true nếu token hợp lệ và chưa hết hạn
+     * @param token Chuỗi token cần kiểm tra.
+     * @return True nếu token hợp lệ và chưa hết hạn, ngược lại trả về False.
      */
     public boolean validateToken(String token) {
         return tokenRepository.findByToken(token)

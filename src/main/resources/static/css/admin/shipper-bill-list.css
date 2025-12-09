@@ -15,7 +15,7 @@ body {
 .page-card {
     background: var(--white);
     border-radius: 16px;
-    box-shadow: 0 12px 32px rgba(11,61,145,0.12);
+    box-shadow: 0 12px 32px rgba(11, 61, 145, 0.12);
     padding: 1.5rem;
     margin-top: 2rem;
 }
@@ -25,7 +25,7 @@ body {
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    border-bottom: 1px solid rgba(0,0,0,0.08);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     padding-bottom: 1rem;
     margin-bottom: 1.5rem;
 }
@@ -46,7 +46,7 @@ body {
 .table-card {
     border-radius: .75rem;
     overflow: hidden;
-    border: 1px solid rgba(0,0,0,0.08);
+    border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .table-custom {
@@ -97,6 +97,7 @@ body {
         width: 100%;
     }
 }
+
 @media (max-width: 576px) {
     .table-custom thead {
         display: none;
@@ -126,6 +127,7 @@ body {
         margin-bottom: 0.25rem;
         display: block;
     }
+
     .table-custom tbody td:last-child {
         border-bottom: none;
     }

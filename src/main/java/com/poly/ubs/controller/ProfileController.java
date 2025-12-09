@@ -16,6 +16,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Quản lý hồ sơ cá nhân của khách hàng.
+ */
 @Controller
 public class ProfileController {
 
@@ -23,6 +26,14 @@ public class ProfileController {
     private CustomerServiceImpl customerService;
     @Autowired
     private BillServiceImpl billService;
+
+    /**
+     * Hiển thị trang thông tin cá nhân.
+     *
+     * @param session Phiên làm việc hiện tại.
+     * @param model   Đối tượng Model.
+     * @return Tên view profile.
+     */
     @GetMapping("/profile")
     public String profile(HttpSession session, Model model) {
         Object loggedInUser = session.getAttribute("loggedInUser");
@@ -37,6 +48,16 @@ public class ProfileController {
         return "/container/user/profile";
     }
 
+    /**
+     * Cập nhật thông tin cá nhân (tên, số điện thoại, email).
+     *
+     * @param name               Tên mới.
+     * @param phone              Số điện thoại mới.
+     * @param email              Email mới.
+     * @param session            Phiên làm việc hiện tại.
+     * @param redirectAttributes Đối tượng truyền thông báo.
+     * @return Chuyển hướng về trang profile.
+     */
     @PostMapping("/update-profile")
     public String updateProfile(
             @RequestParam("name") String name,
@@ -65,6 +86,16 @@ public class ProfileController {
         return "redirect:/profile";
     }
 
+    /**
+     * Thay đổi mật khẩu đăng nhập.
+     *
+     * @param currentPass        Mật khẩu hiện tại.
+     * @param newPass            Mật khẩu mới.
+     * @param confirmPass        Xác nhận mật khẩu mới.
+     * @param session            Phiên làm việc hiện tại.
+     * @param redirectAttributes Đối tượng truyền thông báo.
+     * @return Chuyển hướng về trang profile.
+     */
     @PostMapping("/change-password")
     public String updatePassword(
             @RequestParam("currentPass") String currentPass,
@@ -104,6 +135,13 @@ public class ProfileController {
         return "redirect:/profile";
     }
 
+    /**
+     * Hiển thị lịch sử đơn hàng của khách hàng.
+     *
+     * @param session Phiên làm việc hiện tại.
+     * @param model   Đối tượng Model.
+     * @return Tên view lịch sử đơn hàng.
+     */
     @GetMapping("/orders")
     public String userOrders(HttpSession session, Model model) {
         Customer loggedInUser = (Customer) session.getAttribute("loggedInUser");

@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Xử lý các API thanh toán và Webhook từ cổng thanh toán (SePay).
+ */
 @RestController
 @RequestMapping("/api/payment")
 public class PaymentController {
@@ -20,17 +23,26 @@ public class PaymentController {
     @Autowired
     private BillServiceImpl billService;
 
+    /**
+     * Xử lý Webhook từ SePay để cập nhật trạng thái đơn hàng.
+     * Xác thực token, tìm hóa đơn tương ứng và cập nhật trạng thái thanh toán.
+     *
+     * @param webhookData Dữ liệu giao dịch từ SePay.
+     * @param authHeader  Header xác thực chứa API Key.
+     * @return Phản hồi HTTP về kết quả xử lý.
+     */
     @PostMapping("/sepay-webhook")
     public ResponseEntity<String> handleSePayWebhook(
             @RequestBody SePayWebhookDTO webhookData,
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
         try {
-            // Kiểm tra bảo mật: Authorization: Apikey API_KEY
+            // Kiểm tra bảo mật: Header phải có dạng "Apikey API_KEY"
             if (authHeader == null || !authHeader.startsWith("Apikey ")) {
                 return ResponseEntity.status(401).body("Unauthorized: Missing or invalid Authorization header");
             }
 
-            String receivedToken = authHeader.substring(7).trim(); // Bỏ tiền tố "Apikey "
+            // So khớp token nhận được với cấu hình hệ thống
+            String receivedToken = authHeader.substring(7).trim(); // Loại bỏ tiền tố "Apikey "
             if (!sepayApiToken.equals(receivedToken)) {
                 return ResponseEntity.status(401).body("Unauthorized: Invalid API Token");
             }
@@ -40,10 +52,10 @@ public class PaymentController {
                 return ResponseEntity.badRequest().body("Missing transaction content");
             }
 
-            // Tìm kiếm hóa đơn dựa trên nội dung chuyển khoản
+            // Tìm kiếm hóa đơn trong hệ thống có mã trùng với nội dung chuyển khoản
             List<Bill> allBills = billService.findAllBills();
             Bill foundBill = null;
-            
+
             for (Bill bill : allBills) {
                 if (transactionContent.contains(bill.getId())) {
                     foundBill = bill;
@@ -51,6 +63,7 @@ public class PaymentController {
                 }
             }
 
+            // Nếu tìm thấy hóa đơn, cập nhật trạng thái thành "Đã thanh toán"
             if (foundBill != null) {
                 billService.updateStatus(foundBill.getId(), "Đã thanh toán");
                 return ResponseEntity.ok("Updated bill " + foundBill.getId());
@@ -64,6 +77,12 @@ public class PaymentController {
         }
     }
 
+    /**
+     * Kiểm tra trạng thái hóa đơn.
+     *
+     * @param billId Mã hóa đơn.
+     * @return Trạng thái hiện tại của hóa đơn.
+     */
     @GetMapping("/check-status/{billId}")
     public ResponseEntity<?> checkBillStatus(@PathVariable String billId) {
         Bill bill = billService.findById(billId);

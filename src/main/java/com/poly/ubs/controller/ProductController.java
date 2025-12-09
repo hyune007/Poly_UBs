@@ -13,7 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * Bộ điều khiển quản lý sản phẩm cho trang quản trị
+ * Quản lý sản phẩm trong trang quản trị.
  */
 @Controller
 @RequestMapping("/admin/products")
@@ -29,13 +29,13 @@ public class ProductController {
     private BrandServiceImpl brandService;
 
     /**
-     * Hiển thị danh sách sản phẩm với phân trang và bộ lọc
+     * Hiển thị danh sách sản phẩm với phân trang và bộ lọc.
      *
-     * @param page     số trang (mặc định 0)
-     * @param size     kích thước trang (mặc định 10)
-     * @param category tên danh mục để lọc (tùy chọn)
-     * @param model    đối tượng model để truyền dữ liệu đến view
-     * @return đường dẫn đến template danh sách sản phẩm
+     * @param page     Số trang hiện tại.
+     * @param size     Số lượng sản phẩm trên mỗi trang.
+     * @param category Danh mục cần lọc.
+     * @param model    Đối tượng Model.
+     * @return Tên view danh sách sản phẩm.
      */
     @GetMapping
     public String list(
@@ -103,10 +103,10 @@ public class ProductController {
     }
 
     /**
-     * Hiển thị form thêm sản phẩm mới
+     * Hiển thị form tạo mới sản phẩm.
      *
-     * @param model đối tượng model để truyền dữ liệu đến view
-     * @return đường dẫn đến template form
+     * @param model Đối tượng Model.
+     * @return Tên view form sản phẩm.
      */
     @GetMapping("/create")
     public String createForm(Model model) {
@@ -117,11 +117,11 @@ public class ProductController {
     }
 
     /**
-     * Hiển thị form sửa sản phẩm
+     * Hiển thị form chỉnh sửa sản phẩm.
      *
-     * @param id    ID của sản phẩm cần sửa
-     * @param model đối tượng model để truyền dữ liệu đến view
-     * @return đường dẫn đến template form hoặc redirect nếu không tìm thấy
+     * @param id    ID sản phẩm cần sửa.
+     * @param model Đối tượng Model.
+     * @return Tên view form sản phẩm.
      */
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable String id, Model model) {
@@ -136,10 +136,10 @@ public class ProductController {
     }
 
     /**
-     * Lưu sản phẩm (tạo mới hoặc cập nhật)
+     * Lưu thông tin sản phẩm (xử lý cả thương hiệu và danh mục).
      *
-     * @param product đối tượng sản phẩm cần lưu
-     * @return chuyển hướng về danh sách sản phẩm
+     * @param product Đối tượng sản phẩm.
+     * @return Chuyển hướng về danh sách sản phẩm.
      */
     @PostMapping("/save")
     public String save(@ModelAttribute Product product) {
@@ -164,10 +164,10 @@ public class ProductController {
     }
 
     /**
-     * Xóa sản phẩm
+     * Xóa sản phẩm theo ID.
      *
-     * @param id ID của sản phẩm cần xóa
-     * @return chuyển hướng về danh sách sản phẩm
+     * @param id ID sản phẩm.
+     * @return Chuyển hướng về danh sách sản phẩm.
      */
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable String id) {

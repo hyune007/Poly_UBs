@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Bộ điều khiển quản lý địa chỉ
+ * Quản lý các thao tác liên quan đến địa chỉ khách hàng.
  */
 @RestController
 public class AddressController {
@@ -25,10 +25,11 @@ public class AddressController {
     private CustomerServiceImpl customerService;
 
     /**
-     * Tạo địa chỉ mới cho khách hàng đang đăng nhập
-     * @param payload JSON gồm city, ward, detailAddress
-     * @param session phiên HTTP lưu loggedInUser
-     * @return thông tin địa chỉ đã tạo
+     * Tạo mới địa chỉ cho khách hàng hiện tại.
+     *
+     * @param payload Dữ liệu địa chỉ gồm thành phố, phường/xã, địa chỉ chi tiết.
+     * @param session Phiên làm việc hiện tại của người dùng.
+     * @return Thông tin địa chỉ vừa được tạo.
      */
     @PostMapping("/addresses")
     public ResponseEntity<?> createAddress(@RequestBody Map<String, String> payload, HttpSession session) {
@@ -55,7 +56,11 @@ public class AddressController {
     }
 
     /**
-     * Đặt địa chỉ mặc định
+     * Thiết lập địa chỉ mặc định cho khách hàng.
+     *
+     * @param id      ID của địa chỉ cần đặt làm mặc định.
+     * @param session Phiên làm việc hiện tại của người dùng.
+     * @return Thông báo kết quả thực hiện.
      */
     @PutMapping("/addresses/{id}/default")
     public ResponseEntity<?> setDefault(@PathVariable("id") String id, HttpSession session) {

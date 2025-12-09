@@ -8,23 +8,23 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 /**
- * Repository cho thực thể PasswordResetToken
+ * Giao diện Repository quản lý các thao tác cơ sở dữ liệu đối với thực thể PasswordResetToken (Mã đặt lại mật khẩu).
  */
 @Repository
 public interface PasswordResetTokenRepository extends JpaRepository<PasswordResetToken, Long> {
 
     /**
-     * Tìm token theo chuỗi token
+     * Tìm kiếm thông tin token dựa trên chuỗi token.
      *
-     * @param token chuỗi token
-     * @return Optional chứa PasswordResetToken nếu tìm thấy
+     * @param token Chuỗi token cần tìm.
+     * @return Optional chứa PasswordResetToken nếu tìm thấy.
      */
     Optional<PasswordResetToken> findByToken(String token);
 
     /**
-     * Xóa tất cả token của một khách hàng
+     * Xóa tất cả các token liên quan đến một khách hàng cụ thể.
      *
-     * @param customer khách hàng
+     * @param customer Đối tượng khách hàng cần xóa token.
      */
     void deleteByCustomer(Customer customer);
 }
