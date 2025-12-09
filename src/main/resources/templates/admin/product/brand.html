@@ -1,38 +1,70 @@
+<!-- HTML -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Brand Management</title>
+    <meta charset="UTF-8">
+    <title>Customer Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
-<h2>Brand Management</h2>
+<div class="sidebar">
+    <div th:replace="admin/main-frame-admin/sidebar::sidebar"></div>
+</div>
 
-<form th:action="@{/brand/save}" method="post" th:object="${brand}">
-    <input type="hidden" th:field="*{id}">
-    <label>Name:</label>
-    <input type="text" th:field="*{name}" placeholder="Brand name" required>
-    <button type="submit">Save</button>
-</form>
+<div class="main-content" style="margin-left:260px; background:#f5f6fa; min-height:100vh;">
+    <!-- Main Content -->
+    <div class="container py-4">
+        <h2 class="mb-4 text-primary fw-bold">Brand Management</h2>
 
-<hr>
-<table border="1" cellpadding="5">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="b : ${brands}">
-        <td th:text="${b.id}">1</td>
-        <td th:text="${b.name}">BrandName</td>
-        <td>
-            <a th:href="@{|/brand/edit/${b.id}|}">Edit</a> |
-            <a th:href="@{|/brand/delete/${b.id}|}"
-               onclick="return confirm('Are you sure?')">Delete</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <form class="row g-3" method="post" th:action="@{/admin/save}" th:object="${brand}">
+                    <input th:field="*{id}" type="hidden">
+
+                    <div class="col-md-6">
+                        <label class="form-label">Name:</label>
+                        <input class="form-control" placeholder="Brand name" required th:field="*{name}" type="text">
+                    </div>
+
+                    <div class="col-md-12">
+                        <button class="btn btn-primary px-4" type="submit">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-secondary">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th style="width: 150px;">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="b : ${brands}">
+                        <td th:text="${b.id}"></td>
+                        <td th:text="${b.name}"></td>
+                        <td>
+                            <a class="btn btn-sm btn-warning" th:href="@{|/admin/edit/${b.id}|}">Edit</a>
+                            <a class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')"
+                               th:href="@{|/admin/delete/${b.id}|}">Delete</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div> <!-- end .container -->
+</div> <!-- end .main-content -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<div th:replace="admin/main-frame-admin/footer-admin::footer"></div>
 </body>
+
 </html>

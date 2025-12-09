@@ -8,17 +8,16 @@
 <body>
 <div th:fragment="Content">
 
-    <div class="category-header" >
+    <div class="category-header">
         <h4 th:text="${selectedCategoryName}"></h4>
     </div>
 
-    <div id="products" class="product-grid">
+    <div class="product-grid" id="products">
         <div class="product-card" th:each="item : ${items}">
 
             <a th:href="@{|/product/detail/${item.id}|}">
-                <img th:src="@{|/photos/${item.image}|}" alt="Sản phẩm">
+                <img alt="Sản phẩm" th:src="@{|/photos/${item.image}|}">
             </a>
-
 
 
             <h4 th:text="${item.name}"></h4>
@@ -35,29 +34,35 @@
 
                 <!-- Nút về trang đầu -->
                 <li class="page-item" th:classappend="${items.first} ? 'disabled' : ''">
-                    <a class="page-link" th:href="@{|/home?p=0${selectedCategoryId != null ? '&categoryId=' + selectedCategoryId : ''}#products|}">«</a>
+                    <a class="page-link"
+                       th:href="@{|/home?p=0${selectedCategoryId != null ? '&categoryId=' + selectedCategoryId : ''}#products|}">«</a>
                 </li>
 
                 <!-- Nút trước -->
                 <li class="page-item" th:classappend="${items.first} ? 'disabled' : ''">
-                    <a class="page-link" th:href="@{|/home?p=${items.number - 1}${selectedCategoryId != null ? '&categoryId=' + selectedCategoryId : ''}#products|}">‹</a>
+                    <a class="page-link"
+                       th:href="@{|/home?p=${items.number - 1}${selectedCategoryId != null ? '&categoryId=' + selectedCategoryId : ''}#products|}">‹</a>
                 </li>
 
                 <!-- Danh sách số trang -->
-                <li th:each="i : ${#numbers.sequence(0, items.totalPages - 1)}"
-                    class="page-item"
-                    th:classappend="${i == items.number} ? 'active' : ''">
-                    <a class="page-link" th:href="@{|/home?p=${i}${selectedCategoryId != null ? '&categoryId=' + selectedCategoryId : ''}#products|}" th:text="${i + 1}"></a>
+                <li class="page-item"
+                    th:classappend="${i == items.number} ? 'active' : ''"
+                    th:each="i : ${#numbers.sequence(0, items.totalPages - 1)}">
+                    <a class="page-link"
+                       th:href="@{|/home?p=${i}${selectedCategoryId != null ? '&categoryId=' + selectedCategoryId : ''}#products|}"
+                       th:text="${i + 1}"></a>
                 </li>
 
                 <!-- Nút sau -->
                 <li class="page-item" th:classappend="${items.last} ? 'disabled' : ''">
-                    <a class="page-link" th:href="@{|/home?p=${items.number + 1}${selectedCategoryId != null ? '&categoryId=' + selectedCategoryId : ''}#products|}">›</a>
+                    <a class="page-link"
+                       th:href="@{|/home?p=${items.number + 1}${selectedCategoryId != null ? '&categoryId=' + selectedCategoryId : ''}#products|}">›</a>
                 </li>
 
                 <!-- Nút cuối -->
                 <li class="page-item" th:classappend="${items.last} ? 'disabled' : ''">
-                    <a class="page-link" th:href="@{|/home?p=${items.totalPages - 1}${selectedCategoryId != null ? '&categoryId=' + selectedCategoryId : ''}#products|}">»</a>
+                    <a class="page-link"
+                       th:href="@{|/home?p=${items.totalPages - 1}${selectedCategoryId != null ? '&categoryId=' + selectedCategoryId : ''}#products|}">»</a>
                 </li>
 
             </ul>

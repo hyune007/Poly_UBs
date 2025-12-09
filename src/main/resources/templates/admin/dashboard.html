@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard | Poly_UBs</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f5f6fa;
+        }
+
+        .sidebar {
+            height: 100vh;
+            background: #2f3640;
+            color: white;
+            position: fixed;
+            width: 240px;
+            padding-top: 20px;
+        }
+
+        .sidebar a {
+            color: #dcdde1;
+            text-decoration: none;
+            display: block;
+            padding: 12px 20px;
+            margin: 5px 10px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background: #353b48;
+            color: #00a8ff;
+        }
+
+        .main-content {
+            margin-left: 260px;
+            padding: 20px;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            transition: 0.3s;
+        }
+    </style>
+</head>
+<body>
+<div class="sidebar">
+    <h4 class="text-center mb-4">Poly_UBs Admin</h4>
+    <a th:href="@{/admin/dashboard}">🏠 Trang chủ</a>
+    <a th:href="@{/admin/customer}">👤 Quản lý khách hàng</a>
+    <a th:href="@{/admin/employee}">🧑‍💼 Quản lý nhân viên</a>
+    <a th:href="@{/admin/products}">📦 Quản lý sản phẩm</a>
+    <a th:href="@{/admin/bills/manage}">📦 Quản lý đơn hàng</a>
+    <a th:href="@{/admin/brand}">📦 Quản lý hãng</a>
+
+    <hr class="text-secondary">
+    <a th:href="@{/auth/logout}">🚪 Đăng xuất</a>
+</div>
+
+<div class="main-content">
+    <div class="container">
+        <h2 class="mb-4">Bảng điều khiển quản trị</h2>
+        <p>Xin chào, <strong th:text="${adminUser.name}"></strong> 👋</p>
+
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Khách hàng</h5>
+                        <p class="card-text text-muted">Xem và quản lý danh sách khách hàng</p>
+                        <a class="btn btn-primary" th:href="@{/admin/customer}">Quản lý</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Nhân viên</h5>
+                        <p class="card-text text-muted">Quản lý thông tin và quyền của nhân viên</p>
+                        <a class="btn btn-primary" th:href="@{/admin/employee}">Quản lý</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Sản phẩm</h5>
+                        <p class="card-text text-muted">Thêm, sửa, xóa và xem sản phẩm</p>
+                        <a class="btn btn-primary" th:href="@{/admin/products}">Quản lý</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

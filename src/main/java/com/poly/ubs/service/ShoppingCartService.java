@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Service xử lý nghiệp vụ giỏ hàng
+ * Triển khai dịch vụ xử lý nghiệp vụ liên quan đến giỏ hàng.
  */
 @Service
 public class ShoppingCartService extends GenericServiceImpl<ShoppingCart, String, ShoppingCartRepository> {
@@ -31,23 +31,25 @@ public class ShoppingCartService extends GenericServiceImpl<ShoppingCart, String
     }
 
     /**
-     * Lấy tất cả sản phẩm trong giỏ hàng của khách hàng
+     * Lấy danh sách sản phẩm trong giỏ hàng của khách hàng.
      *
-     * @param customerId ID khách hàng
-     * @return danh sách sản phẩm trong giỏ hàng
+     * @param customerId Mã khách hàng.
+     * @return Danh sách đối tượng ShoppingCart.
      */
     public List<ShoppingCart> findByCustomerId(String customerId) {
         return shoppingCartRepository.findByCustomerId(customerId);
     }
 
     /**
-     * Thêm sản phẩm vào giỏ hàng
-     * Nếu sản phẩm đã có trong giỏ thì tăng số lượng, nếu chưa thì thêm mới
+     * Thêm sản phẩm vào giỏ hàng.
+     * Nếu sản phẩm đã tồn tại, cập nhật số lượng. Nếu chưa, tạo mới.
+     * Kiểm tra tồn kho trước khi thực hiện.
      *
-     * @param customerId ID khách hàng
-     * @param productId  ID sản phẩm
-     * @param quantity   số lượng
-     * @return giỏ hàng đã cập nhật
+     * @param customerId Mã khách hàng.
+     * @param productId  Mã sản phẩm.
+     * @param quantity   Số lượng cần thêm.
+     * @return Đối tượng ShoppingCart đã được cập nhật hoặc tạo mới.
+     * @throws RuntimeException Nếu khách hàng/sản phẩm không tồn tại hoặc không đủ hàng.
      */
     public ShoppingCart addToCart(String customerId, String productId, int quantity) {
         // Kiểm tra khách hàng có tồn tại không
@@ -93,11 +95,12 @@ public class ShoppingCartService extends GenericServiceImpl<ShoppingCart, String
     }
 
     /**
-     * Cập nhật số lượng sản phẩm trong giỏ hàng
+     * Cập nhật số lượng sản phẩm trong giỏ hàng.
      *
-     * @param cartId   ID giỏ hàng
-     * @param quantity số lượng mới
-     * @return giỏ hàng đã cập nhật
+     * @param cartId   Mã giỏ hàng chi tiết.
+     * @param quantity Số lượng mới.
+     * @return Đối tượng ShoppingCart đã cập nhật.
+     * @throws RuntimeException Nếu không tìm thấy giỏ hàng hoặc không đủ hàng.
      */
     public ShoppingCart updateQuantity(String cartId, int quantity) {
         ShoppingCart cart = shoppingCartRepository.findById(cartId).orElse(null);
@@ -115,18 +118,18 @@ public class ShoppingCartService extends GenericServiceImpl<ShoppingCart, String
     }
 
     /**
-     * Xóa sản phẩm khỏi giỏ hàng
+     * Xóa một mục sản phẩm khỏi giỏ hàng.
      *
-     * @param cartId ID giỏ hàng
+     * @param cartId Mã giỏ hàng chi tiết.
      */
     public void removeFromCart(String cartId) {
         shoppingCartRepository.deleteById(cartId);
     }
 
     /**
-     * Xóa toàn bộ giỏ hàng của khách hàng
+     * Xóa toàn bộ sản phẩm trong giỏ hàng của khách hàng.
      *
-     * @param customerId ID khách hàng
+     * @param customerId Mã khách hàng.
      */
     public void clearCart(String customerId) {
         List<ShoppingCart> carts = findByCustomerId(customerId);
@@ -134,10 +137,10 @@ public class ShoppingCartService extends GenericServiceImpl<ShoppingCart, String
     }
 
     /**
-     * Tính tổng tiền trong giỏ hàng
+     * Tính tổng giá trị tiền của giỏ hàng.
      *
-     * @param customerId ID khách hàng
-     * @return tổng tiền
+     * @param customerId Mã khách hàng.
+     * @return Tổng tiền.
      */
     public int calculateTotal(String customerId) {
         List<ShoppingCart> carts = findByCustomerId(customerId);
@@ -147,10 +150,10 @@ public class ShoppingCartService extends GenericServiceImpl<ShoppingCart, String
     }
 
     /**
-     * Đếm số lượng sản phẩm trong giỏ hàng
+     * Đếm tổng số lượng sản phẩm (items) trong giỏ hàng.
      *
-     * @param customerId ID khách hàng
-     * @return số lượng sản phẩm
+     * @param customerId Mã khách hàng.
+     * @return Tổng số lượng sản phẩm.
      */
     public int countItems(String customerId) {
         List<ShoppingCart> carts = findByCustomerId(customerId);
@@ -160,12 +163,11 @@ public class ShoppingCartService extends GenericServiceImpl<ShoppingCart, String
     }
 
     /**
-     * Tạo ID ngẫu nhiên cho giỏ hàng
+     * Sinh mã định danh ngẫu nhiên cho giỏ hàng.
      *
-     * @return ID giỏ hàng
+     * @return Chuỗi ID giỏ hàng.
      */
     private String generateCartId() {
         return "GH" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
     }
 }
-

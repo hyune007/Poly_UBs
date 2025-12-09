@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Chi tiết sản phẩm</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+          rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/general.css">
-    <link rel="stylesheet" href="/css/header.css">
-    <link rel="stylesheet" href="/css/body.css">
+    <link href="/css/general.css" rel="stylesheet">
+    <link href="/css/header.css" rel="stylesheet">
+    <link href="/css/body.css" rel="stylesheet">
     <style>
         .product-detail {
             display: flex;
@@ -16,12 +17,13 @@
             background-color: white;
             padding: 100px;
             border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             max-width: 1000px;
             margin: 0 auto;
             margin-top: 30px;
             margin-bottom: 30px;
         }
+
         .product-detail img {
             width: 360px;
             height: 360px;
@@ -29,17 +31,21 @@
             border-radius: 10px;
             background-color: #f5f5f5;
         }
+
         .product-info {
             flex: 1;
         }
+
         .product-info h2 {
             color: #001476;
             margin-bottom: 15px;
         }
+
         .product-info p {
             margin: 10px 0;
             font-size: 16px;
         }
+
         .btn-buy {
             margin-top: 20px;
             background-color: #001476;
@@ -49,6 +55,7 @@
             border-radius: 6px;
             cursor: pointer;
         }
+
         .btn-buy:hover {
             background-color: #0044cc;
         }
@@ -57,7 +64,7 @@
 <body>
 <div th:replace="main-frame/header :: header"></div>
 <div class="product-detail">
-    <img th:src="@{|/photos/${item.image}|}" alt="Hình sản phẩm">
+    <img alt="Hình sản phẩm" th:src="@{|/photos/${item.image}|}">
     <div class="product-info">
         <h2 th:text="${item.name}"></h2>
         <p><strong>Giá:</strong> <span th:text="${#numbers.formatDecimal(item.price,0,'COMMA',0,'POINT')}"></span>₫</p>
@@ -69,12 +76,14 @@
         <!-- Chọn số lượng -->
         <div style="margin-top: 20px; display: flex; align-items: center; gap: 15px;">
             <label for="quantity" style="font-weight: bold;">Số lượng:</label>
-            <input type="number" id="quantity" name="quantity" value="1" min="1"
+            <input id="quantity" min="1" name="quantity"
+                   style="width: 80px; padding: 8px; border: 1px solid #ddd; border-radius: 4px; text-align: center;"
                    th:max="${item.stock}"
-                   style="width: 80px; padding: 8px; border: 1px solid #ddd; border-radius: 4px; text-align: center;">
+                   type="number"
+                   value="1">
         </div>
 
-        <button class="btn-buy" th:attr="data-product-id=${item.id}" onclick="addToCart(this)">
+        <button class="btn-buy" onclick="addToCart(this)" th:attr="data-product-id=${item.id}">
             Thêm vào giỏ hàng
         </button>
     </div>
@@ -82,56 +91,56 @@
 
 <!-- Script xử lý thêm vào giỏ hàng -->
 <script>
-function addToCart(button) {
-    const productId = button.getAttribute('data-product-id');
-    const quantity = document.getElementById('quantity').value;
+    function addToCart(button) {
+        const productId = button.getAttribute('data-product-id');
+        const quantity = document.getElementById('quantity').value;
 
-    // Validate số lượng
-    if (quantity < 1) {
-        alert('Số lượng phải lớn hơn 0');
-        return;
+        // Validate số lượng
+        if (quantity < 1) {
+            alert('Số lượng phải lớn hơn 0');
+            return;
+        }
+
+        // Gửi request đến server
+        fetch('/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `productId=${productId}&quantity=${quantity}`
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    // Cập nhật số lượng giỏ hàng trên header (nếu có)
+                    updateCartCount();
+                } else {
+                    alert(data.message);
+                    // Nếu chưa đăng nhập, chuyển đến trang login
+                    if (data.message.includes('đăng nhập')) {
+                        window.location.href = '/auth/login';
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Có lỗi xảy ra, vui lòng thử lại!');
+            });
     }
 
-    // Gửi request đến server
-    fetch('/cart/add', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `productId=${productId}&quantity=${quantity}`
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert(data.message);
-            // Cập nhật số lượng giỏ hàng trên header (nếu có)
-            updateCartCount();
-        } else {
-            alert(data.message);
-            // Nếu chưa đăng nhập, chuyển đến trang login
-            if (data.message.includes('đăng nhập')) {
-                window.location.href = '/login';
-            }
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Có lỗi xảy ra, vui lòng thử lại!');
-    });
-}
-
-function updateCartCount() {
-    fetch('/cart/count')
-    .then(response => response.json())
-    .then(data => {
-        // Cập nhật badge số lượng giỏ hàng trên header
-        const cartBadge = document.querySelector('.cart-badge');
-        if (cartBadge) {
-            cartBadge.textContent = data.count;
-        }
-    })
-    .catch(error => console.error('Error:', error));
-}
+    function updateCartCount() {
+        fetch('/cart/count')
+            .then(response => response.json())
+            .then(data => {
+                // Cập nhật badge số lượng giỏ hàng trên header
+                const cartBadge = document.querySelector('.cart-badge');
+                if (cartBadge) {
+                    cartBadge.textContent = data.count;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
 </script>
 
 <div th:replace="main-frame/footer :: footer"></div>

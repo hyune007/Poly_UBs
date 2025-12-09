@@ -9,7 +9,8 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 /**
- * Thực thể token để reset mật khẩu
+ * Lớp thực thể đại diện cho mã thông báo (token) dùng để đặt lại mật khẩu.
+ * Ánh xạ tới bảng "password_reset_tokens" trong cơ sở dữ liệu.
  */
 @Setter
 @Getter
@@ -20,38 +21,38 @@ import java.time.LocalDateTime;
 public class PasswordResetToken {
 
     /**
-     * ID của token
+     * Mã định danh duy nhất của bản ghi token.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**
-     * Token ngẫu nhiên
+     * Chuỗi token ngẫu nhiên dùng để xác thực.
      */
     @Column(name = "token", nullable = false, unique = true)
     private String token;
 
     /**
-     * Khách hàng liên kết với token
+     * Khách hàng yêu cầu đặt lại mật khẩu.
      */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "kh_id", nullable = false)
     private Customer customer;
 
     /**
-     * Thời gian hết hạn của token
+     * Thời gian hết hạn của token.
      */
     @Column(name = "expiry_date", nullable = false)
     private LocalDateTime expiryDate;
 
     /**
-     * Kiểm tra token đã hết hạn chưa
+     * Kiểm tra xem token đã hết hạn hay chưa.
      *
-     * @return true nếu token đã hết hạn
+     * @return True nếu thời gian hiện tại đã vượt quá thời gian hết hạn, ngược lại trả về False.
      */
     public boolean isExpired() {
-        return LocalDateTime.now ().isAfter (expiryDate);
+        return LocalDateTime.now().isAfter(expiryDate);
     }
 }
 

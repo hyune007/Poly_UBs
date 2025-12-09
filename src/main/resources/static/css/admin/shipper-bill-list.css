@@ -1,0 +1,141 @@
+:root {
+    --primary: #0b3d91;
+    --gray: #6c757d;
+    --bg: #f4f7fb;
+    --white: #ffffff;
+}
+
+body {
+    background: var(--bg);
+    color: #1a1a1a;
+    font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+    line-height: 1.6;
+}
+
+.page-card {
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: 0 12px 32px rgba(11, 61, 145, 0.12);
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.brand-badge {
+    background: var(--primary);
+    color: var(--white);
+    padding: .4rem .7rem;
+    border-radius: .5rem;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.muted {
+    color: var(--gray);
+}
+
+.table-card {
+    border-radius: .75rem;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.table-custom {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-custom thead th {
+    background: var(--primary);
+    color: var(--white);
+    border: none;
+    font-weight: 600;
+    font-size: .95rem;
+    padding: .9rem;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+.table-custom tbody tr {
+    background: var(--white);
+    transition: background 0.3s ease;
+}
+
+.table-custom tbody tr:hover {
+    background: #eef2f8;
+}
+
+.table-custom td {
+    padding: .9rem;
+    color: #1a1a1a;
+}
+
+.search-input {
+    max-width: 360px;
+    border: 1px solid #d0d3d8;
+    border-radius: .5rem;
+    padding: .4rem .6rem;
+}
+
+@media (max-width: 768px) {
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: .5rem;
+    }
+
+    .search-input {
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .table-custom thead {
+        display: none;
+    }
+
+    .table-custom tbody tr {
+        display: block;
+        margin-bottom: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 0.5rem;
+        padding: 0.75rem;
+    }
+
+    .table-custom tbody td {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0.5rem 0;
+        font-size: 0.95rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    .table-custom tbody td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--gray);
+        margin-bottom: 0.25rem;
+        display: block;
+    }
+
+    .table-custom tbody td:last-child {
+        border-bottom: none;
+    }
+
+    .btn-sm.w-100 {
+        font-size: 1rem;
+        padding: 0.6rem 1rem;
+        width: 100%;
+    }
+}
+

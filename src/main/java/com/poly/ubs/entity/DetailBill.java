@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Thực thể chi tiết hóa đơn
+ * Lớp thực thể đại diện cho chi tiết đơn hàng (sản phẩm trong hóa đơn).
+ * Ánh xạ tới bảng "chitiethoadon" trong cơ sở dữ liệu.
  */
 @Setter
 @Getter
@@ -17,35 +18,36 @@ import lombok.Setter;
 @Table(name = "chitiethoadon")
 public class DetailBill {
     /**
-     * ID của chi tiết hóa đơn
+     * Mã định danh duy nhất của chi tiết hóa đơn.
      */
     @Id
     @Column(name = "hdct_id")
     private String id;
 
     /**
-     * Hóa đơn liên quan
+     * Hóa đơn chứa chi tiết này.
      */
     @ManyToOne
     @JoinColumn(name = "hd_id")
     private Bill bill;
 
     /**
-     * Sản phẩm trong hóa đơn
+     * Sản phẩm được đặt mua.
      */
     @ManyToOne
     @JoinColumn(name = "sp_id")
     private Product product;
 
     /**
-     * Số lượng sản phẩm
+     * Số lượng sản phẩm đặt mua.
      */
     @Column(name = "quantity")
     private int quantity;
 
     /**
-     * Tổng tiền của chi tiết hóa đơn
+     * Tổng thành tiền của chi tiết này (đơn giá * số lượng).
      */
     @Column(name = "hdct_total")
     private int total;
+
 }

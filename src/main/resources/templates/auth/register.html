@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Đăng ký - Tech Store</title>
-    <link rel="stylesheet" href="/css/general.css">
-    <link rel="stylesheet" href="/css/auth/register.css">
+    <link href="/css/general.css" rel="stylesheet">
+    <link href="/css/auth/register.css" rel="stylesheet">
 </head>
 <body>
 
@@ -13,51 +13,9 @@
 <div class="circuit-background"></div>
 
 <!-- ⬅️ Nút quay lại -->
-<a href="/login" class="back-btn">
+<a class="back-btn" href="/auth/login">
     ← <span>Quay lại đăng nhập</span>
 </a>
-<script>
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-    const firebaseConfig = {
-        apiKey: "AIzaSyBrXjvjPcoFM2yw39yfmgjwksohhhs3eDk",
-        authDomain: "poly-ubs-java5.firebaseapp.com",
-        projectId: "poly-ubs-java5",
-        storageBucket: "poly-ubs-java5.firebasestorage.app",
-        messagingSenderId: "809642356997",
-        appId: "1:809642356997:web:7bbb502520efb38bae076c",
-        measurementId: "G-H4VY6C3DE2"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    document.getElementById('googleSignIn').addEventListener('click', async () => {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        try {
-            const result = await auth.signInWithPopup(provider);
-            const user = result.user;
-            const idToken = await user.getIdToken();
-
-            // POST idToken to backend to create session
-            const res = await fetch('/sessionLogin', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ idToken })
-            });
-
-            if (res.ok) {
-                // Redirect to home page where Thymeleaf will show info from session
-                window.location.href = '/';
-            } else {
-                const txt = await res.text();
-                alert('Login failed: ' + txt);
-            }
-        } catch (err) {
-            console.error(err);
-            alert('Sign-in error: ' + err.message);
-        }
-    });
-</script>
 <!-- ☁️ Sinh nhiều mây -->
 <script>
     function createCloud(top, size, duration, opacity) {
@@ -83,10 +41,10 @@
 </script>
 
 <!-- 🌐 Icon công nghệ -->
-<img src="https://cdn-icons-png.flaticon.com/512/888/888879.png" class="tech-icon" style="top:10%; left:5%;">
-<img src="https://cdn-icons-png.flaticon.com/512/1006/1006363.png" class="tech-icon" style="bottom:15%; right:10%;">
-<img src="https://cdn-icons-png.flaticon.com/512/4248/4248443.png" class="tech-icon" style="top:20%; right:15%;">
-<img src="https://cdn-icons-png.flaticon.com/512/6062/6062646.png" class="tech-icon" style="bottom:10%; left:15%;">
+<img class="tech-icon" src="https://cdn-icons-png.flaticon.com/512/888/888879.png" style="top:10%; left:5%;">
+<img class="tech-icon" src="https://cdn-icons-png.flaticon.com/512/1006/1006363.png" style="bottom:15%; right:10%;">
+<img class="tech-icon" src="https://cdn-icons-png.flaticon.com/512/4248/4248443.png" style="top:20%; right:15%;">
+<img class="tech-icon" src="https://cdn-icons-png.flaticon.com/512/6062/6062646.png" style="bottom:10%; left:15%;">
 
 
 <!-- 💧 Form đăng ký -->
@@ -94,34 +52,34 @@
     <h2>Đăng ký tài khoản</h2>
 
     <div class="google-btn" id="googleRegisterBtn" style="cursor: pointer;">
-        <img src="https://www.svgrepo.com/show/355037/google.svg" alt="Google Logo" style="width: 20px; height: 20px;">
+        <img alt="Google Logo" src="https://www.svgrepo.com/show/355037/google.svg" style="width: 20px; height: 20px;">
         Đăng ký bằng Google
     </div>
 
     <div class="divider">hoặc</div>
 
-    <form action="/register-post" method="post">
-        <input type="text" name="name" placeholder="Họ và tên" required>
-        <input type="email" name="email" placeholder="Email" required>
-        <input type="text" name="phone" placeholder="Số điện thoại" required>
-        <input type="password" name="password" placeholder="Mật khẩu" required>
-        <input type="password" name="confirmPassword" placeholder="Xác nhận mật khẩu" required>
+    <form action="/auth/register-post" method="post">
+        <input name="name" placeholder="Họ và tên" required type="text">
+        <input name="email" placeholder="Email" required type="email">
+        <input name="phone" placeholder="Số điện thoại" required type="text">
+        <input name="password" placeholder="Mật khẩu" required type="password">
+        <input name="confirmPassword" placeholder="Xác nhận mật khẩu" required type="password">
         <button class="btn" type="submit">Tạo tài khoản</button>
     </form>
-    
+
     <!-- Hiển thị thông báo lỗi nếu có -->
-    <div th:if="${error}" class="alert alert-danger mt-3">
+    <div class="alert alert-danger mt-3" th:if="${error}">
         <p style="color: red; text-align: center;" th:text="${error}"></p>
     </div>
-    
+
     <!-- Hiển thị thông báo thành công nếu có -->
-    <div th:if="${success}" class="alert alert-success mt-3">
+    <div class="alert alert-success mt-3" th:if="${success}">
         <p style="color: green; text-align: center;" th:text="${success}"></p>
     </div>
 
 
     <div class="options">
-        <p>Đã có tài khoản? <a href="/login">Đăng nhập ngay</a></p>
+        <p>Đã có tài khoản? <a href="/auth/login">Đăng nhập ngay</a></p>
     </div>
 </div>
 
@@ -151,19 +109,16 @@
 <!-- Firebase SDK -->
 <script type="module">
     // Import Firebase modules
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import {initializeApp} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import {
+        getAuth,
+        signInWithPopup,
+        GoogleAuthProvider
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-    // Firebase configuration
-    const firebaseConfig = {
-        apiKey: "AIzaSyBrXjvjPcoFM2yw39yfmgjwksohhhs3eDk",
-        authDomain: "poly-ubs-java5.firebaseapp.com",
-        projectId: "poly-ubs-java5",
-        storageBucket: "poly-ubs-java5.firebasestorage.app",
-        messagingSenderId: "809642356997",
-        appId: "1:809642356997:web:7bbb502520efb38bae076c",
-        measurementId: "G-H4VY6C3DE2"
-    };
+    // Load Firebase configuration từ backend
+    const configResponse = await fetch('/api/config/firebase');
+    const firebaseConfig = await configResponse.json();
 
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
@@ -180,12 +135,12 @@
             const idToken = await user.getIdToken();
 
             // Gửi token đến backend để xác thực và tạo session
-            const response = await fetch('/api/auth/firebase-login', {
+            const response = await fetch('/auth/api/auth/firebase-login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ idToken: idToken })
+                body: JSON.stringify({idToken: idToken})
             });
 
             const data = await response.json();

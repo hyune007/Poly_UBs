@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Controller xử lý giỏ hàng
+ * Quản lý các thao tác giỏ hàng (xem, thêm, sửa, xóa).
  */
 @Controller
 @RequestMapping("/cart")
@@ -26,11 +26,11 @@ public class ShoppingCartController {
     private ShoppingCartService cartService;
 
     /**
-     * Hiển thị trang giỏ hàng
+     * Hiển thị trang chi tiết giỏ hàng.
      *
-     * @param session đối tượng session
-     * @param model   đối tượng model
-     * @return tên view
+     * @param session Phiên làm việc hiện tại.
+     * @param model   Đối tượng Model.
+     * @return Tên view giỏ hàng.
      */
     @GetMapping
     public String viewCart(HttpSession session, Model model) {
@@ -43,7 +43,7 @@ public class ShoppingCartController {
         Customer customer = (Customer) loggedInUser;
         List<ShoppingCart> cartItems = cartService.findByCustomerId(customer.getId());
 
-        // Xử lý đường dẫn hình ảnh cho từng sản phẩm trong giỏ
+        // Xử lý đường dẫn hình ảnh cho từng sản phẩm trong giỏ dựa trên mã danh mục
         for (ShoppingCart item : cartItems) {
             Product product = item.getProduct();
             if (product != null && product.getCategory() != null) {
@@ -59,18 +59,18 @@ public class ShoppingCartController {
         model.addAttribute("total", total);
         model.addAttribute("itemCount", itemCount);
         model.addAttribute("loggedInUser", customer);
-        model.addAttribute("currentURI", "/cart");  // Thêm biến currentURI để order-process.html sử dụng
+        model.addAttribute("currentURI", "/cart");
 
         return "container/orders/shopping-cart";
     }
 
     /**
-     * Thêm sản phẩm vào giỏ hàng
+     * API thêm sản phẩm vào giỏ hàng.
      *
-     * @param productId ID sản phẩm
-     * @param quantity  số lượng
-     * @param session   đối tượng session
-     * @return response JSON
+     * @param productId ID sản phẩm.
+     * @param quantity  Số lượng.
+     * @param session   Phiên làm việc hiện tại.
+     * @return Phản hồi JSON kết quả thực hiện.
      */
     @PostMapping("/add")
     @ResponseBody
@@ -82,7 +82,7 @@ public class ShoppingCartController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            // Kiểm tra đăng nhập
+            // Kiểm tra trạng thái đăng nhập
             Object loggedInUser = session.getAttribute("loggedInUser");
             if (loggedInUser == null || !(loggedInUser instanceof Customer)) {
                 response.put("success", false);
@@ -92,17 +92,17 @@ public class ShoppingCartController {
 
             Customer customer = (Customer) loggedInUser;
 
-            // Kiểm tra số lượng hợp lệ
+            // Kiểm tra tính hợp lệ của số lượng
             if (quantity <= 0) {
                 response.put("success", false);
                 response.put("message", "Số lượng phải lớn hơn 0");
                 return ResponseEntity.ok(response);
             }
 
-            // Thêm vào giỏ hàng
+            // Thực hiện thêm vào cơ sở dữ liệu
             ShoppingCart cart = cartService.addToCart(customer.getId(), productId, quantity);
 
-            // Đếm số lượng sản phẩm trong giỏ
+            // Cập nhật số lượng hiển thị trên icon giỏ hàng
             int itemCount = cartService.countItems(customer.getId());
 
             response.put("success", true);
@@ -119,12 +119,12 @@ public class ShoppingCartController {
     }
 
     /**
-     * Cập nhật số lượng sản phẩm trong giỏ hàng
+     * API cập nhật số lượng sản phẩm trong giỏ.
      *
-     * @param cartId   ID giỏ hàng
-     * @param quantity số lượng mới
-     * @param session  đối tượng session
-     * @return response JSON
+     * @param cartId   ID giỏ hàng chi tiết.
+     * @param quantity Số lượng mới.
+     * @param session  Phiên làm việc hiện tại.
+     * @return Phản hồi JSON kết quả thực hiện.
      */
     @PostMapping("/update")
     @ResponseBody
@@ -136,7 +136,6 @@ public class ShoppingCartController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            // Kiểm tra đăng nhập
             Object loggedInUser = session.getAttribute("loggedInUser");
             if (loggedInUser == null || !(loggedInUser instanceof Customer)) {
                 response.put("success", false);
@@ -150,7 +149,7 @@ public class ShoppingCartController {
                 return ResponseEntity.ok(response);
             }
 
-            // Cập nhật số lượng
+            // Thực hiện cập nhật
             cartService.updateQuantity(cartId, quantity);
 
             Customer customer = (Customer) loggedInUser;
@@ -172,11 +171,11 @@ public class ShoppingCartController {
     }
 
     /**
-     * Xóa sản phẩm khỏi giỏ hàng
+     * API xóa sản phẩm khỏi giỏ hàng.
      *
-     * @param cartId  ID giỏ hàng
-     * @param session đối tượng session
-     * @return response JSON
+     * @param cartId  ID giỏ hàng chi tiết.
+     * @param session Phiên làm việc hiện tại.
+     * @return Phản hồi JSON kết quả thực hiện.
      */
     @PostMapping("/remove")
     @ResponseBody
@@ -187,7 +186,6 @@ public class ShoppingCartController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            // Kiểm tra đăng nhập
             Object loggedInUser = session.getAttribute("loggedInUser");
             if (loggedInUser == null || !(loggedInUser instanceof Customer)) {
                 response.put("success", false);
@@ -195,7 +193,7 @@ public class ShoppingCartController {
                 return ResponseEntity.ok(response);
             }
 
-            // Xóa sản phẩm
+            // Thực hiện xóa
             cartService.removeFromCart(cartId);
 
             Customer customer = (Customer) loggedInUser;
@@ -217,10 +215,10 @@ public class ShoppingCartController {
     }
 
     /**
-     * Xóa toàn bộ giỏ hàng
+     * API xóa toàn bộ sản phẩm trong giỏ hàng.
      *
-     * @param session đối tượng session
-     * @return response JSON
+     * @param session Phiên làm việc hiện tại.
+     * @return Phản hồi JSON kết quả thực hiện.
      */
     @PostMapping("/clear")
     @ResponseBody
@@ -251,10 +249,10 @@ public class ShoppingCartController {
     }
 
     /**
-     * Lấy số lượng sản phẩm trong giỏ hàng
+     * API lấy tổng số lượng sản phẩm trong giỏ (dùng cho icon).
      *
-     * @param session đối tượng session
-     * @return response JSON
+     * @param session Phiên làm việc hiện tại.
+     * @return Phản hồi JSON số lượng sản phẩm.
      */
     @GetMapping("/count")
     @ResponseBody
@@ -281,10 +279,10 @@ public class ShoppingCartController {
     }
 
     /**
-     * Lấy thư mục hình ảnh theo danh mục sản phẩm
+     * Xác định thư mục chứa ảnh dựa trên mã danh mục.
      *
-     * @param categoryId ID danh mục
-     * @return tên thư mục
+     * @param categoryId Mã danh mục.
+     * @return Tên thư mục chứa ảnh.
      */
     private String getFolderByCategory(String categoryId) {
         return switch (categoryId) {
@@ -301,4 +299,3 @@ public class ShoppingCartController {
         };
     }
 }
-

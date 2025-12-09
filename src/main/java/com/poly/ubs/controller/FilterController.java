@@ -13,13 +13,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Bộ điều khiển xem giao diện
+ * Xử lý lọc và tìm kiếm sản phẩm.
  */
 @org.springframework.stereotype.Controller
 public class FilterController {
@@ -28,25 +31,38 @@ public class FilterController {
     private ProductServiceImpl productService;
     @Autowired
     private CategoryServiceImpl categoryService;
+    @Autowired
+    private BrandServiceImpl brandService;
+
     @ModelAttribute("categories")
     public List<Category> getCategories() {
         return categoryService.getCategories();
     }
+
     @RequestMapping("filter/header")
     public String header(Model model) {
         return "/main-frame/header";
     }
 
     /**
-     * Hiển thị trang chủ
-     * @param model đối tượng model để truyền dữ liệu đến view
-     * @param session đối tượng session để lấy thông tin người dùng
-     * @return đường dẫn đến template trang chủ
+     * Hiển thị danh sách sản phẩm theo danh mục và phân trang.
+     *
+     * @param model      Đối tượng Model.
+     * @param session    Phiên làm việc hiện tại.
+     * @param p          Trang hiện tại.
+     * @param categoryId ID danh mục sản phẩm.
+     * @return Tên view hiển thị sản phẩm.
      */
     @GetMapping("/home/product/list")
     public String home(Model model, HttpSession session, @RequestParam("p") Optional<Integer> p, @RequestParam(value = "categoryId", required = false) String categoryId) {
-        Customer loggedInUser = (Customer) session.getAttribute("loggedInUser");
-        model.addAttribute("loggedInUser", loggedInUser);
+        Object loggedInUser = session.getAttribute("loggedInUser");
+
+        // Chỉ set loggedInUser vào model nếu là Customer
+        if (loggedInUser instanceof Customer) {
+            model.addAttribute("loggedInUser", (Customer) loggedInUser);
+        } else {
+            model.addAttribute("loggedInUser", null);
+        }
         Pageable pageable = PageRequest.of(p.orElse(0), 18);
         Page<Product> items;
 
@@ -61,23 +77,39 @@ public class FilterController {
             model.addAttribute("selectedCategoryName", "Tất cả sản phẩm");
         }
 
-        /**
-         * Truy xuất các phần tử trong danh sách sản phẩm
-         * Cái nào có mã loại sản phẩm gì thì gán đường dẫn image tương đương của loại sản phẩm đó
-         */
+        // Cập nhật đường dẫn hình ảnh dựa trên danh mục sản phẩm
         for (Product item : items) {
             String folder = "";
             switch (item.getCategory().getId()) {
-                case "LSP01": folder = "phone/"; break;
-                case "LSP02": folder = "laptop/"; break;
-                case "LSP03": folder = "pad/"; break;
-                case "LSP04": folder = "smartwatch/"; break;
-                case "LSP05": folder = "headphone/"; break;
-                case "LSP06": folder = "keyboard/"; break;
-                case "LSP07": folder = "mouse/"; break;
-                case "LSP08": folder = "screen/"; break;
-                case "LSP09": folder = "speaker/"; break;
-                default: folder = "other/";
+                case "LSP01":
+                    folder = "phone/";
+                    break;
+                case "LSP02":
+                    folder = "laptop/";
+                    break;
+                case "LSP03":
+                    folder = "pad/";
+                    break;
+                case "LSP04":
+                    folder = "smartwatch/";
+                    break;
+                case "LSP05":
+                    folder = "headphone/";
+                    break;
+                case "LSP06":
+                    folder = "keyboard/";
+                    break;
+                case "LSP07":
+                    folder = "mouse/";
+                    break;
+                case "LSP08":
+                    folder = "screen/";
+                    break;
+                case "LSP09":
+                    folder = "speaker/";
+                    break;
+                default:
+                    folder = "other/";
             }
             item.setImage("products/" + folder + item.getImage());
         }
@@ -87,10 +119,17 @@ public class FilterController {
         return "/nav-link/product-filter";
     }
 
-    @Autowired
-    private BrandServiceImpl brandService;
-
-
+    /**
+     * Lọc sản phẩm theo giá và thương hiệu.
+     *
+     * @param model   Đối tượng Model.
+     * @param min     Giá tối thiểu.
+     * @param max     Giá tối đa.
+     * @param sort    Tiêu chí sắp xếp.
+     * @param brandId ID thương hiệu.
+     * @param p       Trang hiện tại.
+     * @return Tên view kết quả lọc.
+     */
     @GetMapping("/product/filter")
     public String searchByPriceAndBrand(
             Model model,

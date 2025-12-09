@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
- * Service xử lý chức năng reset mật khẩu
+ * Dịch vụ xử lý quy trình đặt lại mật khẩu.
  */
 @Service
 public class PasswordResetService {
@@ -25,30 +25,30 @@ public class PasswordResetService {
     private CustomerRepository customerRepository;
 
     /**
-     * Tạo token reset mật khẩu và gửi email
+     * Tạo token đặt lại mật khẩu và gửi email hướng dẫn cho khách hàng.
      *
-     * @param email email của khách hàng
-     * @throws RuntimeException nếu email không tồn tại
+     * @param email Địa chỉ email của khách hàng.
+     * @throws RuntimeException Nếu email không tồn tại trong hệ thống.
      */
     @Transactional
     public void createPasswordResetToken(String email) {
         // Tìm khách hàng theo email
-        Customer customer = customerRepository.findByEmail (email);
+        Customer customer = customerRepository.findByEmail(email);
         if (customer == null) {
-            throw new RuntimeException ("Email không tồn tại trong hệ thống");
+            throw new RuntimeException("Email không tồn tại trong hệ thống");
         }
 
         // Xóa tất cả token cũ của khách hàng này
-        tokenRepository.deleteByCustomer (customer);
+        tokenRepository.deleteByCustomer(customer);
 
         // Tạo token mới
-        String token = UUID.randomUUID ().toString ();
-        PasswordResetToken resetToken = new PasswordResetToken ();
-        resetToken.setToken (token);
-        resetToken.setCustomer (customer);
-        resetToken.setExpiryDate (LocalDateTime.now ().plusMinutes (5)); // Hết hạn sau 5 phút
+        String token = UUID.randomUUID().toString();
+        PasswordResetToken resetToken = new PasswordResetToken();
+        resetToken.setToken(token);
+        resetToken.setCustomer(customer);
+        resetToken.setExpiryDate(LocalDateTime.now().plusMinutes(5)); // Hết hạn sau 5 phút
 
-        tokenRepository.save (resetToken);
+        tokenRepository.save(resetToken);
 
         // Tạo link reset password
         String resetLink = "http://localhost:8080/reset-password?token=" + token;
@@ -70,50 +70,49 @@ public class PasswordResetService {
                     <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
                     <p style="color: #999; font-size: 12px; text-align: center;">© 2025 Poly_UBs - Tech Store</p>
                 </div>
-                """.formatted (customer.getName (), resetLink);
+                """.formatted(customer.getName(), resetLink);
 
         // Gửi email
-        MailSender.send (customer.getEmail (), "Yêu cầu đặt lại mật khẩu - Poly_UBs", emailBody);
+        MailSender.send(customer.getEmail(), "Yêu cầu đặt lại mật khẩu - Poly_UBs", emailBody);
     }
 
     /**
-     * Xác thực token và đổi mật khẩu mới
+     * Xác thực token và cập nhật mật khẩu mới cho khách hàng.
      *
-     * @param token       chuỗi token
-     * @param newPassword mật khẩu mới
-     * @throws RuntimeException nếu token không hợp lệ hoặc đã hết hạn
+     * @param token       Chuỗi token xác thực.
+     * @param newPassword Mật khẩu mới.
+     * @throws RuntimeException Nếu token không hợp lệ hoặc đã hết hạn.
      */
     @Transactional
     public void resetPassword(String token, String newPassword) {
         // Tìm token
-        PasswordResetToken resetToken = tokenRepository.findByToken (token)
-                .orElseThrow (() -> new RuntimeException ("Token không hợp lệ"));
+        PasswordResetToken resetToken = tokenRepository.findByToken(token)
+                .orElseThrow(() -> new RuntimeException("Token không hợp lệ"));
 
         // Kiểm tra token đã hết hạn chưa
-        if (resetToken.isExpired ()) {
-            tokenRepository.delete (resetToken);
-            throw new RuntimeException ("Link đã hết hạn. Vui lòng yêu cầu đặt lại mật khẩu mới");
+        if (resetToken.isExpired()) {
+            tokenRepository.delete(resetToken);
+            throw new RuntimeException("Link đã hết hạn. Vui lòng yêu cầu đặt lại mật khẩu mới");
         }
 
         // Cập nhật mật khẩu mới
-        Customer customer = resetToken.getCustomer ();
-        customer.setPassword (newPassword);
-        customerRepository.save (customer);
+        Customer customer = resetToken.getCustomer();
+        customer.setPassword(newPassword);
+        customerRepository.save(customer);
 
         // Xóa token sau khi đã sử dụng
-        tokenRepository.delete (resetToken);
+        tokenRepository.delete(resetToken);
     }
 
     /**
-     * Kiểm tra token có hợp lệ không
+     * Kiểm tra tính hợp lệ của token.
      *
-     * @param token chuỗi token
-     * @return true nếu token hợp lệ và chưa hết hạn
+     * @param token Chuỗi token cần kiểm tra.
+     * @return True nếu token hợp lệ và chưa hết hạn, ngược lại trả về False.
      */
     public boolean validateToken(String token) {
-        return tokenRepository.findByToken (token)
-                .map (resetToken -> !resetToken.isExpired ())
-                .orElse (false);
+        return tokenRepository.findByToken(token)
+                .map(resetToken -> !resetToken.isExpired())
+                .orElse(false);
     }
 }
-

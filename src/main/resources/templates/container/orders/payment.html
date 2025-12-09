@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{container/orders/order::view(~{::title}, ~{::article})}">
+<html th:replace="~{container/orders/order::view(~{::title}, ~{::article})}"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -20,33 +20,34 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">Họ và tên</label>
-                                <input type="text" class="form-control" th:value="${orderInfo.fullName}" readonly>
+                                <input class="form-control" readonly th:value="${orderInfo.fullName}" type="text">
+
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Số điện thoại</label>
-                                <input type="tel" class="form-control" th:value="${orderInfo.phone}" readonly>
+                                <input class="form-control" readonly th:value="${orderInfo.phone}" type="tel">
                             </div>
                         </div>
 
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">Tỉnh / Thành phố</label>
-                                <input type="text" class="form-control" th:value="${orderInfo.city}" readonly>
+                                <input class="form-control" readonly th:value="${orderInfo.city}" type="text">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Quận / Huyện / Phường</label>
-                                <input type="text" class="form-control" th:value="${orderInfo.ward}" readonly>
+                                <input class="form-control" readonly th:value="${orderInfo.ward}" type="text">
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">Địa chỉ chi tiết</label>
-                            <input type="text" class="form-control" th:value="${orderInfo.detailAddress}" readonly>
+                            <input class="form-control" readonly th:value="${orderInfo.detailAddress}" type="text">
                         </div>
 
                         <div class="mb-3" th:if="${orderInfo.note != null && !orderInfo.note.isEmpty()}">
                             <label class="form-label">Ghi chú đơn hàng</label>
-                            <textarea class="form-control" rows="3" th:text="${orderInfo.note}" readonly></textarea>
+                            <textarea class="form-control" readonly rows="3" th:text="${orderInfo.note}"></textarea>
                         </div>
                     </form>
                 </div>
@@ -55,21 +56,15 @@
                 <div class="checkout-container">
                     <div class="form-section-title">Hình thức thanh toán</div>
                     <div class="form-check mb-2">
-                        <input class="form-check-input" type="radio" name="paymentMethod" id="cod" checked>
+                        <input checked class="form-check-input" id="cod" name="paymentMethod" type="radio">
                         <label class="form-check-label" for="cod">
                             Thanh toán khi nhận hàng (COD)
                         </label>
                     </div>
                     <div class="form-check mb-2">
-                        <input class="form-check-input" type="radio" name="paymentMethod" id="bank">
+                        <input class="form-check-input" id="bank" name="paymentMethod" type="radio">
                         <label class="form-check-label" for="bank">
                             Chuyển khoản ngân hàng
-                        </label>
-                    </div>
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" type="radio" name="paymentMethod" id="momo">
-                        <label class="form-check-label" for="momo">
-                            Thanh toán qua MoMo / ZaloPay
                         </label>
                     </div>
                 </div>
@@ -81,7 +76,7 @@
                     <h5 class="mb-3">Tóm tắt đơn hàng</h5>
 
                     <!-- Danh sách sản phẩm -->
-                    <div th:each="item : ${cartItems}" class="d-flex justify-content-between mb-2">
+                    <div class="d-flex justify-content-between mb-2" th:each="item : ${cartItems}">
                         <span th:text="${item.product.name} + ' x' + ${item.quantity}">Sản phẩm</span>
                         <strong th:text="${#numbers.formatDecimal(item.product.price * item.quantity,0,'COMMA',0,'POINT')} + '₫'">0₫</strong>
                     </div>
@@ -93,12 +88,22 @@
                     </div>
                     <div class="d-flex justify-content-between mb-3">
                         <strong>Tổng cộng</strong>
-                        <strong class="text-danger fs-5" th:text="${#numbers.formatDecimal(orderInfo.totalAmount,0,'COMMA',0,'POINT')} + '₫'">0₫</strong>
+                        <strong class="text-danger fs-5"
+                                th:text="${#numbers.formatDecimal(orderInfo.totalAmount,0,'COMMA',0,'POINT')} + '₫'">0₫</strong>
                     </div>
 
-                    <form th:action="@{/order/confirm-payment}" method="post">
-                        <button type="submit" class="btn btn-success btn-lg w-100">Xác nhận thanh toán</button>
+                    <form method="post" th:action="@{/order/confirm-payment}">
+                        <input id="hiddenPaymentMethod" name="paymentMethod" type="hidden" value="cod">
+                        <button class="btn btn-success btn-lg w-100" type="submit">Xác nhận thanh toán</button>
                     </form>
+
+                    <script>
+                        document.querySelectorAll('input[name="paymentMethod"]').forEach((elem) => {
+                            elem.addEventListener("change", function (event) {
+                                document.getElementById('hiddenPaymentMethod').value = event.target.id;
+                            });
+                        });
+                    </script>
                 </div>
             </div>
         </div>

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{container/orders/order::view(~{::title}, ~{::article})}">
+<html th:replace="~{container/orders/order::view(~{::title}, ~{::article})}"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Đặt hàng thành công</title>
-    <link rel="stylesheet" href="/css/general.css">
+    <link href="/css/general.css" rel="stylesheet">
 </head>
 <body>
 <div th:replace="container/orders/order-process :: *"></div>
@@ -13,12 +13,74 @@
         <h1>🎉 Đặt hàng thành công!</h1>
         <h3>Cảm ơn bạn đã tin tưởng và đặt hàng tại cửa hàng chúng tôi.</h3>
 
-        <div th:if="${bill != null}" class="order-info mt-4" style="max-width: 600px; margin: 0 auto; text-align: left;">
+        <div class="order-info mt-4" style="max-width: 600px; margin: 0 auto; text-align: left;"
+             th:if="${bill != null}">
+
+            <div class="card p-4 mb-3 text-center" th:if="${qrUrl != null}">
+                <h4>Quét mã để thanh toán</h4>
+                <div class="alert alert-warning" id="countdown-alert">
+                    Đơn hàng sẽ bị hủy nếu không thanh toán sau: <strong id="countdown-timer">10:00</strong>
+                </div>
+                <p>Nội dung chuyển khoản: <strong class="text-danger" th:text="${bill.id}"></strong></p>
+                <div class="d-flex justify-content-center">
+                    <img alt="Mã QR Thanh Toán" class="img-fluid" style="max-width: 300px;" th:src="${qrUrl}">
+                </div>
+                <p class="text-muted mt-2">Vui lòng giữ nguyên nội dung chuyển khoản khi quét mã.</p>
+                <p class="text-muted small">Hệ thống sẽ tự động cập nhật trạng thái sau vài phút.</p>
+
+                <script th:inline="javascript">
+                    const billId = /*[[${bill.id}]]*/ 'HD000000';
+                    const expiryTimeMillis = /*[[${expiryTimeMillis}]]*/ 0;
+
+                    if (expiryTimeMillis > 0) {
+                        const countdownEl = document.getElementById('countdown-timer');
+                        const countdownAlert = document.getElementById('countdown-alert');
+
+                        const timerInterval = setInterval(() => {
+                            const now = new Date().getTime();
+                            const distance = expiryTimeMillis - now;
+
+                            if (distance < 0) {
+                                clearInterval(timerInterval);
+                                countdownEl.innerHTML = "ĐÃ HẾT HẠN";
+                                countdownAlert.classList.remove('alert-warning');
+                                countdownAlert.classList.add('alert-danger');
+                                alert("Đơn hàng đã hết hạn thanh toán và sẽ bị hủy.");
+                                window.location.href = "/home";
+                                return;
+                            }
+
+                            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                            countdownEl.innerHTML = minutes + "m " + seconds + "s ";
+                        }, 1000);
+                    }
+
+                    setInterval(() => {
+                        fetch(`/api/payment/check-status/${billId}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status === 'Đã thanh toán') {
+
+                                    window.location.reload();
+                                }
+                            })
+                            .catch(err => console.error('Error checking status:', err));
+                    }, 3000);
+                </script>
+            </div>
+
             <div class="card p-4">
                 <h5 class="mb-3">Thông tin đơn hàng</h5>
                 <p><strong>Mã đơn hàng:</strong> <span th:text="${bill.id}">HD123456</span></p>
-                <p><strong>Ngày đặt:</strong> <span th:text="${#dates.format(bill.date, 'dd/MM/yyyy')}">01/01/2025</span></p>
-                <p><strong>Trạng thái:</strong> <span class="badge bg-warning" th:text="${bill.status}">Chờ xác nhận</span></p>
+                <p><strong>Ngày đặt:</strong> <span
+                        th:text="${#dates.format(bill.date, 'dd/MM/yyyy')}">01/01/2025</span></p>
+                <p><strong>Trạng thái:</strong>
+                    <span class="badge"
+                          th:classappend="${bill.status == 'Chưa thanh toán'} ? 'bg-danger' : (${bill.status == 'Đã thanh toán'} ? 'bg-success' : 'bg-warning')"
+                          th:text="${bill.status}">Chờ xác nhận</span>
+                </p>
                 <p><strong>Khách hàng:</strong> <span th:text="${bill.customer.name}">Tên khách hàng</span></p>
                 <p><strong>Số điện thoại:</strong> <span th:text="${bill.customer.phone}">0123456789</span></p>
                 <p><strong>Địa chỉ giao hàng:</strong>
