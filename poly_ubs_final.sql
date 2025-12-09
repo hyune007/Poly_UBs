@@ -70,12 +70,10 @@ create table DiaChi
     dc_city          VARCHAR(50)  NOT NULL,
     dc_ward          VARCHAR(50)  NOT NULL,
     dc_detailaddress VARCHAR(255) NOT NULL,
+    dc_is_default    TINYINT(1)   NOT NULL DEFAULT 0,
     PRIMARY KEY (dc_id),
     FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id)
 );
-
-ALTER TABLE DiaChi
-    ADD dc_is_default TINYINT(1) NOT NULL DEFAULT 0;
 
 create table SanPham
 (
@@ -106,12 +104,13 @@ CREATE TABLE GioHang
 
 create table HoaDon
 (
-    hd_id     VARCHAR(8)  NOT NULL,
-    hd_date   DATE        NOT NULL,
-    hd_status VARCHAR(20) NOT NULL,
-    kh_id     VARCHAR(8)  NOT NULL,
-    nv_id     VARCHAR(8)  NULL,
-    dc_id     VARCHAR(8)  NOT NULL,
+    hd_id          VARCHAR(8)   NOT NULL,
+    hd_date        DATE         NOT NULL,
+    hd_status      VARCHAR(20)  NOT NULL,
+    kh_id          VARCHAR(8)   NOT NULL,
+    nv_id          VARCHAR(8)   NULL,
+    dc_id          VARCHAR(8)   NOT NULL,
+    payment_method VARCHAR(255) NOT NULL,
     PRIMARY KEY (hd_id),
     FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id),
     FOREIGN KEY (nv_id) REFERENCES NhanVien (nv_id),
