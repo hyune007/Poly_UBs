@@ -3,63 +3,63 @@ package com.poly.ubs.service;
 import java.util.List;
 
 /**
- * Giao diện chung cho các thao tác CRUD cơ bản
+ * Giao diện định nghĩa các thao tác CRUD cơ bản cho dịch vụ.
  *
- * @param <T>  Loại thực thể
- * @param <ID> Loại khóa chính
+ * @param <T>  Kiểu thực thể.
+ * @param <ID> Kiểu dữ liệu của khóa chính.
  */
 public interface IGenericService<T, ID> {
 
     /**
-     * Lưu một thực thể
+     * Lưu trữ một thực thể mới hoặc cập nhật thực thể hiện có.
      *
-     * @param entity thực thể cần lưu
-     * @return thực thể đã được lưu
+     * @param entity Đối tượng thực thể cần lưu.
+     * @return Đối tượng thực thể đã được lưu.
      */
     T save(T entity);
 
     /**
-     * Cập nhật một thực thể
+     * Cập nhật thông tin của một thực thể.
      *
-     * @param entity thực thể cần cập nhật
-     * @return thực thể đã được cập nhật
+     * @param entity Đối tượng thực thể cần cập nhật.
+     * @return Đối tượng thực thể đã được cập nhật.
      */
     T update(T entity);
 
     /**
-     * Tìm một thực thể theo id
+     * Tìm kiếm một thực thể dựa trên khóa chính.
      *
-     * @param id id của thực thể cần tìm
-     * @return thực thể nếu tìm thấy, null nếu không tìm thấy
+     * @param id Khóa chính của thực thể.
+     * @return Đối tượng thực thể nếu tìm thấy, ngược lại trả về null.
      */
     T findById(ID id);
 
     /**
-     * Tìm tất cả các thực thể
+     * Lấy danh sách toàn bộ các thực thể.
      *
-     * @return danh sách tất cả các thực thể
+     * @return Danh sách các thực thể.
      */
     List<T> findAll();
 
     /**
-     * Xóa một thực thể theo id
+     * Xóa một thực thể dựa trên khóa chính.
      *
-     * @param id id của thực thể cần xóa
+     * @param id Khóa chính của thực thể cần xóa.
      */
     void deleteById(ID id);
 
     /**
-     * Kiểm tra xem một thực thể có tồn tại theo id không
+     * Kiểm tra sự tồn tại của một thực thể dựa trên khóa chính.
      *
-     * @param id id cần kiểm tra
-     * @return true nếu thực thể tồn tại, false nếu không tồn tại
+     * @param id Khóa chính cần kiểm tra.
+     * @return True nếu thực thể tồn tại, ngược lại trả về False.
      */
     boolean existsById(ID id);
 
     /**
-     * Đếm tổng số thực thể
+     * Đếm tổng số lượng thực thể hiện có.
      *
-     * @return số lượng thực thể
+     * @return Số lượng thực thể.
      */
     long count();
 }

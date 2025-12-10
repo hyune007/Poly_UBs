@@ -45,13 +45,90 @@
                     <label>Email</label>
                     <input name="email" readonly required th:value="${customer.email}" type="email"/>
                 </div>
+                <!-- Địa chỉ mặc định -->
+                <div class="form-group">
+                    <label>Địa chỉ mặc định</label>
+                    <select id="addressSelect" disabled
+                            th:if="${customer.addresses}" class="form-select form-select-sm">
+                        <option th:each="addr : ${customer.addresses}"
+                                th:value="${addr.id}"
+                                th:text="${addr.fullAddress}"
+                                th:selected="${addr.isDefault}">
+                        </option>
+                    </select>
+                    <div id="noAddressHint" th:if="${#lists.isEmpty(customer.addresses)}" class="text-muted small">Chưa có địa chỉ nào, hãy thêm bên dưới.</div>
+                    <button type="button" id="addAddressToggleBtn" class="btn btn-outline-primary btn-sm mt-2" disabled>+ Thêm địa chỉ</button>
+                </div>
+                <!-- Collapse thêm địa chỉ -->
+                <div id="addAddressCollapse" class="card p-3 mb-3 d-none">
+                    <h6 class="mb-2">Thêm địa chỉ</h6>
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <label class="form-label">Tỉnh / Thành phố</label>
+                            <select class="form-select form-select-sm" id="provinceSelect">
+                                <option value="">Tỉnh / Thành phố</option>
+                                <option value="ha-noi">TP Hà Nội</option>
+                                <option value="hue">TP Huế</option>
+                                <option value="quang-ninh">Quảng Ninh</option>
+                                <option value="cao-bang">Cao Bằng</option>
+                                <option value="lang-son">Lạng Sơn</option>
+                                <option value="lai-chau">Lai Châu</option>
+                                <option value="dien-bien">Điện Biên</option>
+                                <option value="son-la">Sơn La</option>
+                                <option value="thanh-hoa">Thanh Hóa</option>
+                                <option value="nghe-an">Nghệ An</option>
+                                <option value="ha-tinh">Hà Tĩnh</option>
+                                <option value="tuyen-quang">Tuyên Quang</option>
+                                <option value="lao-cai">Lào Cai</option>
+                                <option value="thai-nguyen">Thái Nguyên</option>
+                                <option value="phu-tho">Phú Thọ</option>
+                                <option value="bac-ninh">Bắc Ninh</option>
+                                <option value="hung-yen">Hưng Yên</option>
+                                <option value="hai-phong">TP Hải Phòng</option>
+                                <option value="ninh-binh">Ninh Bình</option>
+                                <option value="quang-tri">Quảng Trị</option>
+                                <option value="da-nang">TP Đà Nẵng</option>
+                                <option value="quang-ngai">Quảng Ngãi</option>
+                                <option value="gia-lai">Gia Lai</option>
+                                <option value="khanh-hoa">Khánh Hòa</option>
+                                <option value="lam-dong">Lâm Đồng</option>
+                                <option value="dak-lak">Đắk Lắk</option>
+                                <option value="tphcm">TP Hồ Chí Minh</option>
+                                <option value="dong-nai">Đồng Nai</option>
+                                <option value="tay-ninh"></option>
+                                <option value="can-tho">TP Cần Thơ</option>
+                                <option value="vinh-long">Vĩnh Long</option>
+                                <option value="dong-thap">Đồng Tháp</option>
+                                <option value="ca-mau">Cà Mau</option>
+                                <option value="an-giang">An Giang</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Quận/Huyện/Phường</label>
+                            <input type="text" class="form-control form-control-sm" id="districtInput" placeholder="Ví dụ: Cầu Giấy">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Số nhà</label>
+                            <input type="text" class="form-control form-control-sm" id="houseNumberInput" placeholder="Ví dụ: 123">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Tên đường</label>
+                            <input type="text" class="form-control form-control-sm" id="streetInput" placeholder="Ví dụ: Trần Duy Hưng">
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <button type="button" id="saveAddressBtn" class="btn btn-success btn-sm">Lưu địa chỉ</button>
+                        <button type="button" id="cancelAddAddressBtn" class="btn btn-secondary btn-sm">Hủy</button>
+                    </div>
+                    <div id="addressMessage" class="small mt-2 text-success d-none">Lưu thành công!</div>
+                </div>
                 <div class="form-group">
                     <label>Mật khẩu</label>
-                    <input readonly required th:value="${customer.password}" type="password"/>
+                    <input readonly th:value="${customer.password}" type="password"/>
                 </div>
-
                 <button id="editBtn" type="button">Cập nhật thông tin</button>
                 <button class="hidden" id="saveBtn" type="submit">Lưu thay đổi</button>
+                <button class="hidden" id="cancelBtn" type="button">Hủy</button>
             </form>
         </section>
 
@@ -90,7 +167,7 @@
                                required type="password"/>
                     </div>
                     <div class="text-end mb-3">
-                        <a class="forgot-link" href="/forgot-password">Quên mật khẩu?</a>
+                        <a class="forgot-link" href="/auth/forgot-password">Quên mật khẩu?</a>
                     </div>
                     <div class="modal-actions">
                         <button class="cancel-btn" onclick="closePasswordModal()" type="button">Hủy</button>
@@ -104,7 +181,6 @@
 </div>
 
 <script>
-
     document.addEventListener("DOMContentLoaded", function () {
         const openBtn = document.getElementById('openPasswordModal');
         if (openBtn) openBtn.addEventListener('click', openPasswordModal);
@@ -115,12 +191,25 @@
         const inputs = document.querySelectorAll('#profileForm input[type=text], #profileForm input[type=tel], #profileForm input[type=email]');
         const passwordInput = document.querySelector('#profileForm input[type=password]');
 
+        // Địa chỉ
+        const addressSelect = document.getElementById('addressSelect');
+        const addAddressToggleBtn = document.getElementById('addAddressToggleBtn');
+        const addAddressCollapse = document.getElementById('addAddressCollapse');
+        const saveAddressBtn = document.getElementById('saveAddressBtn');
+        const provinceSelect = document.getElementById('provinceSelect');
+        const cancelAddAddressBtn = document.getElementById('cancelAddAddressBtn');
+        const addressMessage = document.getElementById('addressMessage');
+        let tempNewIdCounter = 0;
+        let selectedDefaultAddressId = addressSelect ? addressSelect.value : null;
+
         editBtn.addEventListener('click', function () {
             inputs.forEach(i => i.removeAttribute('readonly'));
             passwordInput.setAttribute('readonly', true); // luôn ẩn password
             editBtn.classList.add('hidden');
             saveBtn.classList.remove('hidden');
             cancelBtn.classList.remove('hidden');
+            if (addressSelect) addressSelect.removeAttribute('disabled');
+            if (addAddressToggleBtn) addAddressToggleBtn.removeAttribute('disabled');
         });
 
         cancelBtn.addEventListener('click', function () {
@@ -129,6 +218,89 @@
             saveBtn.classList.add('hidden');
             cancelBtn.classList.add('hidden');
             editBtn.classList.remove('hidden');
+            if (addressSelect) addressSelect.setAttribute('disabled', true);
+            if (addAddressToggleBtn) addAddressToggleBtn.setAttribute('disabled', true);
+        });
+
+        // Toggle form thêm địa chỉ
+        // Đảm bảo các input trong khối thêm địa chỉ không chặn submit khi đang đóng
+        const districtInput = document.getElementById('districtInput');
+        const houseNumberInput = document.getElementById('houseNumberInput');
+        const streetInput = document.getElementById('streetInput');
+        function setAddAddressInputsEnabled(enabled) {
+            if (provinceSelect) provinceSelect.disabled = !enabled;
+            if (districtInput) districtInput.disabled = !enabled;
+            if (houseNumberInput) houseNumberInput.disabled = !enabled;
+            if (streetInput) streetInput.disabled = !enabled;
+        }
+        // Khởi tạo: collapse đang đóng -> disable các input
+        setAddAddressInputsEnabled(false);
+
+        addAddressToggleBtn?.addEventListener('click', () => {
+            addAddressCollapse.classList.toggle('d-none');
+            const opened = !addAddressCollapse.classList.contains('d-none');
+            setAddAddressInputsEnabled(opened);
+            addressMessage.classList.add('d-none');
+        });
+
+        // Lưu địa chỉ mới (gọi backend)
+        saveAddressBtn?.addEventListener('click', async () => {
+            const province = provinceSelect ? (provinceSelect.options[provinceSelect.selectedIndex]?.text || '').trim() : '';
+            const district = document.getElementById('districtInput').value.trim();
+            const houseNumber = document.getElementById('houseNumberInput').value.trim();
+            const street = document.getElementById('streetInput').value.trim();
+            if (!province || !district || !houseNumber || !street) {
+                addressMessage.classList.remove('d-none');
+                addressMessage.classList.replace('text-success', 'text-danger');
+                addressMessage.textContent = 'Vui lòng điền đầy đủ.';
+                return;
+            }
+            const detailAddress = houseNumber + ' ' + street; // gộp vào dc_detailaddress
+            try {
+                const resp = await fetch('/addresses', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ city: province, ward: district, detailAddress })
+                });
+                if (!resp.ok) throw new Error(await resp.text());
+                const data = await resp.json();
+                if (addressSelect) {
+                    const opt = document.createElement('option');
+                    opt.value = data.id;
+                    opt.textContent = data.fullAddress;
+                    addressSelect.appendChild(opt);
+                    addressSelect.value = data.id;
+                    selectedDefaultAddressId = data.id;
+                }
+                addressMessage.classList.remove('d-none');
+                addressMessage.classList.replace('text-danger', 'text-success');
+                addressMessage.textContent = 'Lưu thành công!';
+                addAddressCollapse.classList.add('d-none');
+                if (provinceSelect) provinceSelect.selectedIndex = 0;
+                ['districtInput','houseNumberInput','streetInput'].forEach(id => {
+                    const el = document.getElementById(id); if (el) el.value='';
+                });
+            } catch (e) {
+                addressMessage.classList.remove('d-none');
+                addressMessage.classList.replace('text-success', 'text-danger');
+                addressMessage.textContent = 'Lỗi: ' + e.message;
+            }
+        });
+
+        cancelAddAddressBtn?.addEventListener('click', () => {
+            addAddressCollapse.classList.add('d-none');
+            setAddAddressInputsEnabled(false);
+        });
+
+        addressSelect?.addEventListener('change', async (e) => {
+            const id = e.target.value;
+            if (addressSelect.disabled) return; // chỉ đổi khi đang edit
+            try {
+                const resp = await fetch(`/addresses/${id}/default`, { method: 'PUT' });
+                if (!resp.ok) throw new Error(await resp.text());
+            } catch (err) {
+                console.error('Đổi địa chỉ mặc định lỗi:', err);
+            }
         });
     });
 

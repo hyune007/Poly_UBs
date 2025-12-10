@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * Cấu hình Web MVC
+ * Cấu hình Web MVC cho ứng dụng.
  */
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
@@ -16,14 +16,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private AdminAuthInterceptor adminAuthInterceptor;
 
     /**
-     * Đăng ký các interceptor
+     * Đăng ký các bộ chặn (interceptor) cho ứng dụng.
+     * Cấu hình chặn các yêu cầu tới đường dẫn /admin/** bằng AdminAuthInterceptor.
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // Thêm interceptor để kiểm tra quyền truy cập vào các URL /admin/**
         registry.addInterceptor(adminAuthInterceptor)
-                .addPathPatterns("/admin/**")
-                .excludePathPatterns("/admin/login"); // Loại trừ trang login của admin nếu có
+                .addPathPatterns("/admin/**");
     }
 }
 

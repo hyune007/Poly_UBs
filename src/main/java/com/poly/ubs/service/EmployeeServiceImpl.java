@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 /**
- * Cài đặt dịch vụ cho thực thể Employee sử dụng dịch vụ chung
+ * Triển khai dịch vụ xử lý nghiệp vụ liên quan đến nhân viên.
  */
 @Service
 public class EmployeeServiceImpl extends GenericServiceImpl<Employee, String, EmployeeRepository> {
@@ -23,29 +23,29 @@ public class EmployeeServiceImpl extends GenericServiceImpl<Employee, String, Em
     }
 
     /**
-     * Tìm nhân viên theo email và mật khẩu
+     * Tìm kiếm nhân viên dựa trên địa chỉ email và mật khẩu.
      *
-     * @param email    email của nhân viên
-     * @param password mật khẩu của nhân viên
-     * @return nhân viên nếu tìm thấy, null nếu không tìm thấy
+     * @param email    Địa chỉ email.
+     * @param password Mật khẩu.
+     * @return Đối tượng Employee nếu tìm thấy, ngược lại trả về null.
      */
     public Employee findByEmailAndPassword(String email, String password) {
         return employeeRepository.findByEmailAndPassword(email, password);
     }
 
-    /**
-     * Tìm nhân viên theo từ khóa với phân trang
-     *
-     * @param keyword từ khóa tìm kiếm (tìm theo tên)
-     * @param page    số trang (bắt đầu từ 0)
-     * @param size    số lượng bản ghi mỗi trang
-     * @return Page chứa danh sách nhân viên
-     */
-    public Page<Employee> findByKeyword(String keyword, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+//    /**
+//     * Tìm kiếm nhân viên theo từ khóa với phân trang.
+//     *
+//     * @param keyword Từ khóa tìm kiếm (theo tên).
+//     * @param page    Chỉ số trang (bắt đầu từ 0).
+//     * @param size    Số lượng bản ghi trên mỗi trang.
+//     * @return Trang kết quả chứa danh sách nhân viên.
+//     */
+    public Page<Employee> findByKeyword(String keyword, Pageable pageable) {
         if (keyword == null || keyword.trim().isEmpty()) {
             return employeeRepository.findAll(pageable);
         }
         return employeeRepository.findByNameContainingIgnoreCase(keyword, pageable);
     }
+
 }

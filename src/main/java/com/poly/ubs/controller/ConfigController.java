@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * REST Controller để cung cấp Firebase configuration cho frontend
- * Config này sẽ được load từ biến môi trường
+ * Cung cấp cấu hình Firebase cho phía frontend thông qua API.
+ * Config được tải từ biến môi trường.
  */
 @RestController
 @RequestMapping("/api/config")
@@ -23,9 +23,9 @@ public class ConfigController {
     private String firebaseProjectId;
 
     /**
-     * Endpoint để lấy Firebase Web Config
+     * Lấy thông tin cấu hình Firebase.
      *
-     * @return Map chứa Firebase configuration
+     * @return Map chứa các thông tin cấu hình Firebase.
      */
     @GetMapping("/firebase")
     public Map<String, String> getFirebaseConfig() {

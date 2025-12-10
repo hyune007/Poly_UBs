@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * Cài đặt dịch vụ cho thực thể Category sử dụng dịch vụ chung
+ * Triển khai dịch vụ xử lý nghiệp vụ liên quan đến danh mục sản phẩm.
  */
 @Service
 public class CategoryServiceImpl extends GenericServiceImpl<Category, String, CategoryRepository> {
@@ -22,9 +22,9 @@ public class CategoryServiceImpl extends GenericServiceImpl<Category, String, Ca
     }
 
     /**
-     * Lấy tất cả danh mục
+     * Lấy danh sách toàn bộ danh mục sản phẩm.
      *
-     * @return danh sách tất cả các danh mục
+     * @return Danh sách đối tượng Category.
      */
     public List<Category> getCategories() {
         return categoryRepository.findAll();

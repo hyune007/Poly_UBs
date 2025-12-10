@@ -13,6 +13,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 
+/**
+ * Quản lý giao hàng cho nhân viên giao hàng (Shipper).
+ */
 @Controller
 @RequestMapping("/shipper")
 public class ShipperController {
@@ -20,6 +23,12 @@ public class ShipperController {
     @Autowired
     private BillServiceImpl billService;
 
+    /**
+     * Hiển thị danh sách khách hàng có đơn hàng đã xác nhận.
+     *
+     * @param model Đối tượng Model.
+     * @return Tên view danh sách khách hàng cần giao.
+     */
     @GetMapping("/manage")
     public String manageUserBill(Model model) {
         List<Customer> confirmedCustomers = billService.findCustomersWithConfirmedBills();
@@ -27,6 +36,13 @@ public class ShipperController {
         return "admin/employee/shipper-customer-bill";
     }
 
+    /**
+     * Hiển thị danh sách đơn hàng cần giao của một khách hàng cụ thể.
+     *
+     * @param customerId ID khách hàng.
+     * @param model Đối tượng Model.
+     * @return Tên view danh sách đơn hàng của khách hàng.
+     */
     @GetMapping("/customer/{customerId}")
     public String totalUserBillList(@PathVariable("customerId") String customerId, Model model) {
         List<Bill> bills = billService.findByCustomerId(customerId);
@@ -43,6 +59,15 @@ public class ShipperController {
         return "admin/employee/shipper";
     }
 
+    /**
+     * Cập nhật trạng thái giao hàng của hóa đơn.
+     *
+     * @param billId ID hóa đơn.
+     * @param status Trạng thái mới.
+     * @param customerId ID khách hàng.
+     * @param redirectAttributes Đối tượng truyền thông báo.
+     * @return Chuyển hướng lại trang danh sách đơn hàng.
+     */
     @PostMapping("/updateStatus")
     public String updateBillStatus(@RequestParam("billId") String billId,
                                    @RequestParam("status") String status,

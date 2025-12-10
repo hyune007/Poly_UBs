@@ -1,6 +1,42 @@
-CREATE DATABASE Poly_UBs;
+CREATE DATABASE IF NOT EXISTS Poly_UBs;
 USE Poly_UBs;
-DROP DATABASE Poly_UBs;
+DROP DATABASE IF EXISTS Poly_UBs;
+-- 1. Independent Tables
+
+create table Role
+(
+    role_id   VARCHAR(20)  NOT NULL,
+    role_name VARCHAR(100) NOT NULL,
+    PRIMARY KEY (role_id)
+);
+
+create table LoaiSanPham
+(
+    lsp_id   VARCHAR(20)  NOT NULL,
+    lsp_name VARCHAR(100) NOT NULL,
+    PRIMARY KEY (lsp_id)
+);
+
+CREATE TABLE Hang
+(
+    hang_id   VARCHAR(10) NOT NULL,
+    hang_name VARCHAR(50) NOT NULL UNIQUE,
+    PRIMARY KEY (hang_id)
+);
+
+create table KhuyenMai
+(
+    km_id          VARCHAR(8)   NOT NULL,
+    km_name        VARCHAR(100) NOT NULL,
+    km_description VARCHAR(100) NOT NULL,
+    km_percent     INT          NOT NULL,
+    km_start_date  DATE         NOT NULL,
+    km_end_date    DATE         NOT NULL,
+    PRIMARY KEY (km_id)
+);
+
+-- 2. Tables with Dependencies
+
 create table KhachHang
 (
     kh_id       VARCHAR(8)   NOT NULL,
@@ -12,27 +48,7 @@ create table KhachHang
     PRIMARY KEY (kh_id),
     FOREIGN KEY (kh_role) REFERENCES Role (role_id)
 );
-create table Role
-(
-    role_id   VARCHAR(20)  NOT NULL,
-    role_name VARCHAR(100) NOT NULL,
-    PRIMARY KEY (role_id)
-);
-insert into Role (role_id, role_name)
-values ('ROLE_ADMIN', 'Quản trị viên'),
-       ('ROLE_EMPLOYEE', 'Nhân viên'),
-       ('ROLE_CUSTOMER', 'Khách hàng');
-CREATE TABLE GioHang
-(
-    gh_id       VARCHAR(8) NOT NULL,
-    sp_quantity INT        NOT NULL,
-    kh_id       VARCHAR(8) NOT NULL,
-    sp_id       VARCHAR(8) NOT NULL,
-    PRIMARY KEY (gh_id),
-    FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id),
-    FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id),
-    UNIQUE KEY unique_customer_product (kh_id, sp_id)
-);
+
 create table NhanVien
 (
     nv_id       VARCHAR(8)   NOT NULL,
@@ -46,18 +62,21 @@ create table NhanVien
     PRIMARY KEY (nv_id),
     FOREIGN KEY (nv_role) REFERENCES Role (role_id)
 );
-create table LoaiSanPham
+
+create table DiaChi
 (
-    lsp_id   VARCHAR(20)  NOT NULL,
-    lsp_name VARCHAR(100) NOT NULL,
-    PRIMARY KEY (lsp_id)
+    dc_id            VARCHAR(8)   NOT NULL,
+    kh_id            VARCHAR(8)   NOT NULL,
+    dc_city          VARCHAR(50)  NOT NULL,
+    dc_ward          VARCHAR(50)  NOT NULL,
+    dc_detailaddress VARCHAR(255) NOT NULL,
+    PRIMARY KEY (dc_id),
+    FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id)
 );
-CREATE TABLE Hang
-(
-    hang_id   VARCHAR(10) NOT NULL,
-    hang_name VARCHAR(50) NOT NULL UNIQUE,
-    PRIMARY KEY (hang_id)
-);
+
+ALTER TABLE DiaChi
+    ADD dc_is_default TINYINT(1) NOT NULL DEFAULT 0;
+
 create table SanPham
 (
     sp_id          VARCHAR(8)   NOT NULL,
@@ -72,40 +91,7 @@ create table SanPham
     FOREIGN KEY (sp_brand_id) REFERENCES Hang (hang_id),
     FOREIGN KEY (sp_category_id) REFERENCES LoaiSanPham (lsp_id)
 );
-create table DiaChi
-(
-    dc_id            VARCHAR(8)   NOT NULL,
-    kh_id            VARCHAR(8)   NOT NULL,
-    dc_city          VARCHAR(50)  NOT NULL,
-    dc_ward          VARCHAR(50)  NOT NULL,
-    dc_detailaddress VARCHAR(255) NOT NULL,
-    PRIMARY KEY (dc_id),
-    FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id)
-);
-create table HoaDon
-(
-    hd_id     VARCHAR(8)  NOT NULL,
-    hd_date   DATE        NOT NULL,
-    hd_status VARCHAR(20) NOT NULL,
-    kh_id     VARCHAR(8)  NOT NULL,
-    nv_id     VARCHAR(8)  NOT NULL,
-    dc_id     VARCHAR(8)  NOT NULL,
-    PRIMARY KEY (hd_id),
-    FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id),
-    FOREIGN KEY (nv_id) REFERENCES NhanVien (nv_id),
-    FOREIGN KEY (dc_id) REFERENCES DiaChi (dc_id)
-);
-create table ChiTietHoaDon
-(
-    hdct_id    VARCHAR(8) NOT NULL,
-    hd_id      VARCHAR(8) NOT NULL,
-    sp_id      VARCHAR(8) NOT NULL,
-    quantity   INT        NOT NULL,
-    hdct_total INT        NOT NULL,
-    PRIMARY KEY (hdct_id),
-    FOREIGN KEY (hd_id) REFERENCES HoaDon (hd_id),
-    FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id)
-);
+
 CREATE TABLE GioHang
 (
     gh_id       VARCHAR(8) NOT NULL,
@@ -117,16 +103,33 @@ CREATE TABLE GioHang
     FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id),
     UNIQUE KEY unique_customer_product (kh_id, sp_id)
 );
-create table KhuyenMai
+
+create table HoaDon
 (
-    km_id          VARCHAR(8)   NOT NULL,
-    km_name        VARCHAR(100) NOT NULL,
-    km_description VARCHAR(100) NOT NULL,
-    km_percent     INT          NOT NULL,
-    km_start_date  DATE         NOT NULL,
-    km_end_date    DATE         NOT NULL,
-    PRIMARY KEY (km_id)
+    hd_id     VARCHAR(8)  NOT NULL,
+    hd_date   DATE        NOT NULL,
+    hd_status VARCHAR(20) NOT NULL,
+    kh_id     VARCHAR(8)  NOT NULL,
+    nv_id     VARCHAR(8)  NULL,
+    dc_id     VARCHAR(8)  NOT NULL,
+    PRIMARY KEY (hd_id),
+    FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id),
+    FOREIGN KEY (nv_id) REFERENCES NhanVien (nv_id),
+    FOREIGN KEY (dc_id) REFERENCES DiaChi (dc_id)
 );
+
+create table ChiTietHoaDon
+(
+    hdct_id    VARCHAR(8) NOT NULL,
+    hd_id      VARCHAR(8) NOT NULL,
+    sp_id      VARCHAR(8) NOT NULL,
+    quantity   INT        NOT NULL,
+    hdct_total INT        NOT NULL,
+    PRIMARY KEY (hdct_id),
+    FOREIGN KEY (hd_id) REFERENCES HoaDon (hd_id),
+    FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id)
+);
+
 create table NhapKho
 (
     nk_id       VARCHAR(8) NOT NULL,
@@ -136,6 +139,7 @@ create table NhapKho
     PRIMARY KEY (nk_id),
     FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id)
 );
+
 create table DanhGia
 (
     dg_id      VARCHAR(8)   NOT NULL,
@@ -148,7 +152,8 @@ create table DanhGia
     FOREIGN KEY (sp_id) REFERENCES SanPham (sp_id),
     FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id)
 );
-CREATE TABLE IF NOT EXISTS password_reset_tokens
+
+CREATE TABLE password_reset_tokens
 (
     id          BIGINT AUTO_INCREMENT PRIMARY KEY,
     token       VARCHAR(255) NOT NULL UNIQUE,
@@ -157,50 +162,19 @@ CREATE TABLE IF NOT EXISTS password_reset_tokens
     FOREIGN KEY (kh_id) REFERENCES KhachHang (kh_id) ON DELETE CASCADE
 );
 
--- Index để tăng tốc độ tìm kiếm theo token
 CREATE INDEX idx_token ON password_reset_tokens (token);
 CREATE INDEX idx_expiry_date ON password_reset_tokens (expiry_date);
 
--- Drop tables in correct order (children first, then parents)
-drop table DanhGia; -- Child of SanPham and KhachHang
-drop table NhapKho; -- Child of SanPham
-drop table KhuyenMai; -- Independent
-drop table GioHang; -- Child of SanPham and KhachHang
-drop table ChiTietHoaDon; -- Child of HoaDon and SanPham
-drop table HoaDon; -- Child of KhachHang, NhanVien, and DiaChi
-drop table DiaChi; -- Child of KhachHang
-drop table SanPham; -- Child of Hang and LoaiSanPham
-drop table NhanVien; -- Independent
-drop table KhachHang; -- Independent
-drop table LoaiSanPham; -- Independent
-drop table Hang; -- Independent
-drop table password_reset_tokens;
+ALTER TABLE hoadon
+ADD COLUMN payment_method VARCHAR(255);
 
-select *
-from Hang;
-select *
-from LoaiSanPham;
-select *
-from SanPham;
-select *
-from NhanVien;
-select *
-from KhachHang;
-select *
-from KhuyenMai;
-select *
-from HoaDon;
-select *
-from ChiTietHoaDon;
-select *
-from GioHang;
-select *
-from DanhGia;
-select *
-from NhapKho;
-select *
-from DiaChi;
--- Data
+-- 3. Insert Data
+
+-- Role
+insert into Role (role_id, role_name)
+values ('ROLE_ADMIN', 'Quản trị viên'),
+       ('ROLE_EMPLOYEE', 'Nhân viên'),
+       ('ROLE_CUSTOMER', 'Khách hàng');
 
 -- Hang
 INSERT INTO Hang (hang_id, hang_name)
@@ -552,5 +526,12 @@ VALUES ('KH001', 'Nguyễn Văn A', 'password123', '0912345678', 'nguyenvana@ema
 
 -- NhanVien (1 employee)
 INSERT INTO NhanVien (nv_id, nv_name, nv_password, nv_phone, nv_mail, nv_address, nv_role, nv_birth)
-VALUES ('NV001', 'Admin', 'adminpass', '0123456789', 'admin@polyubs.com', '123 FPT Polytechnic', "ROLE_ADMIN",
+VALUES ('NV001', 'Admin', 'adminpass', '0123456789', 'admin@polyubs.com', '123 FPT Polytechnic', 'ROLE_ADMIN',
         '1990-01-01');
+
+UPDATE SanPham
+SET sp_price = 1000;
+
+
+select * from NhanVien;
+select * from KhachHang;

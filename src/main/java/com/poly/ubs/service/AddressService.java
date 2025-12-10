@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 /**
- * Service xử lý nghiệp vụ địa chỉ
+ * Dịch vụ xử lý nghiệp vụ liên quan đến địa chỉ.
  */
 @Service
 public class AddressService extends GenericServiceImpl<Address, String, AddressRepository> {
@@ -23,13 +23,13 @@ public class AddressService extends GenericServiceImpl<Address, String, AddressR
     }
 
     /**
-     * Tạo địa chỉ mới cho khách hàng
+     * Tạo mới địa chỉ cho khách hàng.
      *
-     * @param customer      khách hàng
-     * @param city          thành phố
-     * @param ward          phường/xã
-     * @param detailAddress địa chỉ chi tiết
-     * @return địa chỉ đã tạo
+     * @param customer      Đối tượng khách hàng.
+     * @param city          Tên thành phố.
+     * @param ward          Tên phường/xã.
+     * @param detailAddress Địa chỉ chi tiết.
+     * @return Đối tượng Address vừa được tạo.
      */
     public Address createAddress(Customer customer, String city, String ward, String detailAddress) {
         Address address = new Address();
@@ -42,9 +42,9 @@ public class AddressService extends GenericServiceImpl<Address, String, AddressR
     }
 
     /**
-     * Tạo ID ngẫu nhiên cho địa chỉ
+     * Sinh mã định danh ngẫu nhiên cho địa chỉ.
      *
-     * @return ID địa chỉ
+     * @return Chuỗi ID địa chỉ.
      */
     private String generateAddressId() {
         return "DC" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
